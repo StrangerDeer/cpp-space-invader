@@ -20,6 +20,14 @@ public:
         return points;
     }
 
+    void moveLeft() {
+        rect.x += speed;
+    }
+
+    void moveRight() {
+        rect.x -= speed;
+    }
+
 private:
     int points;
     int fireRate;
