@@ -14,7 +14,7 @@ add_executable(cpp_space_invader main.cpp
         objects/FlyingObject.h
         objects/HealthObject.h
         objects/Player.h
-        objects/Util.h
+        Util.h
         objects/ScoreObject.h
         objects/Star.h)
 

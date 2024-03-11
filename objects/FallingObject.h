@@ -1,6 +1,6 @@
 #pragma once
 #include "DimensionalObject.h"
-#include "Util.h"
+#include "../Util.h"
 
 class FallingObject : public DimensionalObject
 {
