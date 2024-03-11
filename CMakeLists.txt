@@ -16,7 +16,11 @@ add_executable(cpp_space_invader main.cpp
         objects/Player.h
         Util.h
         objects/ScoreObject.h
-        objects/Star.h)
+        objects/Star.h
+        ui/Component.cpp
+        ui/EventAction.cpp
+        ui/EventHandler.cpp
+        ui/SdlUi.cpp)
 
 target_link_libraries(cpp_space_invader
         PRIVATE
