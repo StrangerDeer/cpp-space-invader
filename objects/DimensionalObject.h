@@ -11,6 +11,8 @@ public:
         rect.h = height;
     }
 
+    SDL_Rect getRect() {return rect;};
+
 protected:
     SDL_Rect rect{ 0, 0, 0, 0 };
 };
