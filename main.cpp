@@ -1,6 +1,11 @@
-#include <iostream>
+#define SDL_MAIN_HANDLED
 
-int main() {
-    std::cout << "Hello, World!" << std::endl;
-    return 0;
+#include "ui/SdlUi.h"
+
+int main()
+{
+    SDL_SetMainReady();
+
+    SdlUi ui("Sdl Window", 500, 300);
+    return ui.run();
 }
