@@ -56,7 +56,7 @@ void Game::handleEvent() {
 
 void Game::initTexture() {
     spaceshipTexture = std::make_unique<SpaceshipTexture>(renderer, spaceship);
-    asteroidTexture1 = std::make_shared<AsteroidTexture>(renderer, asteroid1);
+    asteroidTexture1 = std::make_shared<AsteroidTexture>(renderer, asteroid1, 0.3);
     blueStarTexture1 = std::make_shared<BlueStarTexture>(renderer, blueStar1);
     blueStarTexture2 = std::make_shared<BlueStarTexture>(renderer, blueStar2);
     blueStarTexture3 = std::make_shared<BlueStarTexture>(renderer, blueStar3);
