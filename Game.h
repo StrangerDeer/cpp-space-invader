@@ -15,6 +15,7 @@ class Game {
  public:
   Game() {
     initSDL();
+    initLogic();
     initTexture();
   }
 
