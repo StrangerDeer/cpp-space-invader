@@ -48,7 +48,7 @@ void Game::initSDL() {
 
 
     //TODO: MOVE TO INITLOGIC
-    spaceship = std::make_shared<Spaceship>(1, 1, 200, 200, 300, 400, 1, 1);
+    spaceship = std::make_shared<Spaceship>(1, 30, 500, 500, 500, 500, 1, 1);
 }
 
 std::shared_ptr<Star> generateStar(int windowWidth,
@@ -272,15 +272,22 @@ void Game::handleEvent() {
 }
 
 void Game::initTexture() {
-    std::string BLUESTAR_IMG = "../ui/textures/bluestar.png";
+    std::vector<std::string> ASTEROID_IMGS = {"../ui/textures/asteroid1.png"};
+
+    //TODO: RANDOMIZE ASTEROID IMG
+    initStarTextures();
+
+    spaceshipTexture = std::make_unique<SpaceshipTexture>(renderer, spaceship);
+    asteroidTexture1 = std::make_shared<AsteroidTexture>(renderer, asteroid1);
+}
+
+void Game::initStarTextures() {
+    std::string BLUESTAR_IMG = "../ui/textures/star.png";
     std::string GREENSTAR_IMG = "../ui/textures/greenstar.png";
     std::string PINKSTAR_IMG = "../ui/textures/pinkstar.png";
     std::string GOLDSTAR_IMG = "../ui/textures/goldstar.png";
     std::string REDSTAR_IMG = "../ui/textures/redstar.png";
-    std::string SPACESHIP_IMG = "../ui/textures/spaceship_spritesheet.png";
-    std::vector<std::string> ASTEROID_IMGS = {"../ui/textures/asteroid1.png"};
 
-    //TODO: DO FOR THE REST OF THE STARS, RANDOMIZE ASTEROID IMG
     for(const std::shared_ptr<Star>& bluestar : blueStars) {
         std::shared_ptr<StarTexture> starTexture = std::make_shared<StarTexture>(renderer, bluestar, BLUESTAR_IMG);
         starTextures.push_back(starTexture);
@@ -301,9 +308,4 @@ void Game::initTexture() {
         std::shared_ptr<StarTexture> starTexture = std::make_shared<StarTexture>(renderer, redstar, REDSTAR_IMG);
         starTextures.push_back(starTexture);
     }
-
-    spaceshipTexture = std::make_unique<SpaceshipTexture>(renderer, spaceship);
-    asteroidTexture1 = std::make_shared<AsteroidTexture>(renderer, asteroid1);
-
-
 }

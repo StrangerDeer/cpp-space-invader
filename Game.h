@@ -83,6 +83,8 @@ private:
                               int minSpeed,
                               int maxSpeed,
                               int point);
+
+    void initStarTextures();
 };
 
 #endif //CPP_SPACE_INVADER_GAME_H
