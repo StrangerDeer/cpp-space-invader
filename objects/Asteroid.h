@@ -19,11 +19,12 @@ public:
         return false;
     };
 
+  void reset() {
+    placeAtStartingPos();
+    health = maxHealth;
+  }
+
 private:
     int maxHealth;
-    void reset() {
-        placeAtStartingPos();
-        health = maxHealth;
-    }
 };
 
