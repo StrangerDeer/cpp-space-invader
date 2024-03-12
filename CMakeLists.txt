@@ -16,7 +16,13 @@ add_executable(cpp_space_invader main.cpp
         objects/Player.h
         Util.h
         Game.cpp
-        Game.h)
+        Game.h
+        ui/TextureCreator.cpp
+        ui/TextureCreator.h
+        ui/SpaceshipTexture.cpp
+        ui/SpaceshipTexture.h
+        ui/TextureCreatorFromPNG.cpp
+        ui/TextureCreatorFromPNG.h)
 
 target_link_libraries(cpp_space_invader
         PRIVATE

@@ -4,12 +4,15 @@
 #include <SDL.h>
 
 #include <iostream>
+#include "objects/Player.h"
+#include "ui/SpaceshipTexture.h"
 
 class Game {
 
 public:
     Game(){
         initSDL();
+        initTexture();
     }
 
     ~Game(){
@@ -26,7 +29,12 @@ private:
 
     bool isRunning{true};
 
+    std::shared_ptr<Player> player{nullptr};
+
+    std::unique_ptr<SpaceshipTexture> playerTexture{nullptr};
+
     void initSDL();
+    void initTexture();
     void handleEvent();
 };
 
