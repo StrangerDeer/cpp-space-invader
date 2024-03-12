@@ -7,7 +7,9 @@ void Game::run() {
         handleEvent();
         SDL_RenderClear(renderer);
         Uint32 ticks = SDL_GetTicks();
-        //spaceshipTexture->print(renderer, ticks);
+        spaceshipTexture->print(renderer, ticks);
+        asteroidTexture1->print(renderer, ticks);
+
         for(std::shared_ptr<BlueStarTexture> starTexture : starTextures) {
             starTexture->print(renderer, ticks);
         }
@@ -36,7 +38,8 @@ void Game::initSDL() {
 
     //TODO: move these into initLogic
     spaceship = std::make_shared<Spaceship>(1, 1, 200, 200, 1, 1, 1, 1);
-    blueStar1 = std::make_shared<Star>(200, 0, 1, 1, 10, 30, true, 10);
+    asteroid1 = std::make_shared<Asteroid>(1, 1, 500, 200, 1, 1, 1, 1, true, 1);
+    blueStar1 = std::make_shared<Star>(500, 200, 1, 1, 10, 30, true, 10);
     blueStar2 = std::make_shared<Star>(400, 0, 1, 1, 15, 35, true, 10);
     blueStar3 = std::make_shared<Star>(600, -50, 1, 1, 7, 20, true, 10);
     stars = {blueStar1, blueStar2, blueStar3};
@@ -53,6 +56,7 @@ void Game::handleEvent() {
 
 void Game::initTexture() {
     spaceshipTexture = std::make_unique<SpaceshipTexture>(renderer, spaceship);
+    asteroidTexture1 = std::make_shared<AsteroidTexture>(renderer, asteroid1);
     blueStarTexture1 = std::make_shared<BlueStarTexture>(renderer, blueStar1);
     blueStarTexture2 = std::make_shared<BlueStarTexture>(renderer, blueStar2);
     blueStarTexture3 = std::make_shared<BlueStarTexture>(renderer, blueStar3);

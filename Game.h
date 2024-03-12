@@ -8,6 +8,8 @@
 #include "ui/objectTextures/SpaceshipTexture.h"
 #include "objects/Star.h"
 #include "ui/objectTextures/BlueStarTexture.h"
+#include "objects/Asteroid.h"
+#include "ui/objectTextures/AsteroidTexture.h"
 #include <vector>
 
 class Game {
@@ -34,12 +36,14 @@ private:
     bool isRunning{true};
 
     std::shared_ptr<Spaceship> spaceship{nullptr};
+    std::shared_ptr<Asteroid> asteroid1{nullptr};
     std::shared_ptr<Star> blueStar1{nullptr};
     std::shared_ptr<Star> blueStar2{nullptr};
     std::shared_ptr<Star> blueStar3{nullptr};
     std::vector<std::shared_ptr<Star>> stars{};
 
     std::unique_ptr<SpaceshipTexture> spaceshipTexture{nullptr};
+    std::shared_ptr<AsteroidTexture> asteroidTexture1{nullptr};
     std::shared_ptr<BlueStarTexture> blueStarTexture1{nullptr};
     std::shared_ptr<BlueStarTexture> blueStarTexture2{nullptr};
     std::shared_ptr<BlueStarTexture> blueStarTexture3{nullptr};

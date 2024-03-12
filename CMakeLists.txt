@@ -25,7 +25,9 @@ add_executable(cpp_space_invader main.cpp
         ui/TextureCreatorFromPNG.cpp
         ui/TextureCreatorFromPNG.h
         ui/objectTextures/BlueStarTexture.h
-        ui/objectTextures/BlueStarTexture.cpp)
+        ui/objectTextures/BlueStarTexture.cpp
+        ui/objectTextures/AsteroidTexture.h
+        ui/objectTextures/AsteroidTexture.cpp)
 
 target_link_libraries(cpp_space_invader
         PRIVATE
