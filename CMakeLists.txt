@@ -24,8 +24,8 @@ add_executable(cpp_space_invader main.cpp
         ui/objectTextures/SpaceshipTexture.h
         ui/TextureCreatorFromPNG.cpp
         ui/TextureCreatorFromPNG.h
-        ui/objectTextures/BlueStarTexture.h
-        ui/objectTextures/BlueStarTexture.cpp
+        ui/objectTextures/StarTexture.h
+        ui/objectTextures/StarTexture.cpp
         ui/objectTextures/AsteroidTexture.h
         ui/objectTextures/AsteroidTexture.cpp)
 

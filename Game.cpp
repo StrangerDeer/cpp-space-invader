@@ -6,15 +6,24 @@ void Game::run() {
         handleEvent();
         SDL_RenderClear(renderer);
         Uint32 ticks = SDL_GetTicks();
-        spaceshipTexture->print(renderer, ticks);
-        asteroidTexture1->print(renderer, ticks);
 
-        for(std::shared_ptr<BlueStarTexture> starTexture : starTextures) {
+        spaceshipTexture->print(renderer, ticks);
+        //asteroidTexture1->print(renderer, ticks);
+
+        for(std::shared_ptr<StarTexture> starTexture : starTextures) {
             starTexture->print(renderer, ticks);
         }
+
+
         for (std::shared_ptr<Star> star : stars) {
             star->fall();
         }
+        for (std::shared_ptr<Asteroid> asteroid : asteroids) {
+            asteroid->fall();
+        }
+
+
+
         SDL_RenderPresent(renderer);
         SDL_Delay(60);
     }
@@ -37,13 +46,9 @@ void Game::initSDL() {
         return;
     }
 
-    //TODO: move these into initLogic
+
+    //TODO: MOVE TO INITLOGIC
     spaceship = std::make_shared<Spaceship>(1, 1, 200, 200, 300, 400, 1, 1);
-    asteroid1 = std::make_shared<Asteroid>(1, 1, 500, 200, 350, 350, 1, 1, true, 1);
-    blueStar1 = std::make_shared<Star>(500, 200, 55, 150, 10, 30, true, 10);
-    blueStar2 = std::make_shared<Star>(400, 0, 55, 150, 15, 35, true, 10);
-    blueStar3 = std::make_shared<Star>(600, -50, 55, 150, 7, 20, true, 10);
-    stars = {blueStar1, blueStar2, blueStar3};
 }
 
 std::shared_ptr<Star> generateStar(int windowWidth,
@@ -54,7 +59,7 @@ std::shared_ptr<Star> generateStar(int windowWidth,
                                    int maxSpeed,
                                    int point) {
   int x = Util::getRandomNumber(0, windowWidth);
-  int y = Util::getRandomNumber(-windowHeight, 0);
+  int y = Util::getRandomNumber(-windowHeight*2, (0-windowHeight)/2);
   return std::make_shared<Star>(x, y, width, height, minSpeed, maxSpeed, point);
 }
 
@@ -67,7 +72,7 @@ std::shared_ptr<Asteroid> generateAsteroid(int windowWidth,
                                            int maxSpeed,
                                            int points) {
   int x = Util::getRandomNumber(0, windowWidth);
-  int y = Util::getRandomNumber(-windowHeight, 0);
+  int y = Util::getRandomNumber(-windowHeight*2, (0-windowHeight)/2);
   return std::make_shared<Asteroid>(maxHp, x, y, width, height, minSpeed, maxSpeed, points);
 }
 
@@ -78,7 +83,8 @@ void Game::initOneKindOfStars(int numberOfStars,
                               int starHeight,
                               int minSpeed,
                               int maxSpeed,
-                              int point) {
+                              int point,
+                              std::vector<std::shared_ptr<Star>>& starVector) {
   for (int i = 0; i < numberOfStars; ++i) {
     std::shared_ptr<Star> s = generateStar(windowWidth,
                                            windowHeight,
@@ -88,6 +94,7 @@ void Game::initOneKindOfStars(int numberOfStars,
                                            maxSpeed,
                                            point);
     stars.push_back(s);
+    starVector.push_back(s);
     dimensionalObjects.push_back(s);
   }
 }
@@ -149,10 +156,6 @@ void Game::initLogic() {
   constexpr int MEDIUM_ASTEROID_HEIGHT = 20;
   constexpr int LARGE_ASTEROID_HEIGHT = 30;
 
-  constexpr int SMALL_ASTEROID_WIDTH = 10;
-  constexpr int MEDIUM_ASTEROID_WIDTH = 20;
-  constexpr int LARGE_ASTEROID_WIDTH = 30;
-
   constexpr int NUMBER_OF_SMALL_ASTEROIDS = 25;
   constexpr int NUMBER_OF_MEDIUM_ASTEROIDS = 15;
   constexpr int NUMBER_OF_LARGE_ASTEROIDS = 5;
@@ -178,7 +181,8 @@ void Game::initLogic() {
                      STAR_HEIGHT,
                      MIN_SPEED_FOR_PINK_STARS,
                      MAX_SPEED_FOR_PINK_STARS,
-                     POINT_FOR_PINK_STARS);
+                     POINT_FOR_PINK_STARS,
+                     pinkStars);
   initOneKindOfStars(NUMBER_OF_GREEN_STARS,
                      windowWidth,
                      windowHeight,
@@ -186,7 +190,8 @@ void Game::initLogic() {
                      STAR_HEIGHT,
                      MIN_SPEED_FOR_GREEN_STARS,
                      MAX_SPEED_FOR_GREEN_STARS,
-                     POINT_FOR_GREEN_STARS);
+                     POINT_FOR_GREEN_STARS,
+                     greenStars);
   initOneKindOfStars(NUMBER_OF_BLUE_STARS,
                      windowWidth,
                      windowHeight,
@@ -194,7 +199,8 @@ void Game::initLogic() {
                      STAR_HEIGHT,
                      MIN_SPEED_FOR_BLUE_STARS,
                      MAX_SPEED_FOR_BLUE_STARS,
-                     POINT_FOR_BLUE_STARS);
+                     POINT_FOR_BLUE_STARS,
+                     blueStars);
   initOneKindOfStars(NUMBER_OF_GOLD_STARS,
                      windowWidth,
                      windowHeight,
@@ -202,7 +208,8 @@ void Game::initLogic() {
                      STAR_HEIGHT,
                      MIN_SPEED_FOR_GOLD_STARS,
                      MAX_SPEED_FOR_GOLD_STARS,
-                     POINT_FOR_GOLD_STARS);
+                     POINT_FOR_GOLD_STARS,
+                     goldStars);
   initOneKindOfStars(NUMBER_OF_RED_STARS,
                      windowWidth,
                      windowHeight,
@@ -210,13 +217,14 @@ void Game::initLogic() {
                      STAR_HEIGHT,
                      MIN_SPEED_FOR_RED_STARS,
                      MAX_SPEED_FOR_RED_STARS,
-                     POINT_FOR_RED_STARS);
+                     POINT_FOR_RED_STARS,
+                     redStars);
 
   initOneKindOfAsteroids(NUMBER_OF_SMALL_ASTEROIDS,
                          windowWidth,
                          windowHeight,
                          HEALTH_OF_SMALL_ASTEROIDS,
-                         SMALL_ASTEROID_WIDTH,
+                         SMALL_ASTEROID_HEIGHT,
                          SMALL_ASTEROID_HEIGHT,
                          MIN_SPEED_FOR_ASTEROIDS,
                          MAX_SPEED_FOR_ASTEROIDS,
@@ -225,7 +233,7 @@ void Game::initLogic() {
                          windowWidth,
                          windowHeight,
                          HEALTH_OF_MEDIUM_ASTEROIDS,
-                         MEDIUM_ASTEROID_WIDTH,
+                         MEDIUM_ASTEROID_HEIGHT,
                          MEDIUM_ASTEROID_HEIGHT,
                          MIN_SPEED_FOR_ASTEROIDS,
                          MAX_SPEED_FOR_ASTEROIDS,
@@ -234,7 +242,7 @@ void Game::initLogic() {
                          windowWidth,
                          windowHeight,
                          HEALTH_OF_LARGE_ASTEROIDS,
-                         LARGE_ASTEROID_WIDTH,
+                         LARGE_ASTEROID_HEIGHT,
                          LARGE_ASTEROID_HEIGHT,
                          MIN_SPEED_FOR_ASTEROIDS,
                          MAX_SPEED_FOR_ASTEROIDS,
@@ -264,10 +272,38 @@ void Game::handleEvent() {
 }
 
 void Game::initTexture() {
+    std::string BLUESTAR_IMG = "../ui/textures/bluestar.png";
+    std::string GREENSTAR_IMG = "../ui/textures/greenstar.png";
+    std::string PINKSTAR_IMG = "../ui/textures/pinkstar.png";
+    std::string GOLDSTAR_IMG = "../ui/textures/goldstar.png";
+    std::string REDSTAR_IMG = "../ui/textures/redstar.png";
+    std::string SPACESHIP_IMG = "../ui/textures/spaceship_spritesheet.png";
+    std::vector<std::string> ASTEROID_IMGS = {"../ui/textures/asteroid1.png"};
+
+    //TODO: DO FOR THE REST OF THE STARS, RANDOMIZE ASTEROID IMG
+    for(const std::shared_ptr<Star>& bluestar : blueStars) {
+        std::shared_ptr<StarTexture> starTexture = std::make_shared<StarTexture>(renderer, bluestar, BLUESTAR_IMG);
+        starTextures.push_back(starTexture);
+    }
+    for(const std::shared_ptr<Star>& greenstar : greenStars) {
+        std::shared_ptr<StarTexture> starTexture = std::make_shared<StarTexture>(renderer, greenstar, GREENSTAR_IMG);
+        starTextures.push_back(starTexture);
+    }
+    for(const std::shared_ptr<Star>& pinkStar : pinkStars) {
+        std::shared_ptr<StarTexture> starTexture = std::make_shared<StarTexture>(renderer, pinkStar, PINKSTAR_IMG);
+        starTextures.push_back(starTexture);
+    }
+    for(const std::shared_ptr<Star>& goldstar : goldStars) {
+        std::shared_ptr<StarTexture> starTexture = std::make_shared<StarTexture>(renderer, goldstar, GOLDSTAR_IMG);
+        starTextures.push_back(starTexture);
+    }
+    for(const std::shared_ptr<Star>& redstar : redStars) {
+        std::shared_ptr<StarTexture> starTexture = std::make_shared<StarTexture>(renderer, redstar, REDSTAR_IMG);
+        starTextures.push_back(starTexture);
+    }
+
     spaceshipTexture = std::make_unique<SpaceshipTexture>(renderer, spaceship);
     asteroidTexture1 = std::make_shared<AsteroidTexture>(renderer, asteroid1);
-    blueStarTexture1 = std::make_shared<BlueStarTexture>(renderer, blueStar1);
-    blueStarTexture2 = std::make_shared<BlueStarTexture>(renderer, blueStar2);
-    blueStarTexture3 = std::make_shared<BlueStarTexture>(renderer, blueStar3);
-    starTextures = {blueStarTexture1, blueStarTexture2, blueStarTexture3};
+
+
 }
