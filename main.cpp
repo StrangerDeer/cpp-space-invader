@@ -1,11 +1,9 @@
-#define SDL_MAIN_HANDLED
+#include "Game.h"
 
-#include "ui/SdlUi.h"
-
-int main()
+int main(int argc, char *argv[])
 {
-    SDL_SetMainReady();
+    Game g;
+    g.run();
 
-    SdlUi ui("Sdl Window", 500, 300);
-    return ui.run();
+    return 0;
 }
