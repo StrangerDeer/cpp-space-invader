@@ -7,6 +7,7 @@ void Game::run() {
         SDL_RenderClear(renderer);
         playerTexture->print(renderer);
         SDL_RenderPresent(renderer);
+        SDL_Delay(60);
     }
 }
 
@@ -24,12 +25,22 @@ void Game::initSDL() {
         std::cerr << "Error: Unable to create renderer!" << SDL_GetError() << std::endl;
         return;
     }
+
+    player = std::make_shared<Player>(0,50,50,50,1,1,1,1);
 }
 
 void Game::handleEvent() {
     while (SDL_PollEvent(&event)){
         if(event.type == SDL_QUIT || event.key.keysym.sym == SDLK_ESCAPE){
             isRunning = false;
+        }
+
+        switch(event.key.keysym.sym){
+            case SDLK_DOWN: player->moveDown(); break;
+            case SDLK_UP: player->moveUp(); break;
+            case SDLK_RIGHT: player->moveRight(); break;
+            case SDLK_LEFT: player->moveLeft(); break;
+            default:;
         }
 
     }
