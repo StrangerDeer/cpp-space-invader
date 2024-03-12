@@ -6,7 +6,7 @@
 class Asteroid : public FallingObject, public ScoreObject, public HealthObject
 {
 public:
-    Asteroid(int maxHp, int health, int x, int y, int width, int height, int minSpeed, int maxSpeed, int resettable, int points) :
+    Asteroid(int maxHp, int health, int x, int y, int width, int height, int minSpeed, int maxSpeed, bool resettable, int points) :
             HealthObject(health), FallingObject(x, y, width, height, minSpeed, maxSpeed, resettable),
             ScoreObject(points) {
         maxHealth = maxHp;
