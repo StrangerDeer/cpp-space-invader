@@ -6,8 +6,8 @@
 class Asteroid : public FallingObject, public ScoreObject, public HealthObject
 {
 public:
-    Asteroid(int maxHp, int x, int y, int width, int height, int minSpeed, int maxSpeed, bool resettable, int points) :
-            HealthObject(maxHp), FallingObject(x, y, width, height, minSpeed, maxSpeed, resettable),
+    Asteroid(int maxHp, int x, int y, int width, int height, int minSpeed, int maxSpeed, int points) :
+            HealthObject(maxHp), FallingObject(x, y, width, height, minSpeed, maxSpeed, true),
             ScoreObject(points), maxHealth(maxHp) {
         getRandomRotation();
     };
