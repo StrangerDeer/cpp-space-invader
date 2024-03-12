@@ -20,6 +20,10 @@ public:
         currentSpeed = Util::getRandomNumber(minSpeed, maxSpeed);
     }
 
+    void fall() {
+        rect.y += currentSpeed;
+    }
+
 protected:
     int minSpeed;
     int maxSpeed;

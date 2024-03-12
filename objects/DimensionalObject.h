@@ -10,9 +10,7 @@ public:
         rect.w = width;
         rect.h = height;
     }
-
-    [[nodiscard]] const SDL_Rect* getRect() const {return &rect;}
-
+  
     SDL_Rect rect{ 0, 0, 0, 0 };
 };
 
