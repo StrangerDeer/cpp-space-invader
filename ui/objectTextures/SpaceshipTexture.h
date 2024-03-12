@@ -10,7 +10,7 @@ class SpaceshipTexture : public TextureCreatorFromPNG {
 
 public:
     SpaceshipTexture(SDL_Renderer* renderer, const std::shared_ptr<Spaceship>& spaceship) :
-    TextureCreatorFromPNG(renderer, "../ui/textures/spaceship_spritesheet.png")
+    TextureCreatorFromPNG(renderer, "../ui/textures/spaceship.png")
     {
         if(!spaceship){
             std::cerr << "Spaceship doesn't exist!" << std::endl;
