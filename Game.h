@@ -63,6 +63,7 @@ class Game {
                               int minSpeed,
                               int maxSpeed,
                               int point);
+  void handleCollisions();
 };
 
 #endif //CPP_SPACE_INVADER_GAME_H

@@ -4,6 +4,7 @@ void Game::run() {
 
   while (isRunning) {
     handleEvent();
+    handleCollisions();
     SDL_RenderClear(renderer);
     playerTexture->print(renderer);
     SDL_RenderPresent(renderer);
@@ -19,7 +20,7 @@ void Game::initSDL() {
     return;
   }
 
-    SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+  SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
 
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
@@ -250,6 +251,20 @@ void Game::handleEvent() {
 
 void Game::initTexture() {
 
-    playerTexture = std::make_unique<SpaceshipTexture>(renderer,player);
+  playerTexture = std::make_unique<SpaceshipTexture>(renderer, player);
 
+}
+void Game::handleCollisions() {
+  for (auto &asteroid : asteroids) {
+    if (SDL_HasIntersection(&player->rect, &asteroid->rect)) {
+      asteroid->reset();
+      player->takeDamage();
+    }
+  }
+  for (auto &star : stars) {
+    if (SDL_HasIntersection(&player->rect, &star->rect)) {
+      star->placeAtStartingPos();
+      star->givePoints(player);
+    }
+  }
 }
