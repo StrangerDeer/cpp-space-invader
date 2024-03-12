@@ -3,8 +3,8 @@
 
 #include <utility>
 
-#include "TextureCreatorFromPNG.h"
-#include "../objects/Spaceship.h"
+#include "../TextureCreatorFromPNG.h"
+#include "../../objects/Spaceship.h"
 
 class SpaceshipTexture : public TextureCreatorFromPNG {
 
