@@ -5,7 +5,8 @@ void Game::run() {
     while(isRunning){
         handleEvent();
         SDL_RenderClear(renderer);
-        playerTexture->print(renderer);
+        Uint32 ticks = SDL_GetTicks();
+        spaceshipTexture->print(renderer, ticks);
         SDL_RenderPresent(renderer);
     }
 }
@@ -24,6 +25,8 @@ void Game::initSDL() {
         std::cerr << "Error: Unable to create renderer!" << SDL_GetError() << std::endl;
         return;
     }
+
+    spaceship = std::make_shared<Spaceship>(1, 1, 200, 200, 1, 1, 1, 1);
 }
 
 void Game::handleEvent() {
@@ -36,7 +39,5 @@ void Game::handleEvent() {
 }
 
 void Game::initTexture() {
-
-    playerTexture = std::make_unique<SpaceshipTexture>(renderer,player);
-
+    spaceshipTexture = std::make_unique<SpaceshipTexture>(renderer, spaceship);
 }

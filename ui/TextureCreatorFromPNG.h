@@ -21,7 +21,7 @@ public:
         }
     }
 
-    virtual void print(SDL_Renderer* renderer){};
+    virtual void print(SDL_Renderer* renderer, Uint32 ticks){};
 
 protected:
     SDL_Texture* texture{nullptr};
