@@ -130,13 +130,13 @@ void Game::initLogic() {
   constexpr int MAX_SPEED_FOR_GOLD_STARS = 30;
   constexpr int MAX_SPEED_FOR_RED_STARS = 35;
 
-  constexpr int SMALL_ASTEROID_HEIGHT = 10;
-  constexpr int MEDIUM_ASTEROID_HEIGHT = 20;
-  constexpr int LARGE_ASTEROID_HEIGHT = 30;
+  constexpr int SMALL_ASTEROID_HEIGHT = 100;
+  constexpr int MEDIUM_ASTEROID_HEIGHT = 200;
+  constexpr int LARGE_ASTEROID_HEIGHT = 300;
 
-  constexpr int SMALL_ASTEROID_WIDTH = 10;
-  constexpr int MEDIUM_ASTEROID_WIDTH = 20;
-  constexpr int LARGE_ASTEROID_WIDTH = 30;
+  constexpr int SMALL_ASTEROID_WIDTH = 100;
+  constexpr int MEDIUM_ASTEROID_WIDTH = 200;
+  constexpr int LARGE_ASTEROID_WIDTH = 300;
 
   constexpr int NUMBER_OF_SMALL_ASTEROIDS = 25;
   constexpr int NUMBER_OF_MEDIUM_ASTEROIDS = 15;
