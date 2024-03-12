@@ -9,18 +9,18 @@
 class StarTexture : public TextureCreatorFromPNG {
 
 public:
-StarTexture(SDL_Renderer* renderer, const std::shared_ptr<Star>& bluestar, const std::string& filePath) :
+StarTexture(SDL_Renderer* renderer, const std::shared_ptr<Star>& star, const std::string& filePath) :
     TextureCreatorFromPNG(renderer, filePath)
     {
-        if(!bluestar){
-            std::cerr << "Bluestar doesn't exist!" << std::endl;
+        if(!star){
+            std::cerr << "Star doesn't exist!" << std::endl;
         } else {
-            this->bluestar = bluestar;
+            this->star = star;
         }
     };
 
     void print(SDL_Renderer*  renderer, Uint32 ticks) override;
 
 private:
-    std::shared_ptr<Star> bluestar{nullptr};
+    std::shared_ptr<Star> star{nullptr};
 };
