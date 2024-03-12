@@ -13,6 +13,6 @@ void BlueStarTexture::print(SDL_Renderer *renderer, Uint32 ticks) {
     SDL_QueryTexture(texture, nullptr, nullptr, &bluestar->rect.w, &bluestar->rect.h);
     Uint32 sprite = (ticks / 100) % 6;
     SDL_Rect srcrect = { static_cast<int>(sprite * 195), 0, 195, 500 };
-    SDL_Rect dstrect = { bluestar->rect.x, bluestar->rect.y, 55, 150 };
+    SDL_Rect dstrect = { bluestar->rect.x, bluestar->rect.y, bluestar->width, bluestar->height };
     SDL_RenderCopy(renderer, texture, &srcrect, &dstrect);
 }
