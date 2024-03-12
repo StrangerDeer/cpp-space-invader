@@ -2,9 +2,9 @@
 // Created by AsusTuf on 2024. 03. 12..
 //
 
-#include "BlueStarTexture.h"
+#include "StarTexture.h"
 
-void BlueStarTexture::print(SDL_Renderer *renderer, Uint32 ticks) {
+void StarTexture::print(SDL_Renderer *renderer, Uint32 ticks) {
     if(!bluestar){
         std::cerr << "Bluestar's texture doesn't exist!" << std::endl;
         return;
