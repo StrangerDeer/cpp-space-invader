@@ -34,11 +34,11 @@ void Game::initSDL() {
         return;
     }
 
+    //TODO: move these into initLogic
     spaceship = std::make_shared<Spaceship>(1, 1, 200, 200, 1, 1, 1, 1);
     blueStar1 = std::make_shared<Star>(200, 0, 1, 1, 10, 30, true, 10);
     blueStar2 = std::make_shared<Star>(400, 0, 1, 1, 15, 35, true, 10);
     blueStar3 = std::make_shared<Star>(600, -50, 1, 1, 7, 20, true, 10);
-
     stars = {blueStar1, blueStar2, blueStar3};
 }
 
