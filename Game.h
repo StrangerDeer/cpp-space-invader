@@ -4,7 +4,7 @@
 #include <SDL.h>
 
 #include <iostream>
-#include "objects/Player.h"
+#include "objects/Spaceship.h"
 #include "ui/SpaceshipTexture.h"
 
 class Game {
@@ -22,6 +22,7 @@ public:
 
     void run();
 
+
 private:
     SDL_Window* window{nullptr};
     SDL_Renderer* renderer{nullptr};
@@ -29,9 +30,9 @@ private:
 
     bool isRunning{true};
 
-    std::shared_ptr<Player> player{nullptr};
+    std::shared_ptr<Spaceship> spaceship{nullptr};
 
-    std::unique_ptr<SpaceshipTexture> playerTexture{nullptr};
+    std::unique_ptr<SpaceshipTexture> spaceshipTexture{nullptr};
 
     void initSDL();
     void initTexture();

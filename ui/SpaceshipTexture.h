@@ -4,13 +4,13 @@
 #include <utility>
 
 #include "TextureCreatorFromPNG.h"
-#include "../objects/Player.h"
+#include "../objects/Spaceship.h"
 
 class SpaceshipTexture : public TextureCreatorFromPNG {
 
 public:
-    SpaceshipTexture(SDL_Renderer* renderer, const std::shared_ptr<Player>& spaceship) :
-    TextureCreatorFromPNG(renderer, "../ui/textures/ship2.png")
+    SpaceshipTexture(SDL_Renderer* renderer, const std::shared_ptr<Spaceship>& spaceship) :
+    TextureCreatorFromPNG(renderer, "../ui/textures/spaceship_spritesheet.png")
     {
         if(!spaceship){
             std::cerr << "Spaceship doesn't exist!" << std::endl;
@@ -19,10 +19,10 @@ public:
         }
     };
 
-    void print(SDL_Renderer*  renderer) override;
+    void print(SDL_Renderer*  renderer, Uint32 ticks) override;
 
 private:
-    std::shared_ptr<Player> spaceship{nullptr};
+    std::shared_ptr<Spaceship> spaceship{nullptr};
 };
 
 
