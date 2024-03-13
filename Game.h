@@ -46,19 +46,11 @@ private:
     bool isRunning{true};
 
     std::shared_ptr<Spaceship> spaceship{nullptr};
-    std::shared_ptr<Asteroid> asteroid1{nullptr};
-    std::shared_ptr<Star> blueStar1{nullptr};
-    std::shared_ptr<Star> blueStar2{nullptr};
-    std::shared_ptr<Star> blueStar3{nullptr};
 
-    std::unique_ptr<SpaceshipTexture> playerTexture{nullptr};
     std::unique_ptr<SpaceshipTexture> spaceshipTexture{nullptr};
-    std::shared_ptr<AsteroidTexture> asteroidTexture1{nullptr};
-    std::shared_ptr<StarTexture> blueStarTexture1{nullptr};
-    std::shared_ptr<StarTexture> blueStarTexture2{nullptr};
-    std::shared_ptr<StarTexture> blueStarTexture3{nullptr};
 
     std::vector<std::shared_ptr<StarTexture>> starTextures{};
+    std::vector<std::shared_ptr<AsteroidTexture>> asteroidTextures{};
 
   void initSDL();
   void initLogic();
@@ -85,6 +77,7 @@ private:
                               int point);
 
     void initStarTextures();
+    void initAsteroidTextures();
 };
 
 #endif //CPP_SPACE_INVADER_GAME_H

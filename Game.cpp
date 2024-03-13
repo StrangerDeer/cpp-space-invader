@@ -8,12 +8,14 @@ void Game::run() {
         Uint32 ticks = SDL_GetTicks();
 
         spaceshipTexture->print(renderer, ticks);
-        //asteroidTexture1->print(renderer, ticks);
 
         for(std::shared_ptr<StarTexture> starTexture : starTextures) {
             starTexture->print(renderer, ticks);
         }
 
+        for(std::shared_ptr<AsteroidTexture> asteroidTexture : asteroidTextures) {
+            asteroidTexture->print(renderer, ticks);
+        }
 
         for (std::shared_ptr<Star> star : stars) {
             star->fall();
@@ -72,7 +74,7 @@ std::shared_ptr<Asteroid> generateAsteroid(int windowWidth,
                                            int maxSpeed,
                                            int points) {
   int x = Util::getRandomNumber(0, windowWidth);
-  int y = Util::getRandomNumber(-windowHeight*2, (0-windowHeight)/2);
+  int y = Util::getRandomNumber(-windowHeight*3, (0-windowHeight)/2);
   return std::make_shared<Asteroid>(maxHp, x, y, width, height, minSpeed, maxSpeed, points);
 }
 
@@ -152,9 +154,9 @@ void Game::initLogic() {
   constexpr int MAX_SPEED_FOR_GOLD_STARS = 30;
   constexpr int MAX_SPEED_FOR_RED_STARS = 35;
 
-  constexpr int SMALL_ASTEROID_HEIGHT = 10;
-  constexpr int MEDIUM_ASTEROID_HEIGHT = 20;
-  constexpr int LARGE_ASTEROID_HEIGHT = 30;
+  constexpr int SMALL_ASTEROID_HEIGHT = 70;
+  constexpr int MEDIUM_ASTEROID_HEIGHT = 120;
+  constexpr int LARGE_ASTEROID_HEIGHT = 170;
 
   constexpr int NUMBER_OF_SMALL_ASTEROIDS = 25;
   constexpr int NUMBER_OF_MEDIUM_ASTEROIDS = 15;
@@ -168,8 +170,8 @@ void Game::initLogic() {
   constexpr int POINT_FOR_MEDIUM_ASTEROIDS = 3;
   constexpr int POINT_FOR_LARGE_ASTEROIDS = 5;
 
-  constexpr int MIN_SPEED_FOR_ASTEROIDS = 2;
-  constexpr int MAX_SPEED_FOR_ASTEROIDS = 10;
+  constexpr int MIN_SPEED_FOR_ASTEROIDS = 1;
+  constexpr int MAX_SPEED_FOR_ASTEROIDS = 15;
 
   int windowWidth = SDL_GetWindowSurface(window)->w;
   int windowHeight = SDL_GetWindowSurface(window)->h;
@@ -272,17 +274,25 @@ void Game::handleEvent() {
 }
 
 void Game::initTexture() {
-    std::vector<std::string> ASTEROID_IMGS = {"../ui/textures/asteroid1.png"};
 
-    //TODO: RANDOMIZE ASTEROID IMG
     initStarTextures();
+    initAsteroidTextures();
 
     spaceshipTexture = std::make_unique<SpaceshipTexture>(renderer, spaceship);
-    asteroidTexture1 = std::make_shared<AsteroidTexture>(renderer, asteroid1);
+}
+
+void Game::initAsteroidTextures() {
+    std::string ASTEROID_IMG = "../ui/textures/asteroid";
+    for(const std::shared_ptr<Asteroid>& asteroid : asteroids) {
+        int randomIndex = Util::getRandomNumber(1, 5);
+        std::string filepath = ASTEROID_IMG + std::to_string(randomIndex) + ".png";
+        std::shared_ptr<AsteroidTexture> asteroidTexture = std::make_shared<AsteroidTexture>(renderer, asteroid, filepath);
+        asteroidTextures.push_back(asteroidTexture);
+    }
 }
 
 void Game::initStarTextures() {
-    std::string BLUESTAR_IMG = "../ui/textures/star.png";
+    std::string BLUESTAR_IMG = "../ui/textures/bluestar.png";
     std::string GREENSTAR_IMG = "../ui/textures/greenstar.png";
     std::string PINKSTAR_IMG = "../ui/textures/pinkstar.png";
     std::string GOLDSTAR_IMG = "../ui/textures/goldstar.png";
