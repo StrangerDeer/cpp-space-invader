@@ -12,7 +12,12 @@
 #include "objects/Asteroid.h"
 #include "ui/objectTextures/AsteroidTexture.h"
 #include "sound/BackgroundMusic.h"
+#include "ui/text/GameText.h"
+#include "ui/text/SpaceshipHealthGameText.h"
 #include <vector>
+
+template<typename T>
+using shared_vector = std::vector<std::shared_ptr<T>>;
 
 class Game {
 
@@ -35,6 +40,8 @@ private:
     SDL_Window *window{nullptr};
     SDL_Renderer *renderer{nullptr};
     SDL_Event event;
+
+    shared_vector<GameText> texts;
 
     std::vector<std::shared_ptr<Star>> stars;
     std::vector<std::shared_ptr<Asteroid>> asteroids;
@@ -61,6 +68,7 @@ private:
   void initLogic();
   void initTexture();
   void handleEvent();
+  void printTexture();
 
   void initOneKindOfStars(int numberOfStars,
                           int windowWidth,

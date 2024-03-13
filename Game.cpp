@@ -6,29 +6,13 @@ void Game::run() {
 
     while(isRunning){
         handleEvent();
-        SDL_RenderClear(renderer);
-        Uint32 ticks = SDL_GetTicks();
-
-        spaceshipTexture->print(renderer, ticks);
-
-        for(const std::shared_ptr<StarTexture>& starTexture : starTextures) {
-            starTexture->print(renderer, ticks);
-        }
-
-        for(std::shared_ptr<AsteroidTexture> asteroidTexture : asteroidTextures) {
-            asteroidTexture->print(renderer, ticks);
-        }
-
-        for (const std::shared_ptr<Star>& star : stars) {
+        for (std::shared_ptr<Star> star : stars) {
             star->fall();
         }
-        for (const std::shared_ptr<Asteroid>& asteroid : asteroids) {
+        for (std::shared_ptr<Asteroid> asteroid : asteroids) {
             asteroid->fall();
         }
-
-
-
-        SDL_RenderPresent(renderer);
+        printTexture();
         SDL_Delay(60);
     }
 }
@@ -293,8 +277,20 @@ void Game::handleEvent() {
 
 void Game::initTexture() {
 
+    int windowWidth = SDL_GetWindowSurface(window)->w;
+    int windowHeight = SDL_GetWindowSurface(window)->h;
+
     initStarTextures();
     initAsteroidTextures();
+
+    std::shared_ptr<GameText> livesText = std::make_shared<GameText>(renderer, "../ui/text/Open 24 Display St.ttf", 50, "Health: ",
+                                                                     SDL_Color{0,255,0,255}, windowWidth * 0.80,windowHeight * 0.95);
+    std::shared_ptr<SpaceshipHealthGameText> spaceHealthText = std::make_shared<SpaceshipHealthGameText>(
+                                                                    renderer, spaceship, "../ui/text/Open 24 Display St.ttf", 50,
+                                                                     SDL_Color{0,255,0,255}, 50,50);
+
+    texts.push_back(livesText);
+    texts.push_back(spaceHealthText);
 
     spaceshipTexture = std::make_unique<SpaceshipTexture>(renderer, spaceship);
 }
@@ -336,4 +332,25 @@ void Game::initStarTextures() {
         std::shared_ptr<StarTexture> starTexture = std::make_shared<StarTexture>(renderer, redstar, REDSTAR_IMG);
         starTextures.push_back(starTexture);
     }
+}
+
+void Game::printTexture() {
+    SDL_RenderClear(renderer);
+    Uint32 ticks = SDL_GetTicks();
+
+    spaceshipTexture->print(renderer, ticks);
+
+    for(const std::shared_ptr<StarTexture>& starTexture : starTextures) {
+        starTexture->print(renderer, ticks);
+    }
+
+    for(std::shared_ptr<AsteroidTexture> asteroidTexture : asteroidTextures) {
+        asteroidTexture->print(renderer, ticks);
+    }
+
+    for(std::shared_ptr<GameText> text : texts){
+        text->display(renderer);
+    }
+
+    SDL_RenderPresent(renderer);
 }
