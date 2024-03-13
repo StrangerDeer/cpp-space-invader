@@ -16,7 +16,7 @@
 
 class Game {
 
-public:
+ public:
   Game() {
     initSDL();
     initLogic();
@@ -31,22 +31,22 @@ public:
 
   void run();
 
-private:
-    SDL_Window *window{nullptr};
-    SDL_Renderer *renderer{nullptr};
-    SDL_Event event;
+ private:
+  SDL_Window *window{nullptr};
+  SDL_Renderer *renderer{nullptr};
+  SDL_Event event;
 
-    std::vector<std::shared_ptr<Star>> stars;
-    std::vector<std::shared_ptr<Asteroid>> asteroids;
-    std::vector<std::shared_ptr<DimensionalObject>> dimensionalObjects;
+  std::vector<std::shared_ptr<Star>> stars;
+  std::vector<std::shared_ptr<Asteroid>> asteroids;
+  std::vector<std::shared_ptr<DimensionalObject>> dimensionalObjects;
 
-    std::vector<std::shared_ptr<Star>> pinkStars;
-    std::vector<std::shared_ptr<Star>> greenStars;
-    std::vector<std::shared_ptr<Star>> blueStars;
-    std::vector<std::shared_ptr<Star>> goldStars;
-    std::vector<std::shared_ptr<Star>> redStars;
+  std::vector<std::shared_ptr<Star>> pinkStars;
+  std::vector<std::shared_ptr<Star>> greenStars;
+  std::vector<std::shared_ptr<Star>> blueStars;
+  std::vector<std::shared_ptr<Star>> goldStars;
+  std::vector<std::shared_ptr<Star>> redStars;
 
-    bool isRunning{true};
+  bool isRunning{true};
 
     std::unique_ptr<BackgroundMusic> backgroundMusic{nullptr};
 
@@ -70,7 +70,7 @@ private:
                           int minSpeed,
                           int maxSpeed,
                           int point,
-                          std::vector<std::shared_ptr<Star>>& starVector);
+                          std::vector<std::shared_ptr<Star>> &starVector);
   void initOneKindOfAsteroids(int numberOfAsteroids,
                               int windowWidth,
                               int windowHeight,
@@ -81,8 +81,9 @@ private:
                               int maxSpeed,
                               int point);
 
-    void initStarTextures();
-    void initAsteroidTextures();
+  void initStarTextures();
+  void initAsteroidTextures();
+  void handleCollisions();
 };
 
 #endif //CPP_SPACE_INVADER_GAME_H
