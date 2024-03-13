@@ -78,7 +78,7 @@ private:
                           int minSpeed,
                           int maxSpeed,
                           int point,
-                          std::vector<std::shared_ptr<Star>>& starVector);
+                          std::vector<std::shared_ptr<Star>> &starVector);
   void initOneKindOfAsteroids(int numberOfAsteroids,
                               int windowWidth,
                               int windowHeight,
@@ -89,8 +89,9 @@ private:
                               int maxSpeed,
                               int point);
 
-    void initStarTextures();
-    void initAsteroidTextures();
+  void initStarTextures();
+  void initAsteroidTextures();
+  void handleCollisions();
 };
 
 #endif //CPP_SPACE_INVADER_GAME_H
