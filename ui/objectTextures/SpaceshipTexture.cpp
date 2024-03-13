@@ -10,7 +10,7 @@ void SpaceshipTexture::print(SDL_Renderer *renderer, Uint32 ticks) {
     SDL_QueryTexture(texture, nullptr, nullptr, &spaceship->rect.w, &spaceship->rect.h);
     Uint32 sprite = (ticks / 100) % 7;
     SDL_Rect srcrect = { static_cast<int>(sprite * 500), 0, 500, 500 };
-    SDL_Rect dstrect = { spaceship->rect.x, spaceship->rect.y, 100, 100 };
+    SDL_Rect dstrect = { spaceship->rect.x, spaceship->rect.y, spaceship->width, spaceship->height };
     //SDL_RenderCopy(renderer, texture, &srcrect, &dstrect);
     SDL_RenderCopyEx(renderer, texture, &srcrect, &dstrect, 45, nullptr, SDL_FLIP_NONE);
 }
