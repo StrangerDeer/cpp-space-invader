@@ -5,6 +5,7 @@ find_package(SDL2 CONFIG REQUIRED)
 find_package(SDL2_image CONFIG REQUIRED)
 find_package(SDL2_ttf CONFIG REQUIRED)
 find_package(SDL2_mixer CONFIG REQUIRED)
+find_package(SDL2_mixer_ext CONFIG REQUIRED)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -28,7 +29,9 @@ add_executable(cpp_space_invader main.cpp
         ui/objectTextures/StarTexture.h
         ui/objectTextures/StarTexture.cpp
         ui/objectTextures/AsteroidTexture.h
-        ui/objectTextures/AsteroidTexture.cpp)
+        ui/objectTextures/AsteroidTexture.cpp
+        sound/BackgroundMusic.cpp
+        sound/BackgroundMusic.h)
 
 target_link_libraries(cpp_space_invader
         PRIVATE
@@ -37,4 +40,5 @@ target_link_libraries(cpp_space_invader
         $<IF:$<TARGET_EXISTS:SDL2_image::SDL2_image>,SDL2_image::SDL2_image,SDL2_image::SDL2_image-static>
         $<IF:$<TARGET_EXISTS:SDL2_ttf::SDL2_ttf>,SDL2_ttf::SDL2_ttf,SDL2_ttf::SDL2_ttf-static>
         $<IF:$<TARGET_EXISTS:SDL2_mixer::SDL2_mixer>,SDL2_mixer::SDL2_mixer,SDL2_mixer::SDL2_mixer-static>
+        $<IF:$<TARGET_EXISTS:SDL2_mixer_ext::SDL2_mixer_ext>,SDL2_mixer_ext::SDL2_mixer_ext,SDL2_mixer_ext::SDL2_mixer_ext_Static>
 )
