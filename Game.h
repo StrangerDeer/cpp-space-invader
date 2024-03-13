@@ -11,6 +11,7 @@
 #include "ui/objectTextures/StarTexture.h"
 #include "objects/Asteroid.h"
 #include "ui/objectTextures/AsteroidTexture.h"
+#include "sound/BackgroundMusic.h"
 #include <vector>
 
 class Game {
@@ -25,6 +26,7 @@ public:
   ~Game() {
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
+    SDL_Quit();
   }
 
   void run();
@@ -45,6 +47,8 @@ private:
     std::vector<std::shared_ptr<Star>> redStars;
 
     bool isRunning{true};
+
+    std::unique_ptr<BackgroundMusic> backgroundMusic{nullptr};
 
     std::shared_ptr<Spaceship> spaceship{nullptr};
     std::shared_ptr<Asteroid> asteroid1{nullptr};

@@ -1,7 +1,8 @@
 #include "Game.h"
 
 void Game::run() {
-    Mix_PlayMusic(backgroundMusic,1);
+
+    backgroundMusic->playBackgroundMusic();
 
     while(isRunning){
         handleEvent();
@@ -11,15 +12,15 @@ void Game::run() {
         spaceshipTexture->print(renderer, ticks);
         //asteroidTexture1->print(renderer, ticks);
 
-        for(std::shared_ptr<StarTexture> starTexture : starTextures) {
+        for(const std::shared_ptr<StarTexture>& starTexture : starTextures) {
             starTexture->print(renderer, ticks);
         }
 
 
-        for (std::shared_ptr<Star> star : stars) {
+        for (const std::shared_ptr<Star>& star : stars) {
             star->fall();
         }
-        for (std::shared_ptr<Asteroid> asteroid : asteroids) {
+        for (const std::shared_ptr<Asteroid>& asteroid : asteroids) {
             asteroid->fall();
         }
 
@@ -51,7 +52,9 @@ void Game::initSDL() {
 
 
     //TODO: MOVE TO INITLOGIC
-    spaceship = std::make_shared<Spaceship>(1, 30, 500, 500, 500, 500, 1, 1);
+    spaceship = std::make_shared<Spaceship>(1, 50, 500, 500, 500, 500, 1, 1);
+
+    backgroundMusic = std::make_unique<BackgroundMusic>();
 }
 
 std::shared_ptr<Star> generateStar(int windowWidth,
@@ -285,7 +288,7 @@ void Game::initTexture() {
 }
 
 void Game::initStarTextures() {
-    std::string BLUESTAR_IMG = "../ui/textures/star.png";
+    std::string BLUESTAR_IMG = "../ui/textures/bluestar.png";
     std::string GREENSTAR_IMG = "../ui/textures/greenstar.png";
     std::string PINKSTAR_IMG = "../ui/textures/pinkstar.png";
     std::string GOLDSTAR_IMG = "../ui/textures/goldstar.png";
