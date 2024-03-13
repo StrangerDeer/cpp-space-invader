@@ -12,11 +12,17 @@
 #include "objects/Asteroid.h"
 #include "ui/objectTextures/AsteroidTexture.h"
 #include "sound/BackgroundMusic.h"
+#include "ui/text/GameText.h"
+#include "ui/text/SpaceshipHealthGameText.h"
+#include "ui/text/SpaceshipPointGameText.h"
 #include <vector>
+
+template<typename T>
+using shared_vector = std::vector<std::shared_ptr<T>>;
 
 class Game {
 
- public:
+public:
   Game() {
     initSDL();
     initLogic();
@@ -31,22 +37,24 @@ class Game {
 
   void run();
 
- private:
-  SDL_Window *window{nullptr};
-  SDL_Renderer *renderer{nullptr};
-  SDL_Event event;
+private:
+    SDL_Window *window{nullptr};
+    SDL_Renderer *renderer{nullptr};
+    SDL_Event event;
 
-  std::vector<std::shared_ptr<Star>> stars;
-  std::vector<std::shared_ptr<Asteroid>> asteroids;
-  std::vector<std::shared_ptr<DimensionalObject>> dimensionalObjects;
+    shared_vector<GameText> texts;
 
-  std::vector<std::shared_ptr<Star>> pinkStars;
-  std::vector<std::shared_ptr<Star>> greenStars;
-  std::vector<std::shared_ptr<Star>> blueStars;
-  std::vector<std::shared_ptr<Star>> goldStars;
-  std::vector<std::shared_ptr<Star>> redStars;
+    std::vector<std::shared_ptr<Star>> stars;
+    std::vector<std::shared_ptr<Asteroid>> asteroids;
+    std::vector<std::shared_ptr<DimensionalObject>> dimensionalObjects;
 
-  bool isRunning{true};
+    std::vector<std::shared_ptr<Star>> pinkStars;
+    std::vector<std::shared_ptr<Star>> greenStars;
+    std::vector<std::shared_ptr<Star>> blueStars;
+    std::vector<std::shared_ptr<Star>> goldStars;
+    std::vector<std::shared_ptr<Star>> redStars;
+
+    bool isRunning{true};
 
     std::unique_ptr<BackgroundMusic> backgroundMusic{nullptr};
 
@@ -61,6 +69,7 @@ class Game {
   void initLogic();
   void initTexture();
   void handleEvent();
+  void printTexture();
 
   void initOneKindOfStars(int numberOfStars,
                           int windowWidth,
@@ -84,6 +93,8 @@ class Game {
   void initStarTextures();
   void initAsteroidTextures();
   void handleCollisions();
+
+    void makeObjectsFall();
 };
 
 #endif //CPP_SPACE_INVADER_GAME_H

@@ -4,32 +4,30 @@ void Game::run() {
 
   backgroundMusic->playBackgroundMusic();
 
-  while (isRunning) {
-    handleEvent();
-    handleCollisions();
-    SDL_RenderClear(renderer);
-    Uint32 ticks = SDL_GetTicks();
-
-    spaceshipTexture->print(renderer, ticks);
-
-    for (const std::shared_ptr<StarTexture> &starTexture : starTextures) {
-      starTexture->print(renderer, ticks);
+    while(isRunning){
+        handleEvent();
+        handleCollisions();
+        makeObjectsFall();
+        printTexture();
+        SDL_Delay(60);
     }
+}
 
-    for (std::shared_ptr<AsteroidTexture> asteroidTexture : asteroidTextures) {
-      asteroidTexture->print(renderer, ticks);
+void Game::makeObjectsFall() {
+    int windowHeight = SDL_GetWindowSurface(window)->h;
+    int windowWidth = SDL_GetWindowSurface(window)->w;
+    for (std::shared_ptr<Star> star : stars) {
+        star->fall();
+        if (star.get()->rect.y > windowHeight + 300) {
+            star->placeAtStartingPos(windowWidth, windowHeight);
+        }
     }
-
-    for (const std::shared_ptr<Star> &star : stars) {
-      star->fall();
+    for (std::shared_ptr<Asteroid> asteroid : asteroids) {
+        asteroid->fall();
+        if (asteroid.get()->rect.y > windowHeight + 300) {
+            asteroid->placeAtStartingPos(windowWidth, windowHeight);
+        }
     }
-    for (const std::shared_ptr<Asteroid> &asteroid : asteroids) {
-      asteroid->fall();
-    }
-
-    SDL_RenderPresent(renderer);
-    SDL_Delay(60);
-  }
 }
 
 void Game::initSDL() {
@@ -52,8 +50,10 @@ void Game::initSDL() {
   }
 
 
-  //TODO: MOVE TO INITLOGIC
-  spaceship = std::make_shared<Spaceship>(1, 50, 500, 500, 100, 100, 1, 1);
+    int windowHeight = SDL_GetWindowSurface(window)->h;
+    int windowWidth = SDL_GetWindowSurface(window)->w;
+    //TODO: MOVE TO INITLOGIC
+    spaceship = std::make_shared<Spaceship>(5, 50, windowWidth * 0.5, windowHeight * 0.85, 100, 100, 1, 1);
 
   backgroundMusic = std::make_unique<BackgroundMusic>();
 }
@@ -264,13 +264,25 @@ void Game::handleEvent() {
     }
 
     switch (event.key.keysym.sym) {
-      case SDLK_DOWN: spaceship->moveDown();
+      case SDLK_DOWN:
+          if(spaceship->rect.y+50 + spaceship->height < SDL_GetWindowSurface(window)->h){
+              spaceship->moveDown();
+          }
         break;
-      case SDLK_UP: spaceship->moveUp();
+      case SDLK_UP:
+          if(spaceship->rect.y+50 > 0 + spaceship->height) {
+              spaceship->moveUp();
+          }
         break;
-      case SDLK_RIGHT: spaceship->moveRight();
+      case SDLK_RIGHT:
+          if(spaceship->rect.x+60 + spaceship->width < SDL_GetWindowSurface(window)->w){
+              spaceship->moveRight();
+          }
         break;
-      case SDLK_LEFT: spaceship->moveLeft();
+      case SDLK_LEFT:
+          if(spaceship->rect.x+50 > 0 + spaceship->width) {
+              spaceship->moveLeft();
+          }
         break;
       default:;
     }
@@ -280,10 +292,27 @@ void Game::handleEvent() {
 
 void Game::initTexture() {
 
-  initStarTextures();
-  initAsteroidTextures();
+    int windowWidth = SDL_GetWindowSurface(window)->w;
+    int windowHeight = SDL_GetWindowSurface(window)->h;
 
-  spaceshipTexture = std::make_unique<SpaceshipTexture>(renderer, spaceship);
+    initStarTextures();
+    initAsteroidTextures();
+
+    std::shared_ptr<GameText> livesText = std::make_shared<GameText>(renderer, "../ui/text/Open 24 Display St.ttf", 50, "Health: ",
+                                                                     SDL_Color{0,255,0,255}, 20,windowHeight * 0.93);
+    std::shared_ptr<SpaceshipHealthGameText> spaceHealthText = std::make_shared<SpaceshipHealthGameText>(
+                                                                    renderer, spaceship, "../ui/text/Open 24 Display St.ttf", 50,
+                                                                     SDL_Color{0,255,0,255}, 175,windowHeight * 0.93);
+
+    std::shared_ptr<SpaceshipPointGameText> spacePointText = std::make_shared<SpaceshipPointGameText>(
+            renderer, spaceship, "../ui/text/Open 24 Display St.ttf", 50,
+            SDL_Color{0,255,0,255}, windowWidth - 150,windowHeight * 0.93);
+
+    texts.push_back(livesText);
+    texts.push_back(spaceHealthText);
+    texts.push_back(spacePointText);
+
+    spaceshipTexture = std::make_unique<SpaceshipTexture>(renderer, spaceship);
 }
 
 void Game::initAsteroidTextures() {
@@ -350,4 +379,25 @@ void Game::handleCollisions() {
       star->givePoints(spaceship);
     }
   }
+}
+
+void Game::printTexture() {
+    SDL_RenderClear(renderer);
+    Uint32 ticks = SDL_GetTicks();
+
+    spaceshipTexture->print(renderer, ticks);
+
+    for(const std::shared_ptr<StarTexture>& starTexture : starTextures) {
+        starTexture->print(renderer, ticks);
+    }
+
+    for(std::shared_ptr<AsteroidTexture> asteroidTexture : asteroidTextures) {
+        asteroidTexture->print(renderer, ticks);
+    }
+
+    for(std::shared_ptr<GameText> text : texts){
+        text->display(renderer);
+    }
+
+    SDL_RenderPresent(renderer);
 }

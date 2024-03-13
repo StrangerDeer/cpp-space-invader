@@ -31,7 +31,13 @@ add_executable(cpp_space_invader main.cpp
         ui/objectTextures/AsteroidTexture.h
         ui/objectTextures/AsteroidTexture.cpp
         sound/BackgroundMusic.cpp
-        sound/BackgroundMusic.h)
+        sound/BackgroundMusic.h
+        ui/text/GameText.cpp
+        ui/text/GameText.h
+        ui/text/SpaceshipHealthGameText.cpp
+        ui/text/SpaceshipHealthGameText.h
+        ui/text/SpaceshipPointGameText.cpp
+        ui/text/SpaceshipPointGameText.h)
 
 target_link_libraries(cpp_space_invader
         PRIVATE
