@@ -14,6 +14,7 @@
 #include "sound/BackgroundMusic.h"
 #include "ui/text/GameText.h"
 #include "ui/text/SpaceshipHealthGameText.h"
+#include "ui/text/SpaceshipPointGameText.h"
 #include <vector>
 
 template<typename T>

@@ -35,7 +35,9 @@ add_executable(cpp_space_invader main.cpp
         ui/text/GameText.cpp
         ui/text/GameText.h
         ui/text/SpaceshipHealthGameText.cpp
-        ui/text/SpaceshipHealthGameText.h)
+        ui/text/SpaceshipHealthGameText.h
+        ui/text/SpaceshipPointGameText.cpp
+        ui/text/SpaceshipPointGameText.h)
 
 target_link_libraries(cpp_space_invader
         PRIVATE

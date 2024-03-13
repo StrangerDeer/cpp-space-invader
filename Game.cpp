@@ -39,7 +39,7 @@ void Game::initSDL() {
 
 
     //TODO: MOVE TO INITLOGIC
-    spaceship = std::make_shared<Spaceship>(1, 50, 500, 500, 100, 100, 1, 1);
+    spaceship = std::make_shared<Spaceship>(5, 50, 500, 500, 100, 100, 1, 1);
 
   backgroundMusic = std::make_unique<BackgroundMusic>();
 }
@@ -285,13 +285,18 @@ void Game::initTexture() {
     initAsteroidTextures();
 
     std::shared_ptr<GameText> livesText = std::make_shared<GameText>(renderer, "../ui/text/Open 24 Display St.ttf", 50, "Health: ",
-                                                                     SDL_Color{0,255,0,255}, windowWidth * 0.80,windowHeight * 0.95);
+                                                                     SDL_Color{0,255,0,255}, 20,windowHeight * 0.93);
     std::shared_ptr<SpaceshipHealthGameText> spaceHealthText = std::make_shared<SpaceshipHealthGameText>(
                                                                     renderer, spaceship, "../ui/text/Open 24 Display St.ttf", 50,
-                                                                     SDL_Color{0,255,0,255}, 50,50);
+                                                                     SDL_Color{0,255,0,255}, 175,windowHeight * 0.93);
+
+    std::shared_ptr<SpaceshipPointGameText> spacePointText = std::make_shared<SpaceshipPointGameText>(
+            renderer, spaceship, "../ui/text/Open 24 Display St.ttf", 50,
+            SDL_Color{0,255,0,255}, windowWidth - 150,windowHeight * 0.93);
 
     texts.push_back(livesText);
     texts.push_back(spaceHealthText);
+    texts.push_back(spacePointText);
 
     spaceshipTexture = std::make_unique<SpaceshipTexture>(renderer, spaceship);
 }
