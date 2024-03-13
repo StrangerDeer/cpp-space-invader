@@ -2,6 +2,7 @@
 #define CPP_SPACE_INVADER_GAME_H
 
 #include <SDL.h>
+#include <SDL_mixer.h>
 
 #include <iostream>
 #include "objects/Player.h"

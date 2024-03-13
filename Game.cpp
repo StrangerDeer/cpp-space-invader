@@ -1,6 +1,7 @@
 #include "Game.h"
 
 void Game::run() {
+    Mix_PlayMusic(backgroundMusic,1);
 
     while(isRunning){
         handleEvent();
@@ -12,6 +13,8 @@ void Game::run() {
 }
 
 void Game::initSDL() {
+    SDL_Init(SDL_INIT_EVERYTHING);
+
     window = SDL_CreateWindow("Space Invader", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1000,1000,
                               SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_OPENGL);
     if (!window) {
