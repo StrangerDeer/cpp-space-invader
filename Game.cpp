@@ -308,14 +308,23 @@ void Game::initStarTextures() {
 }
 
 void Game::handleCollisions() {
+
+  SDL_Rect spaceshipRect{spaceship->rect.x, spaceship->rect.y, spaceship->width, spaceship->height};
+
   for (auto &asteroid : asteroids) {
-    if (SDL_HasIntersection(&spaceship->rect, &asteroid->rect)) {
+
+    SDL_Rect asteroidRect{asteroid->rect.x, asteroid->rect.y, asteroid->width, asteroid->height};
+
+    if (SDL_HasIntersection(&spaceshipRect, &asteroidRect)) {
       asteroid->reset();
       spaceship->takeDamage();
     }
   }
   for (auto &star : stars) {
-    if (SDL_HasIntersection(&spaceship->rect, &star->rect)) {
+
+    SDL_Rect starRect{star->rect.x, star->rect.y, star->width, star->height};
+
+    if (SDL_HasIntersection(&spaceshipRect, &starRect)) {
       star->placeAtStartingPos();
       star->givePoints(spaceship);
     }
