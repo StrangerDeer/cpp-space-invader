@@ -13,14 +13,15 @@ class Asteroid : public FallingObject, public ScoreObject, public HealthObject {
 
   bool isDead() {
     if (health <= 0) {
-      reset();
+      //TODO: set reset arguments according to window
+      reset(0, 0);
       return true;
     }
     return false;
   };
 
-  void reset() {
-    placeAtStartingPos();
+  void reset(int windowWidth, int windowHeight) {
+    placeAtStartingPos(windowWidth, windowHeight);
     health = maxHealth;
     getRandomRotation();
   }
