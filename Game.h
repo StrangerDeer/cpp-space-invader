@@ -4,11 +4,13 @@
 #include <SDL.h>
 
 #include <iostream>
-#include "objects/Player.h"
-#include "ui/SpaceshipTexture.h"
-#include <vector>
+#include "objects/Spaceship.h"
+#include "ui/objectTextures/SpaceshipTexture.h"
 #include "objects/Star.h"
+#include "ui/objectTextures/StarTexture.h"
 #include "objects/Asteroid.h"
+#include "ui/objectTextures/AsteroidTexture.h"
+#include <vector>
 
 class Game {
 
@@ -35,11 +37,28 @@ class Game {
   std::vector<std::shared_ptr<Asteroid>> asteroids;
   std::vector<std::shared_ptr<DimensionalObject>> dimensionalObjects;
 
+  std::vector<std::shared_ptr<Star>> pinkStars;
+  std::vector<std::shared_ptr<Star>> greenStars;
+  std::vector<std::shared_ptr<Star>> blueStars;
+  std::vector<std::shared_ptr<Star>> goldStars;
+  std::vector<std::shared_ptr<Star>> redStars;
+
   bool isRunning{true};
 
-  std::shared_ptr<Player> player{nullptr};
+  std::shared_ptr<Spaceship> spaceship{nullptr};
+  std::shared_ptr<Asteroid> asteroid1{nullptr};
+  std::shared_ptr<Star> blueStar1{nullptr};
+  std::shared_ptr<Star> blueStar2{nullptr};
+  std::shared_ptr<Star> blueStar3{nullptr};
 
   std::unique_ptr<SpaceshipTexture> playerTexture{nullptr};
+  std::unique_ptr<SpaceshipTexture> spaceshipTexture{nullptr};
+  std::shared_ptr<AsteroidTexture> asteroidTexture1{nullptr};
+  std::shared_ptr<StarTexture> blueStarTexture1{nullptr};
+  std::shared_ptr<StarTexture> blueStarTexture2{nullptr};
+  std::shared_ptr<StarTexture> blueStarTexture3{nullptr};
+
+  std::vector<std::shared_ptr<StarTexture>> starTextures{};
 
   void initSDL();
   void initLogic();
@@ -53,7 +72,8 @@ class Game {
                           int starHeight,
                           int minSpeed,
                           int maxSpeed,
-                          int point);
+                          int point,
+                          std::vector<std::shared_ptr<Star>> &starVector);
   void initOneKindOfAsteroids(int numberOfAsteroids,
                               int windowWidth,
                               int windowHeight,
@@ -63,6 +83,8 @@ class Game {
                               int minSpeed,
                               int maxSpeed,
                               int point);
+
+  void initStarTextures();
   void handleCollisions();
 };
 
