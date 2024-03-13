@@ -77,6 +77,7 @@ class Game {
                               int point);
 
   void initStarTextures();
+  void initAsteroidTextures();
   void handleCollisions();
 };
 

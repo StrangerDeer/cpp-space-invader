@@ -48,7 +48,7 @@ void Game::initSDL() {
 
 
   //TODO: MOVE TO INITLOGIC
-  spaceship = std::make_shared<Spaceship>(1, 30, 500, 500, 500, 500, 1, 1);
+  spaceship = std::make_shared<Spaceship>(1, 30, 500, 500, 100, 100, 1, 1);
 }
 
 std::shared_ptr<Star> generateStar(int windowWidth,
@@ -320,6 +320,9 @@ void Game::initStarTextures() {
 
 void Game::handleCollisions() {
 
+  int windowWidth = SDL_GetWindowSurface(window)->w;
+  int windowHeight = SDL_GetWindowSurface(window)->h;
+
   SDL_Rect spaceshipRect{spaceship->rect.x, spaceship->rect.y, spaceship->width, spaceship->height};
 
   for (auto &asteroid : asteroids) {
@@ -327,7 +330,7 @@ void Game::handleCollisions() {
     SDL_Rect asteroidRect{asteroid->rect.x, asteroid->rect.y, asteroid->width, asteroid->height};
 
     if (SDL_HasIntersection(&spaceshipRect, &asteroidRect)) {
-      asteroid->reset();
+      asteroid->reset(windowWidth, windowHeight);
       spaceship->takeDamage();
     }
   }
@@ -336,7 +339,7 @@ void Game::handleCollisions() {
     SDL_Rect starRect{star->rect.x, star->rect.y, star->width, star->height};
 
     if (SDL_HasIntersection(&spaceshipRect, &starRect)) {
-      star->placeAtStartingPos();
+      star->placeAtStartingPos(windowWidth, windowHeight);
       star->givePoints(spaceship);
     }
   }
