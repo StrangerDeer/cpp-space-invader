@@ -54,7 +54,7 @@ void Game::initSDL() {
 
 
     //TODO: MOVE TO INITLOGIC
-    spaceship = std::make_shared<Spaceship>(1, 50, 500, 500, 500, 500, 1, 1);
+    spaceship = std::make_shared<Spaceship>(1, 50, 500, 500, 100, 100, 1, 1);
 
     backgroundMusic = std::make_unique<BackgroundMusic>();
 }
@@ -265,13 +265,25 @@ void Game::handleEvent() {
     }
 
     switch (event.key.keysym.sym) {
-      case SDLK_DOWN: spaceship->moveDown();
+      case SDLK_DOWN:
+          if(spaceship->rect.y+50 + spaceship->height < SDL_GetWindowSurface(window)->h){
+              spaceship->moveDown();
+          }
         break;
-      case SDLK_UP: spaceship->moveUp();
+      case SDLK_UP:
+          if(spaceship->rect.y+50 > 0 + spaceship->height) {
+              spaceship->moveUp();
+          }
         break;
-      case SDLK_RIGHT: spaceship->moveRight();
+      case SDLK_RIGHT:
+          if(spaceship->rect.x+60 + spaceship->width < SDL_GetWindowSurface(window)->w){
+              spaceship->moveRight();
+          }
         break;
-      case SDLK_LEFT: spaceship->moveLeft();
+      case SDLK_LEFT:
+          if(spaceship->rect.x+50 > 0 + spaceship->width) {
+              spaceship->moveLeft();
+          }
         break;
       default:;
     }
