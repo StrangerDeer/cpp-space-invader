@@ -93,6 +93,8 @@ private:
   void initStarTextures();
   void initAsteroidTextures();
   void handleCollisions();
+
+    void makeObjectsFall();
 };
 
 #endif //CPP_SPACE_INVADER_GAME_H

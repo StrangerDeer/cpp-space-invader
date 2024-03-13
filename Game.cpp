@@ -7,14 +7,26 @@ void Game::run() {
     while(isRunning){
         handleEvent();
         handleCollisions();
-        for (std::shared_ptr<Star> star : stars) {
-            star->fall();
-        }
-        for (std::shared_ptr<Asteroid> asteroid : asteroids) {
-            asteroid->fall();
-        }
+        makeObjectsFall();
         printTexture();
         SDL_Delay(60);
+    }
+}
+
+void Game::makeObjectsFall() {
+    int windowHeight = SDL_GetWindowSurface(window)->h;
+    int windowWidth = SDL_GetWindowSurface(window)->w;
+    for (std::shared_ptr<Star> star : stars) {
+        star->fall();
+        if (star.get()->rect.y > windowHeight + 300) {
+            star->placeAtStartingPos(windowWidth, windowHeight);
+        }
+    }
+    for (std::shared_ptr<Asteroid> asteroid : asteroids) {
+        asteroid->fall();
+        if (asteroid.get()->rect.y > windowHeight + 300) {
+            asteroid->placeAtStartingPos(windowWidth, windowHeight);
+        }
     }
 }
 
@@ -38,8 +50,10 @@ void Game::initSDL() {
   }
 
 
+    int windowHeight = SDL_GetWindowSurface(window)->h;
+    int windowWidth = SDL_GetWindowSurface(window)->w;
     //TODO: MOVE TO INITLOGIC
-    spaceship = std::make_shared<Spaceship>(5, 50, 500, 500, 100, 100, 1, 1);
+    spaceship = std::make_shared<Spaceship>(5, 50, windowWidth * 0.5, windowHeight * 0.85, 100, 100, 1, 1);
 
   backgroundMusic = std::make_unique<BackgroundMusic>();
 }
