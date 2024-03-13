@@ -53,7 +53,7 @@ void Game::initSDL() {
 
 
   //TODO: MOVE TO INITLOGIC
-  spaceship = std::make_shared<Spaceship>(1, 50, 500, 500, 500, 500, 1, 1);
+  spaceship = std::make_shared<Spaceship>(1, 50, 500, 500, 100, 100, 1, 1);
 
   backgroundMusic = std::make_unique<BackgroundMusic>();
 }
