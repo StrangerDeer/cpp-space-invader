@@ -2,6 +2,8 @@
 
 void Game::run() {
 
+    backgroundMusic->playBackgroundMusic();
+
     while(isRunning){
         handleEvent();
         SDL_RenderClear(renderer);
@@ -9,7 +11,7 @@ void Game::run() {
 
         spaceshipTexture->print(renderer, ticks);
 
-        for(std::shared_ptr<StarTexture> starTexture : starTextures) {
+        for(const std::shared_ptr<StarTexture>& starTexture : starTextures) {
             starTexture->print(renderer, ticks);
         }
 
@@ -17,10 +19,10 @@ void Game::run() {
             asteroidTexture->print(renderer, ticks);
         }
 
-        for (std::shared_ptr<Star> star : stars) {
+        for (const std::shared_ptr<Star>& star : stars) {
             star->fall();
         }
-        for (std::shared_ptr<Asteroid> asteroid : asteroids) {
+        for (const std::shared_ptr<Asteroid>& asteroid : asteroids) {
             asteroid->fall();
         }
 
@@ -32,12 +34,14 @@ void Game::run() {
 }
 
 void Game::initSDL() {
-  window = SDL_CreateWindow("Space Invader", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1000, 1000,
-                            SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_OPENGL);
-  if (!window) {
-    std::cerr << "Error: Unable to create window!" << SDL_GetError() << std::endl;
-    return;
-  }
+    SDL_Init(SDL_INIT_EVERYTHING);
+
+    window = SDL_CreateWindow("Space Invader", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1000,1000,
+                              SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_OPENGL);
+    if (!window) {
+        std::cerr << "Error: Unable to create window!" << SDL_GetError() << std::endl;
+        return;
+    }
 
     SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
 
@@ -50,7 +54,9 @@ void Game::initSDL() {
 
 
     //TODO: MOVE TO INITLOGIC
-    spaceship = std::make_shared<Spaceship>(1, 30, 500, 500, 500, 500, 1, 1);
+    spaceship = std::make_shared<Spaceship>(1, 50, 500, 500, 500, 500, 1, 1);
+
+    backgroundMusic = std::make_unique<BackgroundMusic>();
 }
 
 std::shared_ptr<Star> generateStar(int windowWidth,
