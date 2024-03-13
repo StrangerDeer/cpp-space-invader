@@ -49,12 +49,6 @@ void Game::initSDL() {
     return;
   }
 
-
-    int windowHeight = SDL_GetWindowSurface(window)->h;
-    int windowWidth = SDL_GetWindowSurface(window)->w;
-    //TODO: MOVE TO INITLOGIC
-    spaceship = std::make_shared<Spaceship>(5, 50, windowWidth * 0.5, windowHeight * 0.85, 100, 100, 1, 1);
-
   backgroundMusic = std::make_unique<BackgroundMusic>();
 }
 
@@ -254,6 +248,9 @@ void Game::initLogic() {
                          MIN_SPEED_FOR_ASTEROIDS,
                          MAX_SPEED_FOR_ASTEROIDS,
                          POINT_FOR_LARGE_ASTEROIDS);
+
+
+    spaceship = std::make_shared<Spaceship>(5, 50, windowWidth * 0.5, windowHeight * 0.85, 100, 100, 1, 1);
 
 }
 
