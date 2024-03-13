@@ -1,28 +1,31 @@
 #include "Game.h"
 
 void Game::run() {
+
+  backgroundMusic->playBackgroundMusic();
+
   while (isRunning) {
     handleEvent();
     handleCollisions();
     SDL_RenderClear(renderer);
     Uint32 ticks = SDL_GetTicks();
 
-        spaceshipTexture->print(renderer, ticks);
+    spaceshipTexture->print(renderer, ticks);
 
-    for (std::shared_ptr<StarTexture> starTexture : starTextures) {
+    for (const std::shared_ptr<StarTexture> &starTexture : starTextures) {
       starTexture->print(renderer, ticks);
     }
 
-        for(std::shared_ptr<AsteroidTexture> asteroidTexture : asteroidTextures) {
-            asteroidTexture->print(renderer, ticks);
-        }
+    for (std::shared_ptr<AsteroidTexture> asteroidTexture : asteroidTextures) {
+      asteroidTexture->print(renderer, ticks);
+    }
 
-        for (std::shared_ptr<Star> star : stars) {
-            star->fall();
-        }
-        for (std::shared_ptr<Asteroid> asteroid : asteroids) {
-            asteroid->fall();
-        }
+    for (const std::shared_ptr<Star> &star : stars) {
+      star->fall();
+    }
+    for (const std::shared_ptr<Asteroid> &asteroid : asteroids) {
+      asteroid->fall();
+    }
 
     SDL_RenderPresent(renderer);
     SDL_Delay(60);
@@ -30,6 +33,8 @@ void Game::run() {
 }
 
 void Game::initSDL() {
+  SDL_Init(SDL_INIT_EVERYTHING);
+
   window = SDL_CreateWindow("Space Invader", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1000, 1000,
                             SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_OPENGL);
   if (!window) {
@@ -48,7 +53,9 @@ void Game::initSDL() {
 
 
   //TODO: MOVE TO INITLOGIC
-  spaceship = std::make_shared<Spaceship>(1, 30, 500, 500, 100, 100, 1, 1);
+  spaceship = std::make_shared<Spaceship>(1, 50, 500, 500, 500, 500, 1, 1);
+
+  backgroundMusic = std::make_unique<BackgroundMusic>();
 }
 
 std::shared_ptr<Star> generateStar(int windowWidth,
@@ -72,7 +79,7 @@ std::shared_ptr<Asteroid> generateAsteroid(int windowWidth,
                                            int maxSpeed,
                                            int points) {
   int x = Util::getRandomNumber(0, windowWidth);
-  int y = Util::getRandomNumber(-windowHeight*3, (0-windowHeight)/2);
+  int y = Util::getRandomNumber(-windowHeight * 3, (0 - windowHeight) / 2);
   return std::make_shared<Asteroid>(maxHp, x, y, width, height, minSpeed, maxSpeed, points);
 }
 
@@ -273,28 +280,28 @@ void Game::handleEvent() {
 
 void Game::initTexture() {
 
-    initStarTextures();
-    initAsteroidTextures();
+  initStarTextures();
+  initAsteroidTextures();
 
-    spaceshipTexture = std::make_unique<SpaceshipTexture>(renderer, spaceship);
+  spaceshipTexture = std::make_unique<SpaceshipTexture>(renderer, spaceship);
 }
 
 void Game::initAsteroidTextures() {
-    std::string ASTEROID_IMG = "../ui/textures/asteroid";
-    for(const std::shared_ptr<Asteroid>& asteroid : asteroids) {
-        int randomIndex = Util::getRandomNumber(1, 5);
-        std::string filepath = ASTEROID_IMG + std::to_string(randomIndex) + ".png";
-        std::shared_ptr<AsteroidTexture> asteroidTexture = std::make_shared<AsteroidTexture>(renderer, asteroid, filepath);
-        asteroidTextures.push_back(asteroidTexture);
-    }
+  std::string ASTEROID_IMG = "../ui/textures/asteroid";
+  for (const std::shared_ptr<Asteroid> &asteroid : asteroids) {
+    int randomIndex = Util::getRandomNumber(1, 5);
+    std::string filepath = ASTEROID_IMG + std::to_string(randomIndex) + ".png";
+    std::shared_ptr<AsteroidTexture> asteroidTexture = std::make_shared<AsteroidTexture>(renderer, asteroid, filepath);
+    asteroidTextures.push_back(asteroidTexture);
+  }
 }
 
 void Game::initStarTextures() {
-    std::string BLUESTAR_IMG = "../ui/textures/bluestar.png";
-    std::string GREENSTAR_IMG = "../ui/textures/greenstar.png";
-    std::string PINKSTAR_IMG = "../ui/textures/pinkstar.png";
-    std::string GOLDSTAR_IMG = "../ui/textures/goldstar.png";
-    std::string REDSTAR_IMG = "../ui/textures/redstar.png";
+  std::string BLUESTAR_IMG = "../ui/textures/bluestar.png";
+  std::string GREENSTAR_IMG = "../ui/textures/greenstar.png";
+  std::string PINKSTAR_IMG = "../ui/textures/pinkstar.png";
+  std::string GOLDSTAR_IMG = "../ui/textures/goldstar.png";
+  std::string REDSTAR_IMG = "../ui/textures/redstar.png";
 
   for (const std::shared_ptr<Star> &bluestar : blueStars) {
     std::shared_ptr<StarTexture> starTexture = std::make_shared<StarTexture>(renderer, bluestar, BLUESTAR_IMG);

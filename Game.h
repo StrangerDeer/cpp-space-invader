@@ -2,6 +2,7 @@
 #define CPP_SPACE_INVADER_GAME_H
 
 #include <SDL.h>
+#include <SDL_mixer.h>
 
 #include <iostream>
 #include "objects/Spaceship.h"
@@ -10,6 +11,7 @@
 #include "ui/objectTextures/StarTexture.h"
 #include "objects/Asteroid.h"
 #include "ui/objectTextures/AsteroidTexture.h"
+#include "sound/BackgroundMusic.h"
 #include <vector>
 
 class Game {
@@ -24,6 +26,7 @@ class Game {
   ~Game() {
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
+    SDL_Quit();
   }
 
   void run();
@@ -44,6 +47,8 @@ class Game {
   std::vector<std::shared_ptr<Star>> redStars;
 
   bool isRunning{true};
+
+    std::unique_ptr<BackgroundMusic> backgroundMusic{nullptr};
 
     std::shared_ptr<Spaceship> spaceship{nullptr};
 
