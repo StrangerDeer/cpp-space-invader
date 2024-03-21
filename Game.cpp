@@ -8,6 +8,17 @@ void Game::run() {
         handleEvent();
         handleCollisions();
         makeObjectsFall();
+
+        if(!spaceship->bullets.empty()){
+          for(int i = 0; i < spaceship->bullets.size(); i++){
+            std::shared_ptr<SpaceshipBullet> bullet = spaceship->bullets.at(i);
+            bullet->move();
+            if(bullet->bulletRect.y < 0){
+              spaceship->bullets.erase(spaceship->bullets.begin() + i);
+              spaceshipBulletsTexture.erase(spaceshipBulletsTexture.begin() + i);
+            }
+          }
+        }
         printTexture();
         SDL_Delay(60);
     }
@@ -74,7 +85,7 @@ std::shared_ptr<Asteroid> generateAsteroid(int windowWidth,
                                            int points) {
   int x = Util::getRandomNumber(0, windowWidth);
   int y = Util::getRandomNumber(-windowHeight * 3, (0 - windowHeight) / 2);
-  return std::make_shared<Asteroid>(maxHp, x, y, width, height, minSpeed, maxSpeed, points);
+  return std::make_shared<Asteroid>(maxHp, x, y, width, height, minSpeed, maxSpeed, points, windowWidth, windowHeight);
 }
 
 void Game::initOneKindOfStars(int numberOfStars,
@@ -260,30 +271,39 @@ void Game::handleEvent() {
       isRunning = false;
     }
 
-    switch (event.key.keysym.sym) {
-      case SDLK_DOWN:
-          if(spaceship->rect.y+50 + spaceship->height < SDL_GetWindowSurface(window)->h){
-              spaceship->moveDown();
+    if(event.type == SDL_KEYDOWN){
+      switch (event.key.keysym.sym) {
+        case SDLK_DOWN:
+          if(spaceship->rect.y + 50 + spaceship->height < SDL_GetWindowSurface(window)->h){
+            spaceship->moveDown();
           }
-        break;
-      case SDLK_UP:
-          if(spaceship->rect.y+50 > 0 + spaceship->height) {
-              spaceship->moveUp();
+          break;
+        case SDLK_UP:
+          if(spaceship->rect.y + 50 > 0 + spaceship->height) {
+            spaceship->moveUp();
           }
-        break;
-      case SDLK_RIGHT:
-          if(spaceship->rect.x+60 + spaceship->width < SDL_GetWindowSurface(window)->w){
-              spaceship->moveRight();
+          break;
+        case SDLK_RIGHT:
+          if(spaceship->rect.x + 60 + spaceship->width < SDL_GetWindowSurface(window)->w){
+            spaceship->moveRight();
           }
-        break;
-      case SDLK_LEFT:
-          if(spaceship->rect.x+50 > 0 + spaceship->width) {
-              spaceship->moveLeft();
+          break;
+        case SDLK_LEFT:
+          if(spaceship->rect.x + 50 > 0 + spaceship->width) {
+            spaceship->moveLeft();
           }
-        break;
-      default:;
-    }
+          break;
 
+        case SDLK_SPACE:
+
+          if(!event.key.repeat){
+            std::shared_ptr<SpaceshipBullet> bullet = spaceship->shoot(spaceship->width, spaceship->height);
+            std::shared_ptr<BulletTexture> bulletTexture = std::make_shared<BulletTexture>(renderer, bullet);
+            spaceshipBulletsTexture.push_back(bulletTexture);
+          }
+          break;
+      }
+    }
   }
 }
 
@@ -363,7 +383,7 @@ void Game::handleCollisions() {
     SDL_Rect asteroidRect{asteroid->rect.x, asteroid->rect.y, asteroid->width, asteroid->height};
 
     if (SDL_HasIntersection(&spaceshipRect, &asteroidRect)) {
-      asteroid->reset(windowWidth, windowHeight);
+      asteroid->reset();
       spaceship->takeDamage();
     }
   }
@@ -376,13 +396,36 @@ void Game::handleCollisions() {
       star->givePoints(spaceship);
     }
   }
+
+  if(!spaceship->bullets.empty()){
+    for(int i = 0; i < spaceship->bullets.size(); i++){
+      std::shared_ptr<SpaceshipBullet> bullet = spaceship->bullets.at(i);
+      SDL_Rect bulletRect{bullet->bulletRect.x, bullet->bulletRect.y, bullet->width, bullet->height};
+
+      for(auto asteroid : asteroids){
+        if(asteroid->rect.y + asteroid->height < 0){
+          continue;
+        }
+
+        SDL_Rect asteroidRect{asteroid->rect.x, asteroid->rect.y, asteroid->width, asteroid->height};
+
+        if(SDL_HasIntersection(&bulletRect, &asteroidRect)){
+          asteroid->reduceHp(bullet->damage);
+          spaceship->bullets.erase(spaceship->bullets.begin() + i);
+          spaceshipBulletsTexture.erase(spaceshipBulletsTexture.begin() + i);
+        }
+
+        if(asteroid->isDead()){
+          asteroid->givePoints(spaceship);
+        }
+      }
+    }
+  }
 }
 
 void Game::printTexture() {
     SDL_RenderClear(renderer);
     Uint32 ticks = SDL_GetTicks();
-
-    spaceshipTexture->print(renderer, ticks);
 
     for(const std::shared_ptr<StarTexture>& starTexture : starTextures) {
         starTexture->print(renderer, ticks);
@@ -391,6 +434,15 @@ void Game::printTexture() {
     for(std::shared_ptr<AsteroidTexture> asteroidTexture : asteroidTextures) {
         asteroidTexture->print(renderer, ticks);
     }
+
+
+  if(!spaceshipBulletsTexture.empty()){
+    for(std::shared_ptr<BulletTexture> bullet : spaceshipBulletsTexture){
+      bullet->print(renderer);
+    }
+  }
+
+  spaceshipTexture->print(renderer, ticks);
 
     for(std::shared_ptr<GameText> text : texts){
         text->display(renderer);

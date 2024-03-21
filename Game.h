@@ -5,17 +5,21 @@
 #include <SDL_mixer.h>
 
 #include <iostream>
+#include <vector>
+
 #include "objects/Spaceship.h"
-#include "ui/objectTextures/SpaceshipTexture.h"
 #include "objects/Star.h"
-#include "ui/objectTextures/StarTexture.h"
 #include "objects/Asteroid.h"
+
+#include "ui/objectTextures/BulletTexture.h"
+#include "ui/objectTextures/SpaceshipTexture.h"
+#include "ui/objectTextures/StarTexture.h"
 #include "ui/objectTextures/AsteroidTexture.h"
-#include "sound/BackgroundMusic.h"
 #include "ui/text/GameText.h"
 #include "ui/text/SpaceshipHealthGameText.h"
 #include "ui/text/SpaceshipPointGameText.h"
-#include <vector>
+
+#include "sound/BackgroundMusic.h"
 
 template<typename T>
 using shared_vector = std::vector<std::shared_ptr<T>>;
@@ -61,9 +65,9 @@ private:
     std::shared_ptr<Spaceship> spaceship{nullptr};
 
     std::unique_ptr<SpaceshipTexture> spaceshipTexture{nullptr};
-
     std::vector<std::shared_ptr<StarTexture>> starTextures{};
     std::vector<std::shared_ptr<AsteroidTexture>> asteroidTextures{};
+    shared_vector<BulletTexture> spaceshipBulletsTexture{};
 
   void initSDL();
   void initLogic();
