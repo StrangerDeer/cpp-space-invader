@@ -28,6 +28,12 @@ void Game::makeObjectsFall() {
             asteroid->placeAtStartingPos(windowWidth, windowHeight);
         }
     }
+    for (std::shared_ptr<FallingObject> elem : backgroundElems) {
+        elem->fall();
+        if (elem.get()->rect.y > windowHeight + 300) {
+            elem->placeAtStartingPos(windowWidth, windowHeight);
+        }
+    }
 }
 
 void Game::initSDL() {
@@ -77,6 +83,17 @@ std::shared_ptr<Asteroid> generateAsteroid(int windowWidth,
   return std::make_shared<Asteroid>(maxHp, x, y, width, height, minSpeed, maxSpeed, points);
 }
 
+std::shared_ptr<FallingObject> generateFallingObject(int windowWidth,
+                                           int windowHeight,
+                                           int width,
+                                           int height,
+                                           int minSpeed,
+                                           int maxSpeed) {
+    int x = Util::getRandomNumber(0 + width, windowWidth - width);
+    int y = Util::getRandomNumber(-windowHeight * 1, (0 - windowHeight) / 2);
+    return std::make_shared<FallingObject>(x, y, width, height, minSpeed, maxSpeed, true);
+}
+
 void Game::initOneKindOfStars(int numberOfStars,
                               int windowWidth,
                               int windowHeight,
@@ -122,7 +139,26 @@ void Game::initOneKindOfAsteroids(int numberOfAsteroids,
     asteroids.push_back(a);
     dimensionalObjects.push_back(a);
   }
+}
 
+
+void Game::initBackgroundElements(int numberOfElems,
+                                  int windowWidth,
+                                  int windowHeight,
+                                  int width,
+                                  int height,
+                                  int minSpeed,
+                                  int maxSpeed) {
+    for (int i = 0; i < numberOfElems; ++i) {
+        std::shared_ptr<FallingObject>
+                elem = generateFallingObject(windowWidth,
+                                             windowHeight,
+                                             width,
+                                             height,
+                                             minSpeed,
+                                             maxSpeed);
+        backgroundElems.push_back(elem);
+    }
 }
 
 void Game::initLogic() {
@@ -172,8 +208,21 @@ void Game::initLogic() {
   constexpr int MIN_SPEED_FOR_ASTEROIDS = 1;
   constexpr int MAX_SPEED_FOR_ASTEROIDS = 15;
 
+  constexpr int MIN_SPEED_FOR_BACKGROUND_ELEM = 1;
+  constexpr int MAX_SPEED_FOR_BACKGROUND_ELEM = 1;
+  constexpr int BACKGROUND_ELEM_HEIGHT = 600;
+  constexpr int NUMBER_OF_BACKGROUND_ELEMS = 1;
+
   int windowWidth = SDL_GetWindowSurface(window)->w;
   int windowHeight = SDL_GetWindowSurface(window)->h;
+
+  initBackgroundElements(NUMBER_OF_BACKGROUND_ELEMS,
+                           windowWidth,
+                           windowHeight,
+                           BACKGROUND_ELEM_HEIGHT,
+                           BACKGROUND_ELEM_HEIGHT,
+                           MIN_SPEED_FOR_BACKGROUND_ELEM,
+                           MAX_SPEED_FOR_BACKGROUND_ELEM);
 
   initOneKindOfStars(NUMBER_OF_PINK_STARS,
                      windowWidth,
@@ -292,6 +341,7 @@ void Game::initTexture() {
     int windowWidth = SDL_GetWindowSurface(window)->w;
     int windowHeight = SDL_GetWindowSurface(window)->h;
 
+    initBackgroundElemTextures();
     initStarTextures();
     initAsteroidTextures();
 
@@ -310,6 +360,14 @@ void Game::initTexture() {
     texts.push_back(spacePointText);
 
     spaceshipTexture = std::make_unique<SpaceshipTexture>(renderer, spaceship);
+}
+
+void Game::initBackgroundElemTextures() {
+    std::string BACKGROUND_IMG = "../ui/textures/background3.png";
+    for (const std::shared_ptr<FallingObject> &elem : backgroundElems) {
+        std::shared_ptr<BackgroundTexture> backgroundTexture = std::make_shared<BackgroundTexture>(renderer, elem, BACKGROUND_IMG);
+        backgroundTextures.push_back(backgroundTexture);
+    }
 }
 
 void Game::initAsteroidTextures() {
@@ -382,15 +440,20 @@ void Game::printTexture() {
     SDL_RenderClear(renderer);
     Uint32 ticks = SDL_GetTicks();
 
-    spaceshipTexture->print(renderer, ticks);
 
-    for(const std::shared_ptr<StarTexture>& starTexture : starTextures) {
+    for(const std::shared_ptr<BackgroundTexture> &backgroundTexture : backgroundTextures) {
+        backgroundTexture->print(renderer, ticks);
+    }
+
+    for(const std::shared_ptr<StarTexture> &starTexture : starTextures) {
         starTexture->print(renderer, ticks);
     }
 
-    for(std::shared_ptr<AsteroidTexture> asteroidTexture : asteroidTextures) {
+    for(std::shared_ptr<AsteroidTexture> &asteroidTexture : asteroidTextures) {
         asteroidTexture->print(renderer, ticks);
     }
+
+    spaceshipTexture->print(renderer, ticks);
 
     for(std::shared_ptr<GameText> text : texts){
         text->display(renderer);
@@ -398,3 +461,4 @@ void Game::printTexture() {
 
     SDL_RenderPresent(renderer);
 }
+

@@ -15,6 +15,7 @@
 #include "ui/text/GameText.h"
 #include "ui/text/SpaceshipHealthGameText.h"
 #include "ui/text/SpaceshipPointGameText.h"
+#include "ui/objectTextures/BackgroundTexture.h"
 #include <vector>
 
 template<typename T>
@@ -54,6 +55,8 @@ private:
     std::vector<std::shared_ptr<Star>> goldStars;
     std::vector<std::shared_ptr<Star>> redStars;
 
+    shared_vector<FallingObject> backgroundElems;
+
     bool isRunning{true};
 
     std::unique_ptr<BackgroundMusic> backgroundMusic{nullptr};
@@ -64,6 +67,7 @@ private:
 
     std::vector<std::shared_ptr<StarTexture>> starTextures{};
     std::vector<std::shared_ptr<AsteroidTexture>> asteroidTextures{};
+    shared_vector<BackgroundTexture> backgroundTextures{};
 
   void initSDL();
   void initLogic();
@@ -90,8 +94,18 @@ private:
                               int maxSpeed,
                               int point);
 
+  void initBackgroundElements(int numberOfElems,
+                              int windowWidth,
+                              int windowHeight,
+                              int width,
+                              int height,
+                              int minSpeed,
+                              int maxSpeed);
+
   void initStarTextures();
   void initAsteroidTextures();
+  void initBackgroundElemTextures();
+
   void handleCollisions();
 
     void makeObjectsFall();
