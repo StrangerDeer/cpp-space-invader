@@ -363,7 +363,7 @@ void Game::initTexture() {
 }
 
 void Game::initBackgroundElemTextures() {
-    std::string BACKGROUND_IMG = "../ui/textures/background3.png";
+    std::string BACKGROUND_IMG = "../ui/textures/background7.png";
     for (const std::shared_ptr<FallingObject> &elem : backgroundElems) {
         std::shared_ptr<BackgroundTexture> backgroundTexture = std::make_shared<BackgroundTexture>(renderer, elem, BACKGROUND_IMG);
         backgroundTextures.push_back(backgroundTexture);
