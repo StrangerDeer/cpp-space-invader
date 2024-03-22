@@ -1,7 +1,9 @@
 #pragma once
+#include <vector>
 #include "DimensionalObject.h"
 #include "FlyingObject.h"
 #include "HealthObject.h"
+#include "SpaceshipBullet.h"
 
 class Spaceship : public DimensionalObject, public FlyingObject, public HealthObject
 {
@@ -12,6 +14,8 @@ public:
         points = 0;
     };
 
+    std::vector<std::shared_ptr<SpaceshipBullet>> bullets;
+
     void increasePoints(int pts) {
         points += pts;
     }
@@ -20,9 +24,25 @@ public:
         return points;
     }
 
+  [[nodiscard]] int getFirerate() const {
+    return fireRate;
+  }
+
     void moveLeft(){
         rect.x -= speed;
     }
+
+    std::shared_ptr<SpaceshipBullet> shoot(int spaceshipWidth, int spaceshipHeight){
+      int x = rect.x + spaceshipWidth / 2;
+      int y = rect.y + spaceshipHeight / 2;
+
+      std::shared_ptr<SpaceshipBullet> bullet = std::make_shared<SpaceshipBullet>(x, y);
+
+      bullets.push_back(bullet);
+
+      return bullet;
+    }
+
     void moveRight(){ rect.x += speed; }
     void moveUp(){ rect.y -= speed;}
     void moveDown(){ rect.y += speed;}
