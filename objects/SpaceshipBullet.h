@@ -7,7 +7,7 @@ class SpaceshipBullet {
  public:
 
   SpaceshipBullet(int x, int y) :
-  speed(10), width(10), height(10), damage(1)
+  speed(20), width(10), height(10), damage(1)
   {
     bulletRect.x = x;
     bulletRect.y = y;
