@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <vector>
+#include <chrono>
 
 #include "objects/Spaceship.h"
 #include "objects/Star.h"
@@ -19,7 +20,8 @@
 #include "ui/text/SpaceshipHealthGameText.h"
 #include "ui/text/SpaceshipPointGameText.h"
 
-#include "sound/BackgroundMusic.h"
+#include "sound/GameMusic.h"
+#include "sound/GameSoundEffect.h"
 
 template<typename T>
 using shared_vector = std::vector<std::shared_ptr<T>>;
@@ -28,6 +30,7 @@ class Game {
 
 public:
   Game() {
+    lastShootTime = std::chrono::steady_clock::now();
     initSDL();
     initLogic();
     initTexture();
@@ -46,6 +49,9 @@ private:
     SDL_Renderer *renderer{nullptr};
     SDL_Event event;
 
+    bool isRunning{true};
+    std::chrono::steady_clock::time_point lastShootTime;
+
     shared_vector<GameText> texts;
 
     std::vector<std::shared_ptr<Star>> stars;
@@ -58,9 +64,8 @@ private:
     std::vector<std::shared_ptr<Star>> goldStars;
     std::vector<std::shared_ptr<Star>> redStars;
 
-    bool isRunning{true};
-
-    std::unique_ptr<BackgroundMusic> backgroundMusic{nullptr};
+    std::unique_ptr<GameMusic> backgroundMusic{nullptr};
+    std::unique_ptr<GameSoundEffect> spaceshipShootSoundEffect{nullptr};
 
     std::shared_ptr<Spaceship> spaceship{nullptr};
 
@@ -69,13 +74,13 @@ private:
     std::vector<std::shared_ptr<AsteroidTexture>> asteroidTextures{};
     shared_vector<BulletTexture> spaceshipBulletsTexture{};
 
-  void initSDL();
-  void initLogic();
-  void initTexture();
-  void handleEvent();
-  void printTexture();
+    void initSDL();
+    void initLogic();
+    void initTexture();
+    void handleEvent();
+    void printTexture();
 
-  void initOneKindOfStars(int numberOfStars,
+    void initOneKindOfStars(int numberOfStars,
                           int windowWidth,
                           int windowHeight,
                           int starWidth,
@@ -84,7 +89,7 @@ private:
                           int maxSpeed,
                           int point,
                           std::vector<std::shared_ptr<Star>> &starVector);
-  void initOneKindOfAsteroids(int numberOfAsteroids,
+    void initOneKindOfAsteroids(int numberOfAsteroids,
                               int windowWidth,
                               int windowHeight,
                               int maxHp,
@@ -94,9 +99,9 @@ private:
                               int maxSpeed,
                               int point);
 
-  void initStarTextures();
-  void initAsteroidTextures();
-  void handleCollisions();
+    void initStarTextures();
+    void initAsteroidTextures();
+    void handleCollisions();
 
     void makeObjectsFall();
 };

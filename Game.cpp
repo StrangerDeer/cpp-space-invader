@@ -2,7 +2,7 @@
 
 void Game::run() {
 
-  backgroundMusic->playBackgroundMusic();
+  backgroundMusic->playMusic();
 
     while(isRunning){
         handleEvent();
@@ -60,7 +60,8 @@ void Game::initSDL() {
     return;
   }
 
-  backgroundMusic = std::make_unique<BackgroundMusic>();
+  backgroundMusic = std::make_unique<GameMusic>("..//sound//background.wav");
+  spaceshipShootSoundEffect = std::make_unique<GameSoundEffect>("..//sound//spaceshipShootSoundeffect.wav");
 }
 
 std::shared_ptr<Star> generateStar(int windowWidth,
@@ -295,12 +296,16 @@ void Game::handleEvent() {
           break;
 
         case SDLK_SPACE:
+            auto now = std::chrono::steady_clock::now();
+            auto timeSinceLastShoot = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastShootTime).count();
 
-          if(!event.key.repeat){
-            std::shared_ptr<SpaceshipBullet> bullet = spaceship->shoot(spaceship->width, spaceship->height);
-            std::shared_ptr<BulletTexture> bulletTexture = std::make_shared<BulletTexture>(renderer, bullet);
-            spaceshipBulletsTexture.push_back(bulletTexture);
-          }
+            if(timeSinceLastShoot >= (1.0 / spaceship->getFirerate()) * 1000){
+              std::shared_ptr<SpaceshipBullet> bullet = spaceship->shoot(spaceship->width, spaceship->height);
+              std::shared_ptr<BulletTexture> bulletTexture = std::make_shared<BulletTexture>(renderer, bullet);
+              spaceshipBulletsTexture.push_back(bulletTexture);
+              spaceshipShootSoundEffect->playSoundEffect();
+              lastShootTime = now;
+            }
           break;
       }
     }
