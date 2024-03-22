@@ -30,8 +30,8 @@ add_executable(cpp_space_invader main.cpp
         ui/objectTextures/StarTexture.cpp
         ui/objectTextures/AsteroidTexture.h
         ui/objectTextures/AsteroidTexture.cpp
-        sound/BackgroundMusic.cpp
-        sound/BackgroundMusic.h
+        sound/GameMusic.cpp
+        sound/GameMusic.h
         ui/text/GameText.cpp
         ui/text/GameText.h
         ui/text/SpaceshipHealthGameText.cpp
@@ -40,7 +40,10 @@ add_executable(cpp_space_invader main.cpp
         ui/text/SpaceshipPointGameText.h
         objects/SpaceshipBullet.h
         ui/objectTextures/BulletTexture.cpp
-        ui/objectTextures/BulletTexture.h)
+        ui/objectTextures/BulletTexture.h
+        sound/GameSoundEffect.cpp
+        sound/GameSoundEffect.h
+)
 
 target_link_libraries(cpp_space_invader
         PRIVATE
