@@ -43,6 +43,7 @@ add_executable(cpp_space_invader main.cpp
         ui/objectTextures/BulletTexture.h
         sound/GameSoundEffect.cpp
         sound/GameSoundEffect.h
+        Config.h
 )
 
 target_link_libraries(cpp_space_invader
