@@ -8,6 +8,8 @@
 #include <vector>
 #include <chrono>
 
+#include "Config.h"
+
 #include "objects/Spaceship.h"
 #include "objects/Star.h"
 #include "objects/Asteroid.h"
@@ -34,6 +36,7 @@ public:
     initSDL();
     initLogic();
     initTexture();
+    initSounds();
   }
 
   ~Game() {
@@ -49,34 +52,43 @@ private:
     SDL_Renderer *renderer{nullptr};
     SDL_Event event;
 
+    int windowWidth{0};
+    int windowHeight{0};
     bool isRunning{true};
+    Uint32 ticks{0};
+    Uint32 frameStart;
+    int frameTime;
     std::chrono::steady_clock::time_point lastShootTime;
 
-    shared_vector<GameText> texts;
+    //Logic
+    shared_vector<Star> stars;
+    shared_vector<Asteroid> asteroids;
+    shared_vector<DimensionalObject> dimensionalObjects;
 
-    std::vector<std::shared_ptr<Star>> stars;
-    std::vector<std::shared_ptr<Asteroid>> asteroids;
-    std::vector<std::shared_ptr<DimensionalObject>> dimensionalObjects;
-
-    std::vector<std::shared_ptr<Star>> pinkStars;
-    std::vector<std::shared_ptr<Star>> greenStars;
-    std::vector<std::shared_ptr<Star>> blueStars;
-    std::vector<std::shared_ptr<Star>> goldStars;
-    std::vector<std::shared_ptr<Star>> redStars;
-
-    std::unique_ptr<GameMusic> backgroundMusic{nullptr};
-    std::unique_ptr<GameSoundEffect> spaceshipShootSoundEffect{nullptr};
+    shared_vector<Star> pinkStars;
+    shared_vector<Star> greenStars;
+    shared_vector<Star> blueStars;
+    shared_vector<Star> goldStars;
+    shared_vector<Star> redStars;
 
     std::shared_ptr<Spaceship> spaceship{nullptr};
 
+    //UI
     std::unique_ptr<SpaceshipTexture> spaceshipTexture{nullptr};
-    std::vector<std::shared_ptr<StarTexture>> starTextures{};
-    std::vector<std::shared_ptr<AsteroidTexture>> asteroidTextures{};
+    shared_vector<StarTexture> starTextures{};
+    shared_vector<AsteroidTexture> asteroidTextures{};
     shared_vector<BulletTexture> spaceshipBulletsTexture{};
+
+    shared_vector<GameText> texts;
+
+    //Sounds
+    std::unique_ptr<GameMusic> backgroundMusic{nullptr};
+    std::unique_ptr<GameSoundEffect> spaceshipShootSoundEffect{nullptr};
 
     void initSDL();
     void initLogic();
     void initTexture();
+    void initSounds();
     void handleEvent();
     void printTexture();
 
@@ -88,7 +100,7 @@ private:
                           int minSpeed,
                           int maxSpeed,
                           int point,
-                          std::vector<std::shared_ptr<Star>> &starVector);
+                          shared_vector<Star> &starVector);
     void initOneKindOfAsteroids(int numberOfAsteroids,
                               int windowWidth,
                               int windowHeight,
