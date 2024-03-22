@@ -115,7 +115,7 @@ std::shared_ptr<BackgroundElement> generateBackgroundElement(int windowWidth,
     int x = Util::getRandomNumber(0, windowWidth - width);
     int y = yPos - height * 1.5;
     yPos = y;
-    return std::make_shared<BackgroundElement>(x, y, width, height, 20, 20, true);
+    return std::make_shared<BackgroundElement>(x, y, width, height, minSpeed, maxSpeed, true);
 }
 
 void Game::initOneKindOfStars(int numberOfStars,
@@ -408,10 +408,9 @@ void Game::initTexture() {
 }
 
 void Game::initBackgroundElemTextures() {
-    std::string BACKGROUND_IMG = "../ui/textures/background";
     for (const std::shared_ptr<BackgroundElement> &elem : backgroundElems) {
         int randomIndex = Util::getRandomNumber(1, 10);
-        std::string filepath = BACKGROUND_IMG + std::to_string(randomIndex) + ".png";
+        std::string filepath = BACKGROUND_ELEM_FILEPATH + std::to_string(randomIndex) + TEXTURE_FILE_EXTENSION;
         std::shared_ptr<BackgroundTexture> backgroundTexture = std::make_shared<BackgroundTexture>(renderer, elem, filepath);
         backgroundTextures.push_back(backgroundTexture);
     }
