@@ -367,7 +367,7 @@ void Game::initTexture() {
 void Game::initBackgroundElemTextures() {
     std::string BACKGROUND_IMG = "../ui/textures/background";
     for (const std::shared_ptr<BackgroundElement> &elem : backgroundElems) {
-        int randomIndex = Util::getRandomNumber(1, 7);
+        int randomIndex = Util::getRandomNumber(1, 10);
         std::string filepath = BACKGROUND_IMG + std::to_string(randomIndex) + ".png";
         std::shared_ptr<BackgroundTexture> backgroundTexture = std::make_shared<BackgroundTexture>(renderer, elem, filepath);
         backgroundTextures.push_back(backgroundTexture);
