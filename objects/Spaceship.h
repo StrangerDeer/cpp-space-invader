@@ -24,6 +24,10 @@ public:
         return points;
     }
 
+  [[nodiscard]] int getFirerate() const {
+    return fireRate;
+  }
+
     void moveLeft(){
         rect.x -= speed;
     }
