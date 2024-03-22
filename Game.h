@@ -13,17 +13,20 @@
 #include "objects/Spaceship.h"
 #include "objects/Star.h"
 #include "objects/Asteroid.h"
+#include "objects/BackgroundElement.h"
 
 #include "ui/objectTextures/BulletTexture.h"
 #include "ui/objectTextures/SpaceshipTexture.h"
 #include "ui/objectTextures/StarTexture.h"
 #include "ui/objectTextures/AsteroidTexture.h"
+#include "ui/objectTextures/BackgroundTexture.h"
 #include "ui/text/GameText.h"
 #include "ui/text/SpaceshipHealthGameText.h"
 #include "ui/text/SpaceshipPointGameText.h"
 
 #include "sound/GameMusic.h"
 #include "sound/GameSoundEffect.h"
+
 
 template<typename T>
 using shared_vector = std::vector<std::shared_ptr<T>>;
@@ -64,6 +67,7 @@ private:
     shared_vector<Star> stars;
     shared_vector<Asteroid> asteroids;
     shared_vector<DimensionalObject> dimensionalObjects;
+    shared_vector<BackgroundElement> backgroundElems;
 
     shared_vector<Star> pinkStars;
     shared_vector<Star> greenStars;
@@ -78,6 +82,7 @@ private:
     shared_vector<StarTexture> starTextures{};
     shared_vector<AsteroidTexture> asteroidTextures{};
     shared_vector<BulletTexture> spaceshipBulletsTexture{};
+    shared_vector<BackgroundTexture> backgroundTextures{};
 
     shared_vector<GameText> texts;
 
@@ -111,9 +116,19 @@ private:
                               int maxSpeed,
                               int point);
 
-    void initStarTextures();
-    void initAsteroidTextures();
-    void handleCollisions();
+  void initBackgroundElements(int numberOfElems,
+                              int windowWidth,
+                              int windowHeight,
+                              int width,
+                              int height,
+                              int minSpeed,
+                              int maxSpeed);
+
+  void initStarTextures();
+  void initAsteroidTextures();
+  void initBackgroundElemTextures();
+
+  void handleCollisions();
 
     void makeObjectsFall();
 };
