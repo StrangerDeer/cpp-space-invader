@@ -488,10 +488,12 @@ void Game::handleCollisions() {
           asteroid->reduceHp(bullet->damage);
           spaceship->bullets.erase(spaceship->bullets.begin() + i);
           spaceshipBulletsTexture.erase(spaceshipBulletsTexture.begin() + i);
-        }
 
-        if(asteroid->isDead()){
-          asteroid->givePoints(spaceship);
+          if(asteroid->isDead()){
+            asteroid->givePoints(spaceship);
+          }
+
+          break;
         }
       }
     }
