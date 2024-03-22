@@ -202,23 +202,23 @@ void Game::initLogic() {
   constexpr int POINT_FOR_RED_STARS = 50;
 
   constexpr int MIN_SPEED_FOR_PINK_STARS = 2;
-  constexpr int MIN_SPEED_FOR_GREEN_STARS = 5;
-  constexpr int MIN_SPEED_FOR_BLUE_STARS = 7;
-  constexpr int MIN_SPEED_FOR_GOLD_STARS = 10;
-  constexpr int MIN_SPEED_FOR_RED_STARS = 15;
+  constexpr int MIN_SPEED_FOR_GREEN_STARS = 3;
+  constexpr int MIN_SPEED_FOR_BLUE_STARS = 5;
+  constexpr int MIN_SPEED_FOR_GOLD_STARS = 7;
+  constexpr int MIN_SPEED_FOR_RED_STARS = 10;
 
-  constexpr int MAX_SPEED_FOR_PINK_STARS = 10;
-  constexpr int MAX_SPEED_FOR_GREEN_STARS = 20;
-  constexpr int MAX_SPEED_FOR_BLUE_STARS = 30;
-  constexpr int MAX_SPEED_FOR_GOLD_STARS = 35;
-  constexpr int MAX_SPEED_FOR_RED_STARS = 40;
+  constexpr int MAX_SPEED_FOR_PINK_STARS = 5;
+  constexpr int MAX_SPEED_FOR_GREEN_STARS = 7;
+  constexpr int MAX_SPEED_FOR_BLUE_STARS = 10;
+  constexpr int MAX_SPEED_FOR_GOLD_STARS = 15;
+  constexpr int MAX_SPEED_FOR_RED_STARS = 25;
 
   constexpr int SMALL_ASTEROID_HEIGHT = 70;
   constexpr int MEDIUM_ASTEROID_HEIGHT = 120;
   constexpr int LARGE_ASTEROID_HEIGHT = 250;
 
-  constexpr int NUMBER_OF_SMALL_ASTEROIDS = 20;
-  constexpr int NUMBER_OF_MEDIUM_ASTEROIDS = 10;
+  constexpr int NUMBER_OF_SMALL_ASTEROIDS = 12;
+  constexpr int NUMBER_OF_MEDIUM_ASTEROIDS = 7;
   constexpr int NUMBER_OF_LARGE_ASTEROIDS = 3;
 
   constexpr int HEALTH_OF_SMALL_ASTEROIDS = 1;
@@ -229,13 +229,13 @@ void Game::initLogic() {
   constexpr int POINT_FOR_MEDIUM_ASTEROIDS = 3;
   constexpr int POINT_FOR_LARGE_ASTEROIDS = 5;
 
-  constexpr int MIN_SPEED_FOR_ASTEROIDS = 1;
-  constexpr int MAX_SPEED_FOR_ASTEROIDS = 15;
+  constexpr int MIN_SPEED_FOR_ASTEROIDS = 2;
+  constexpr int MAX_SPEED_FOR_ASTEROIDS = 9;
 
   constexpr int MIN_SPEED_FOR_BACKGROUND_ELEM = 1;
   constexpr int MAX_SPEED_FOR_BACKGROUND_ELEM = 1;
   constexpr int BACKGROUND_ELEM_HEIGHT = 600;
-  constexpr int NUMBER_OF_BACKGROUND_ELEMS = 7;
+  constexpr int NUMBER_OF_BACKGROUND_ELEMS = 10;
 
   int windowWidth = SDL_GetWindowSurface(window)->w;
   int windowHeight = SDL_GetWindowSurface(window)->h;
@@ -323,7 +323,7 @@ void Game::initLogic() {
                          POINT_FOR_LARGE_ASTEROIDS);
 
 
-    spaceship = std::make_shared<Spaceship>(5, 50, windowWidth * 0.5, windowHeight * 0.85, 100, 100, 1, 1);
+    spaceship = std::make_shared<Spaceship>(5, 75, windowWidth * 0.5, windowHeight * 0.85, 100, 100, 10, 1);
 
 }
 

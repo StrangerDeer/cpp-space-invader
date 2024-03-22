@@ -36,7 +36,7 @@ class Asteroid : public FallingObject, public ScoreObject, public HealthObject {
   int windowWidth, windowHeight;
 
   void getRandomRotation() {
-    int rotation = Util::getRandomNumber(1, 30);
+    int rotation = Util::getRandomNumber(1, 7);
     angleRotation = (double) rotation / 10;
   }
 };
