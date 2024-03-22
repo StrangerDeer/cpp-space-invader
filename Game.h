@@ -16,6 +16,7 @@
 #include "ui/text/SpaceshipHealthGameText.h"
 #include "ui/text/SpaceshipPointGameText.h"
 #include "ui/objectTextures/BackgroundTexture.h"
+#include "objects/BackgroundElement.h"
 #include <vector>
 
 template<typename T>
@@ -55,7 +56,7 @@ private:
     std::vector<std::shared_ptr<Star>> goldStars;
     std::vector<std::shared_ptr<Star>> redStars;
 
-    shared_vector<FallingObject> backgroundElems;
+    shared_vector<BackgroundElement> backgroundElems;
 
     bool isRunning{true};
 

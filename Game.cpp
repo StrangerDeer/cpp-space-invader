@@ -28,9 +28,9 @@ void Game::makeObjectsFall() {
             asteroid->placeAtStartingPos(windowWidth, windowHeight);
         }
     }
-    for (std::shared_ptr<FallingObject> elem : backgroundElems) {
+    for (std::shared_ptr<BackgroundElement> &elem : backgroundElems) {
         elem->fall();
-        if (elem.get()->rect.y > windowHeight + 300) {
+        if (elem->rect.y > windowHeight + (((elem->height * 1.5) * backgroundElems.size()) - windowHeight - elem->height)) {
             elem->placeAtStartingPos(windowWidth, windowHeight);
         }
     }
@@ -83,15 +83,17 @@ std::shared_ptr<Asteroid> generateAsteroid(int windowWidth,
   return std::make_shared<Asteroid>(maxHp, x, y, width, height, minSpeed, maxSpeed, points);
 }
 
-std::shared_ptr<FallingObject> generateFallingObject(int windowWidth,
-                                           int windowHeight,
-                                           int width,
-                                           int height,
-                                           int minSpeed,
-                                           int maxSpeed) {
-    int x = Util::getRandomNumber(0 + width, windowWidth - width);
-    int y = Util::getRandomNumber(-windowHeight * 1, (0 - windowHeight) / 2);
-    return std::make_shared<FallingObject>(x, y, width, height, minSpeed, maxSpeed, true);
+std::shared_ptr<BackgroundElement> generateBackgroundElement(int windowWidth,
+                                                             int windowHeight,
+                                                             int width,
+                                                             int height,
+                                                             int minSpeed,
+                                                             int maxSpeed) {
+    static int yPos = -windowHeight * 1;
+    int x = Util::getRandomNumber(0, windowWidth - width);
+    int y = yPos - height * 1.5;
+    yPos = y;
+    return std::make_shared<BackgroundElement>(x, y, width, height, 20, 20, true);
 }
 
 void Game::initOneKindOfStars(int numberOfStars,
@@ -150,13 +152,13 @@ void Game::initBackgroundElements(int numberOfElems,
                                   int minSpeed,
                                   int maxSpeed) {
     for (int i = 0; i < numberOfElems; ++i) {
-        std::shared_ptr<FallingObject>
-                elem = generateFallingObject(windowWidth,
-                                             windowHeight,
-                                             width,
-                                             height,
-                                             minSpeed,
-                                             maxSpeed);
+        std::shared_ptr<BackgroundElement>
+                elem = generateBackgroundElement(windowWidth,
+                                                 windowHeight,
+                                                 width,
+                                                 height,
+                                                 minSpeed,
+                                                 maxSpeed);
         backgroundElems.push_back(elem);
     }
 }
@@ -211,7 +213,7 @@ void Game::initLogic() {
   constexpr int MIN_SPEED_FOR_BACKGROUND_ELEM = 1;
   constexpr int MAX_SPEED_FOR_BACKGROUND_ELEM = 1;
   constexpr int BACKGROUND_ELEM_HEIGHT = 600;
-  constexpr int NUMBER_OF_BACKGROUND_ELEMS = 1;
+  constexpr int NUMBER_OF_BACKGROUND_ELEMS = 7;
 
   int windowWidth = SDL_GetWindowSurface(window)->w;
   int windowHeight = SDL_GetWindowSurface(window)->h;
@@ -363,9 +365,11 @@ void Game::initTexture() {
 }
 
 void Game::initBackgroundElemTextures() {
-    std::string BACKGROUND_IMG = "../ui/textures/background7.png";
-    for (const std::shared_ptr<FallingObject> &elem : backgroundElems) {
-        std::shared_ptr<BackgroundTexture> backgroundTexture = std::make_shared<BackgroundTexture>(renderer, elem, BACKGROUND_IMG);
+    std::string BACKGROUND_IMG = "../ui/textures/background";
+    for (const std::shared_ptr<BackgroundElement> &elem : backgroundElems) {
+        int randomIndex = Util::getRandomNumber(1, 7);
+        std::string filepath = BACKGROUND_IMG + std::to_string(randomIndex) + ".png";
+        std::shared_ptr<BackgroundTexture> backgroundTexture = std::make_shared<BackgroundTexture>(renderer, elem, filepath);
         backgroundTextures.push_back(backgroundTexture);
     }
 }
