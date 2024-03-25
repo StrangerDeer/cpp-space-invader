@@ -4,7 +4,7 @@ void Game::run() {
 
   backgroundMusic->playMusic();
 
-  while(isRunning){
+  while(isRunning == 1){
     frameStart = SDL_GetTicks();
     handleEvent();
     handleCollisions();
@@ -20,7 +20,16 @@ void Game::run() {
         }
       }
     }
+
+    if(spaceship->getHealth() == 0){
+      isRunning = 2;
+    }
+
     printTexture();
+
+    if(isRunning == 2){
+      handleGameOver();
+    }
 
     frameTime = SDL_GetTicks() - frameStart;
 
@@ -78,6 +87,9 @@ void Game::initSDL() {
 void Game::initSounds() {
   backgroundMusic = std::make_unique<GameMusic>(BACKGROUND_MUSIC_FILEPATH);
   spaceshipShootSoundEffect = std::make_unique<GameSoundEffect>(SPACESHIP_SHOOT_SOUND_EFFECT_FILEPATH);
+  starPickUpSoundEffect = std::make_unique<GameSoundEffect>("../sound/star_pick_up.wav");
+  asteroidHitByBullet = std::make_unique<GameSoundEffect>("../sound/asteroid_hit_by_bullet.wav");
+  asteroidExplodes = std::make_unique<GameSoundEffect>("../sound/asteroid_explodes.wav");
 }
 
 std::shared_ptr<Star> generateStar(int windowWidth,
@@ -186,6 +198,47 @@ void Game::initBackgroundElements(int numberOfElems,
 }
 
 void Game::initLogic() {
+
+  if(spaceship){
+    spaceship = nullptr;
+  }
+
+  if(!stars.empty()){
+    stars.clear();
+  }
+
+  if(!asteroids.empty()){
+    asteroids.clear();
+  }
+
+  if(!dimensionalObjects.empty()){
+    dimensionalObjects.clear();
+  }
+
+  if(!backgroundElems.empty()){
+    backgroundElems.clear();
+  }
+
+  if(!pinkStars.empty()){
+    pinkStars.clear();
+  }
+
+  if(!greenStars.empty()){
+    greenStars.clear();
+  }
+
+  if(!blueStars.empty()){
+    blueStars.clear();
+  }
+
+  if(!goldStars.empty()){
+    goldStars.clear();
+  }
+
+  if(!redStars.empty()){
+    redStars.clear();
+  }
+
   constexpr int STAR_HEIGHT = 125;
   constexpr int STAR_WIDTH = 50;
 
@@ -330,7 +383,7 @@ void Game::initLogic() {
 void Game::handleEvent() {
   while (SDL_PollEvent(&event)) {
     if (event.type == QUIT || event.key.keysym.sym == QUIT_BUTTON) {
-      isRunning = false;
+      isRunning = 0;
     }
 
     if(event.type == SDL_KEYDOWN){
@@ -375,8 +428,27 @@ void Game::handleEvent() {
 
 void Game::initTexture() {
 
-    int windowWidth = SDL_GetWindowSurface(window)->w;
-    int windowHeight = SDL_GetWindowSurface(window)->h;
+    if(spaceshipTexture){
+      spaceshipTexture = nullptr;
+    }
+
+    if(!starTextures.empty()){
+      starTextures.clear();
+    }
+
+    if(!asteroidTextures.empty()){
+      asteroidTextures.clear();
+    }
+
+
+    if(!spaceshipBulletsTexture.empty()){
+      spaceshipBulletsTexture.clear();
+    }
+
+
+    if(!texts.empty()){
+      texts.clear();
+    }
 
     initBackgroundElemTextures();
     initStarTextures();
@@ -472,6 +544,7 @@ void Game::handleCollisions() {
     SDL_Rect starRect{star->rect.x, star->rect.y, star->width, star->height};
 
     if (SDL_HasIntersection(&spaceshipRect, &starRect)) {
+      starPickUpSoundEffect->playSoundEffect();
       star->placeAtStartingPos(windowWidth, windowHeight);
       star->givePoints(spaceship);
     }
@@ -490,12 +563,16 @@ void Game::handleCollisions() {
         SDL_Rect asteroidRect{asteroid->rect.x, asteroid->rect.y, asteroid->width, asteroid->height};
 
         if(SDL_HasIntersection(&bulletRect, &asteroidRect)){
+
           asteroid->reduceHp(bullet->damage);
           spaceship->bullets.erase(spaceship->bullets.begin() + i);
           spaceshipBulletsTexture.erase(spaceshipBulletsTexture.begin() + i);
 
           if(asteroid->isDead()){
+            asteroidExplodes->playSoundEffect();
             asteroid->givePoints(spaceship);
+          } else {
+            asteroidHitByBullet->playSoundEffect();
           }
 
           break;
@@ -538,5 +615,47 @@ void Game::printTexture() {
     }
 
     SDL_RenderPresent(renderer);
+}
+
+void Game::handleGameOver() {
+  GameText gameOverText{renderer,
+                        DEFAULT_GAME_TEXT_FONT_PATH,
+                        DEFAULT_GAME_TEXT_FONT_SIZE,
+                        "GAME OVER",
+                        DEFAULT_GAME_TEXT_COLOR,
+                        windowWidth / 2,
+                        windowHeight / 2};
+  GameText continueText{
+      renderer,
+      DEFAULT_GAME_TEXT_FONT_PATH,
+      DEFAULT_GAME_TEXT_FONT_SIZE,
+      "Press space to continue!",
+      DEFAULT_GAME_TEXT_COLOR,
+      windowWidth / 2,
+      (windowHeight / 2) + DEFAULT_GAME_TEXT_FONT_SIZE
+  };
+
+  GameMusic gameOverMusic{"../sound/game_over.wav"};
+
+  gameOverMusic.playMusic();
+
+  while(isRunning == 2){
+    while (SDL_PollEvent(&event)) {
+      if (event.type == QUIT || event.key.keysym.sym == QUIT_BUTTON) {
+        isRunning = 0;
+      }
+
+      if(event.type == SDL_KEYDOWN){
+        if(event.key.keysym.sym == SDLK_SPACE){
+          initLogic();
+          initTexture();
+          isRunning = 1;
+        }
+      }
+    }
+    continueText.display(renderer);
+    gameOverText.display(renderer);
+    SDL_RenderPresent(renderer);
+  }
 }
 

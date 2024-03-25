@@ -57,7 +57,7 @@ private:
 
     int windowWidth{0};
     int windowHeight{0};
-    bool isRunning{true};
+    int isRunning{1};
     Uint32 ticks{0};
     Uint32 frameStart;
     int frameTime;
@@ -89,6 +89,9 @@ private:
     //Sounds
     std::unique_ptr<GameMusic> backgroundMusic{nullptr};
     std::unique_ptr<GameSoundEffect> spaceshipShootSoundEffect{nullptr};
+    std::unique_ptr<GameSoundEffect> starPickUpSoundEffect{nullptr};
+    std::unique_ptr<GameSoundEffect> asteroidHitByBullet{nullptr};
+    std::unique_ptr<GameSoundEffect> asteroidExplodes{nullptr};
 
     void initSDL();
     void initLogic();
@@ -130,7 +133,9 @@ private:
 
   void handleCollisions();
 
-    void makeObjectsFall();
+  void makeObjectsFall();
+
+  void handleGameOver();
 };
 
 #endif //CPP_SPACE_INVADER_GAME_H
