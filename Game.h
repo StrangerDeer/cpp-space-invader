@@ -89,6 +89,9 @@ private:
     //Sounds
     std::unique_ptr<GameMusic> backgroundMusic{nullptr};
     std::unique_ptr<GameSoundEffect> spaceshipShootSoundEffect{nullptr};
+    std::unique_ptr<GameSoundEffect> starPickUpSoundEffect{nullptr};
+    std::unique_ptr<GameSoundEffect> asteroidHitByBullet{nullptr};
+    std::unique_ptr<GameSoundEffect> asteroidExplodes{nullptr};
 
     void initSDL();
     void initLogic();

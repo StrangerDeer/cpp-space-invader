@@ -87,6 +87,9 @@ void Game::initSDL() {
 void Game::initSounds() {
   backgroundMusic = std::make_unique<GameMusic>(BACKGROUND_MUSIC_FILEPATH);
   spaceshipShootSoundEffect = std::make_unique<GameSoundEffect>(SPACESHIP_SHOOT_SOUND_EFFECT_FILEPATH);
+  starPickUpSoundEffect = std::make_unique<GameSoundEffect>("../sound/star_pick_up.wav");
+  asteroidHitByBullet = std::make_unique<GameSoundEffect>("../sound/asteroid_hit_by_bullet.wav");
+  asteroidExplodes = std::make_unique<GameSoundEffect>("../sound/asteroid_explodes.wav");
 }
 
 std::shared_ptr<Star> generateStar(int windowWidth,
@@ -476,6 +479,7 @@ void Game::handleCollisions() {
     SDL_Rect starRect{star->rect.x, star->rect.y, star->width, star->height};
 
     if (SDL_HasIntersection(&spaceshipRect, &starRect)) {
+      starPickUpSoundEffect->playSoundEffect();
       star->placeAtStartingPos(windowWidth, windowHeight);
       star->givePoints(spaceship);
     }
@@ -494,12 +498,16 @@ void Game::handleCollisions() {
         SDL_Rect asteroidRect{asteroid->rect.x, asteroid->rect.y, asteroid->width, asteroid->height};
 
         if(SDL_HasIntersection(&bulletRect, &asteroidRect)){
+
           asteroid->reduceHp(bullet->damage);
           spaceship->bullets.erase(spaceship->bullets.begin() + i);
           spaceshipBulletsTexture.erase(spaceshipBulletsTexture.begin() + i);
 
           if(asteroid->isDead()){
+            asteroidExplodes->playSoundEffect();
             asteroid->givePoints(spaceship);
+          } else {
+            asteroidHitByBullet->playSoundEffect();
           }
 
           break;
@@ -543,7 +551,6 @@ void Game::printTexture() {
 
     SDL_RenderPresent(renderer);
 }
-
 
 void Game::handleGameOver() {
   GameText gameOverText{renderer,
