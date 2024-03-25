@@ -486,6 +486,22 @@ void Game::handleCollisions() {
       std::shared_ptr<SpaceshipBullet> bullet = spaceship->bullets.at(i);
       SDL_Rect bulletRect{bullet->bulletRect.x, bullet->bulletRect.y, bullet->width, bullet->height};
 
+      if (alien->rect.y + alien->height >= 0) {
+          SDL_Rect alienRect{alien->rect.x, alien->rect.y, alien->width, alien->height};
+
+          if (SDL_HasIntersection(&bulletRect, &alienRect)) {
+              alien->takeDamage();
+              spaceship->bullets.erase(spaceship->bullets.begin() + i);
+              spaceshipBulletsTexture.erase(spaceshipBulletsTexture.begin() + i);
+
+              if (alien->isDead()) {
+                  alien->givePoints(spaceship);
+              }
+
+              break;
+          }
+      }
+
       for(auto asteroid : asteroids){
         if(asteroid->rect.y + asteroid->height < 0){
           continue;
