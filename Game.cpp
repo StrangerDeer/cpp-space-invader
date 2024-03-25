@@ -9,14 +9,11 @@ void Game::run() {
     handleEvent();
     handleCollisions();
     makeObjectsMove();
-
-
+    printTexture();
 
     if(spaceship->getHealth() == 0){
       isRunning = 2;
     }
-
-    printTexture();
 
     if(isRunning == 2){
       handleGameOver();
@@ -459,31 +456,7 @@ void Game::handleEvent() {
 
 void Game::initTexture() {
 
-    if(spaceshipTexture){
-      spaceshipTexture = nullptr;
-    }
-
-    if (alienTexture) {
-        alienTexture = nullptr;
-    }
-
-    if(!starTextures.empty()){
-      starTextures.clear();
-    }
-
-    if(!asteroidTextures.empty()){
-      asteroidTextures.clear();
-    }
-
-
-    if(!spaceshipBulletsTexture.empty()){
-      spaceshipBulletsTexture.clear();
-    }
-
-
-    if(!texts.empty()){
-      texts.clear();
-    }
+    clearTextures();
 
     initBackgroundElemTextures();
     initStarTextures();
@@ -513,6 +486,44 @@ void Game::initTexture() {
 
     spaceshipTexture = std::make_unique<SpaceshipTexture>(renderer, spaceship);
     alienTexture = std::make_unique<AlienTexture>(renderer, alien);
+}
+
+void Game::clearTextures() {
+
+
+    if(!backgroundTextures.empty()) {
+        backgroundTextures.clear();
+    }
+
+    if(spaceshipTexture){
+        spaceshipTexture = nullptr;
+    }
+
+    if (alienTexture) {
+        alienTexture = nullptr;
+    }
+
+    if(!starTextures.empty()){
+      starTextures.clear();
+    }
+
+    if(!asteroidTextures.empty()){
+      asteroidTextures.clear();
+    }
+
+    if(!spaceshipBulletsTexture.empty()){
+      spaceshipBulletsTexture.clear();
+    }
+
+    if(!alienBulletsTexture.empty()) {
+        alienBulletsTexture.clear();
+    }
+
+
+
+    if(!texts.empty()){
+      texts.clear();
+    }
 }
 
 void Game::initBackgroundElemTextures() {
@@ -594,6 +605,7 @@ void Game::handleCollisions() {
 
           if (SDL_HasIntersection(&bulletRect, &spaceshipRect)) {
               spaceship->takeDamage();
+              asteroidExplodes->playSoundEffect();
               alien->bullets.erase(alien->bullets.begin() + i);
               alienBulletsTexture.erase(alienBulletsTexture.begin() + i);
           }
