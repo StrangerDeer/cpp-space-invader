@@ -144,6 +144,8 @@ private:
   void handleGameOver();
 
     void clearObjects();
+
+    void clearTextures();
 };
 
 #endif //CPP_SPACE_INVADER_GAME_H
