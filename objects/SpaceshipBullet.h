@@ -15,13 +15,13 @@ class SpaceshipBullet {
     bulletRect.h = height;
   }
 
-  void move(){
+  virtual void move(){
     bulletRect.y -= speed;
   }
 
   int width, height, damage;
   SDL_Rect bulletRect{0,0,0,0};
 
- private:
+protected:
   int speed;
 };
