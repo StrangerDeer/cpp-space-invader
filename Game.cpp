@@ -8,18 +8,9 @@ void Game::run() {
     frameStart = SDL_GetTicks();
     handleEvent();
     handleCollisions();
-    makeObjectsFall();
+    makeObjectsMove();
 
-    if(!spaceship->bullets.empty()){
-      for(int i = 0; i < spaceship->bullets.size(); i++){
-        std::shared_ptr<SpaceshipBullet> bullet = spaceship->bullets.at(i);
-        bullet->move();
-        if(bullet->bulletRect.y < 0){
-          spaceship->bullets.erase(spaceship->bullets.begin() + i);
-          spaceshipBulletsTexture.erase(spaceshipBulletsTexture.begin() + i);
-        }
-      }
-    }
+
 
     if(spaceship->getHealth() == 0){
       isRunning = 2;
@@ -39,7 +30,7 @@ void Game::run() {
   }
 }
 
-void Game::makeObjectsFall() {
+void Game::makeObjectsMove() {
     int windowHeight = SDL_GetWindowSurface(window)->h;
     int windowWidth = SDL_GetWindowSurface(window)->w;
     for (std::shared_ptr<Star> star : stars) {
@@ -58,6 +49,37 @@ void Game::makeObjectsFall() {
         elem->fall();
         if (elem->rect.y > windowHeight + (((elem->height * 1.5) * backgroundElems.size()) - windowHeight - elem->height)) {
             elem->placeAtStartingPos(windowWidth, windowHeight);
+        }
+    }
+
+    alien->fall();
+
+    bool isAlienShooting = alien->decideIfShooting();
+    if (isAlienShooting) {
+        std::shared_ptr<AlienBullet> bullet = alien->shoot();
+        std::shared_ptr<BulletTexture> alienBulletTexture = std::make_shared<BulletTexture>(renderer, bullet, SDL_Color{255, 0, 0, 255});
+        alienBulletsTexture.push_back(alienBulletTexture);
+    }
+
+    if (!alien->bullets.empty()){
+        for(int i = 0; i < alien->bullets.size(); i++) {
+            std::shared_ptr<AlienBullet> bullet = alien->bullets.at(i);
+            bullet->move();
+            if(bullet->bulletRect.y > windowHeight){
+                alien->bullets.erase(alien->bullets.begin() + i);
+                alienBulletsTexture.erase(alienBulletsTexture.begin() + i);
+            }
+        }
+    }
+
+    if(!spaceship->bullets.empty()){
+        for(int i = 0; i < spaceship->bullets.size(); i++){
+            std::shared_ptr<SpaceshipBullet> bullet = spaceship->bullets.at(i);
+            bullet->move();
+            if(bullet->bulletRect.y < 0){
+                spaceship->bullets.erase(spaceship->bullets.begin() + i);
+                spaceshipBulletsTexture.erase(spaceshipBulletsTexture.begin() + i);
+            }
         }
     }
 }
@@ -88,7 +110,7 @@ void Game::initSounds() {
   backgroundMusic = std::make_unique<GameMusic>(BACKGROUND_MUSIC_FILEPATH);
   spaceshipShootSoundEffect = std::make_unique<GameSoundEffect>(SPACESHIP_SHOOT_SOUND_EFFECT_FILEPATH);
   starPickUpSoundEffect = std::make_unique<GameSoundEffect>("../sound/star_pick_up.wav");
-  asteroidHitByBullet = std::make_unique<GameSoundEffect>("../sound/asteroid_hit_by_bullet.wav");
+  objectHitByBullet = std::make_unique<GameSoundEffect>("../sound/asteroid_hit_by_bullet.wav");
   asteroidExplodes = std::make_unique<GameSoundEffect>("../sound/asteroid_explodes.wav");
 }
 
@@ -199,47 +221,9 @@ void Game::initBackgroundElements(int numberOfElems,
 
 void Game::initLogic() {
 
-  if(spaceship){
-    spaceship = nullptr;
-  }
+    clearObjects();
 
-  if(!stars.empty()){
-    stars.clear();
-  }
-
-  if(!asteroids.empty()){
-    asteroids.clear();
-  }
-
-  if(!dimensionalObjects.empty()){
-    dimensionalObjects.clear();
-  }
-
-  if(!backgroundElems.empty()){
-    backgroundElems.clear();
-  }
-
-  if(!pinkStars.empty()){
-    pinkStars.clear();
-  }
-
-  if(!greenStars.empty()){
-    greenStars.clear();
-  }
-
-  if(!blueStars.empty()){
-    blueStars.clear();
-  }
-
-  if(!goldStars.empty()){
-    goldStars.clear();
-  }
-
-  if(!redStars.empty()){
-    redStars.clear();
-  }
-
-  constexpr int STAR_HEIGHT = 125;
+    constexpr int STAR_HEIGHT = 125;
   constexpr int STAR_WIDTH = 50;
 
   constexpr int NUMBER_OF_PINK_STARS = 7;
@@ -376,8 +360,55 @@ void Game::initLogic() {
                          POINT_FOR_LARGE_ASTEROIDS);
 
 
-    spaceship = std::make_shared<Spaceship>(5, 75, windowWidth * 0.5, windowHeight * 0.85, 100, 100, 10, 1);
+    spaceship = std::make_shared<Spaceship>(10, 75, windowWidth * 0.5, windowHeight * 0.85, 100, 100, 10, 1);
 
+    alien = std::make_shared<Alien>(5, windowWidth * 0.5, windowHeight * -1.5, 100, 100, 50, windowWidth, windowHeight);
+}
+
+void Game::clearObjects() {
+    if(spaceship){
+        spaceship = nullptr;
+    }
+
+    if (alien) {
+        alien = nullptr;
+    }
+
+    if(!stars.empty()){
+      stars.clear();
+    }
+
+    if(!asteroids.empty()){
+      asteroids.clear();
+    }
+
+    if(!dimensionalObjects.empty()){
+      dimensionalObjects.clear();
+    }
+
+    if(!backgroundElems.empty()){
+      backgroundElems.clear();
+    }
+
+    if(!pinkStars.empty()){
+      pinkStars.clear();
+    }
+
+    if(!greenStars.empty()){
+      greenStars.clear();
+    }
+
+    if(!blueStars.empty()){
+      blueStars.clear();
+    }
+
+    if(!goldStars.empty()){
+      goldStars.clear();
+    }
+
+    if(!redStars.empty()){
+      redStars.clear();
+    }
 }
 
 void Game::handleEvent() {
@@ -414,9 +445,9 @@ void Game::handleEvent() {
             auto timeSinceLastShoot = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastShootTime).count();
 
             if(timeSinceLastShoot >= (1.0 / spaceship->getFirerate()) * 1000){
-              std::shared_ptr<SpaceshipBullet> bullet = spaceship->shoot(spaceship->width, spaceship->height);
-              std::shared_ptr<BulletTexture> bulletTexture = std::make_shared<BulletTexture>(renderer, bullet);
-              spaceshipBulletsTexture.push_back(bulletTexture);
+              std::shared_ptr<SpaceshipBullet> bullet = spaceship->shoot();
+              std::shared_ptr<BulletTexture> spaceShipBulletTexture = std::make_shared<BulletTexture>(renderer, bullet, SDL_Color{0, 255, 0, 255});
+              spaceshipBulletsTexture.push_back(spaceShipBulletTexture);
               spaceshipShootSoundEffect->playSoundEffect();
               lastShootTime = now;
             }
@@ -430,6 +461,10 @@ void Game::initTexture() {
 
     if(spaceshipTexture){
       spaceshipTexture = nullptr;
+    }
+
+    if (alienTexture) {
+        alienTexture = nullptr;
     }
 
     if(!starTextures.empty()){
@@ -477,6 +512,7 @@ void Game::initTexture() {
     texts.push_back(spacePointText);
 
     spaceshipTexture = std::make_unique<SpaceshipTexture>(renderer, spaceship);
+    alienTexture = std::make_unique<AlienTexture>(renderer, alien);
 }
 
 void Game::initBackgroundElemTextures() {
@@ -536,6 +572,7 @@ void Game::handleCollisions() {
 
     if (SDL_HasIntersection(&spaceshipRect, &asteroidRect)) {
       asteroid->reset();
+      asteroidExplodes->playSoundEffect();
       spaceship->takeDamage();
     }
   }
@@ -550,10 +587,40 @@ void Game::handleCollisions() {
     }
   }
 
+  if(!alien->bullets.empty()) {
+      for (int i = 0; i < alien->bullets.size(); i++) {
+          std::shared_ptr<AlienBullet> bullet = alien->bullets.at(i);
+          SDL_Rect bulletRect{bullet->bulletRect.x, bullet->bulletRect.y, bullet->width, bullet->height};
+
+          if (SDL_HasIntersection(&bulletRect, &spaceshipRect)) {
+              spaceship->takeDamage();
+              alien->bullets.erase(alien->bullets.begin() + i);
+              alienBulletsTexture.erase(alienBulletsTexture.begin() + i);
+          }
+      }
+  }
+
   if(!spaceship->bullets.empty()){
     for(int i = 0; i < spaceship->bullets.size(); i++){
       std::shared_ptr<SpaceshipBullet> bullet = spaceship->bullets.at(i);
       SDL_Rect bulletRect{bullet->bulletRect.x, bullet->bulletRect.y, bullet->width, bullet->height};
+
+      if (alien->rect.y + alien->height >= 0) {
+          SDL_Rect alienRect{alien->rect.x, alien->rect.y, alien->width, alien->height};
+
+          if (SDL_HasIntersection(&bulletRect, &alienRect)) {
+              alien->takeDamage();
+              objectHitByBullet->playSoundEffect();
+              spaceship->bullets.erase(spaceship->bullets.begin() + i);
+              spaceshipBulletsTexture.erase(spaceshipBulletsTexture.begin() + i);
+
+              if (alien->isDead()) {
+                  alien->givePoints(spaceship);
+              }
+
+              break;
+          }
+      }
 
       for(auto asteroid : asteroids){
         if(asteroid->rect.y + asteroid->height < 0){
@@ -563,16 +630,13 @@ void Game::handleCollisions() {
         SDL_Rect asteroidRect{asteroid->rect.x, asteroid->rect.y, asteroid->width, asteroid->height};
 
         if(SDL_HasIntersection(&bulletRect, &asteroidRect)){
-
-          asteroid->reduceHp(bullet->damage);
+          asteroid->takeDamage();
           spaceship->bullets.erase(spaceship->bullets.begin() + i);
           spaceshipBulletsTexture.erase(spaceshipBulletsTexture.begin() + i);
 
           if(asteroid->isDead()){
             asteroidExplodes->playSoundEffect();
             asteroid->givePoints(spaceship);
-          } else {
-            asteroidHitByBullet->playSoundEffect();
           }
 
           break;
@@ -600,6 +664,7 @@ void Game::printTexture() {
     }
 
     spaceshipTexture->print(renderer, ticks);
+    alienTexture->print(renderer, ticks);
 
 
   if(!spaceshipBulletsTexture.empty()){
@@ -607,6 +672,12 @@ void Game::printTexture() {
       bullet->print(renderer);
     }
   }
+
+    if(!alienBulletsTexture.empty()){
+        for(std::shared_ptr<BulletTexture> bullet : alienBulletsTexture){
+            bullet->print(renderer);
+        }
+    }
 
   spaceshipTexture->print(renderer, ticks);
 

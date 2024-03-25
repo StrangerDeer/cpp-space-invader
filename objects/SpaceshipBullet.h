@@ -7,7 +7,7 @@ class SpaceshipBullet {
  public:
 
   SpaceshipBullet(int x, int y) :
-  speed(20), width(10), height(10), damage(1)
+  speed(15), width(10), height(25), damage(1)
   {
     bulletRect.x = x;
     bulletRect.y = y;
@@ -15,13 +15,13 @@ class SpaceshipBullet {
     bulletRect.h = height;
   }
 
-  void move(){
+  virtual void move(){
     bulletRect.y -= speed;
   }
 
   int width, height, damage;
   SDL_Rect bulletRect{0,0,0,0};
 
- private:
+protected:
   int speed;
 };

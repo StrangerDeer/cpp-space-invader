@@ -26,6 +26,8 @@
 
 #include "sound/GameMusic.h"
 #include "sound/GameSoundEffect.h"
+#include "objects/Alien.h"
+#include "ui/objectTextures/AlienTexture.h"
 
 
 template<typename T>
@@ -76,12 +78,16 @@ private:
     shared_vector<Star> redStars;
 
     std::shared_ptr<Spaceship> spaceship{nullptr};
+    std::shared_ptr<Alien> alien{nullptr};
 
     //UI
     std::unique_ptr<SpaceshipTexture> spaceshipTexture{nullptr};
+    std::unique_ptr<AlienTexture> alienTexture{nullptr};
+
     shared_vector<StarTexture> starTextures{};
     shared_vector<AsteroidTexture> asteroidTextures{};
     shared_vector<BulletTexture> spaceshipBulletsTexture{};
+    shared_vector<BulletTexture> alienBulletsTexture{};
     shared_vector<BackgroundTexture> backgroundTextures{};
 
     shared_vector<GameText> texts;
@@ -90,7 +96,7 @@ private:
     std::unique_ptr<GameMusic> backgroundMusic{nullptr};
     std::unique_ptr<GameSoundEffect> spaceshipShootSoundEffect{nullptr};
     std::unique_ptr<GameSoundEffect> starPickUpSoundEffect{nullptr};
-    std::unique_ptr<GameSoundEffect> asteroidHitByBullet{nullptr};
+    std::unique_ptr<GameSoundEffect> objectHitByBullet{nullptr};
     std::unique_ptr<GameSoundEffect> asteroidExplodes{nullptr};
 
     void initSDL();
@@ -133,9 +139,11 @@ private:
 
   void handleCollisions();
 
-  void makeObjectsFall();
+  void makeObjectsMove();
 
   void handleGameOver();
+
+    void clearObjects();
 };
 
 #endif //CPP_SPACE_INVADER_GAME_H
