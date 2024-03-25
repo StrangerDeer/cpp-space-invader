@@ -87,6 +87,7 @@ private:
     shared_vector<StarTexture> starTextures{};
     shared_vector<AsteroidTexture> asteroidTextures{};
     shared_vector<BulletTexture> spaceshipBulletsTexture{};
+    shared_vector<BulletTexture> alienBulletsTexture{};
     shared_vector<BackgroundTexture> backgroundTextures{};
 
     shared_vector<GameText> texts;
@@ -95,7 +96,7 @@ private:
     std::unique_ptr<GameMusic> backgroundMusic{nullptr};
     std::unique_ptr<GameSoundEffect> spaceshipShootSoundEffect{nullptr};
     std::unique_ptr<GameSoundEffect> starPickUpSoundEffect{nullptr};
-    std::unique_ptr<GameSoundEffect> asteroidHitByBullet{nullptr};
+    std::unique_ptr<GameSoundEffect> objectHitByBullet{nullptr};
     std::unique_ptr<GameSoundEffect> asteroidExplodes{nullptr};
 
     void initSDL();
@@ -138,9 +139,11 @@ private:
 
   void handleCollisions();
 
-  void makeObjectsFall();
+  void makeObjectsMove();
 
   void handleGameOver();
+
+    void clearObjects();
 };
 
 #endif //CPP_SPACE_INVADER_GAME_H

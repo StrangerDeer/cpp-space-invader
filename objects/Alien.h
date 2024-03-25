@@ -13,19 +13,31 @@ class Alien : public HealthObject, public FallingObject, public ScoreObject {
 public:
     Alien(int maxHp, int x, int y, int width, int height, int points, int windowW, int windowH) :
             ScoreObject(points), HealthObject(maxHp), FallingObject(x, y, width, height, 2, 15, true),
-            maxHealth(maxHp), windowWidth(windowW), windowHeight(windowH), fallingSpeed(5) {
+            maxHealth(maxHp), windowWidth(windowW), windowHeight(windowH), fallingSpeed(5), shootCounter(0), shootLimit(30) {
         chooseDestination();
     };
 
     std::vector<std::shared_ptr<AlienBullet>> bullets;
 
-    std::shared_ptr<AlienBullet> shoot(int spaceshipWidth, int spaceshipHeight){
-        int x = rect.x + spaceshipWidth / 2;
-        int y = rect.y + spaceshipHeight / 2;
+    std::shared_ptr<AlienBullet> shoot(){
+        int x = rect.x + width / 2;
+        int y = rect.y + height / 2;
 
         std::shared_ptr<AlienBullet> bullet = std::make_shared<AlienBullet>(x, y);
         bullets.push_back(bullet);
         return bullet;
+    }
+
+    bool decideIfShooting() {
+        if (shootCounter == shootLimit) {
+            shootCounter = 0;
+            int willShoot = Util::getRandomNumber(0, 1);
+            if (willShoot == 1) {
+                return true;
+            }
+            return false;
+        }
+        return false;
     }
 
     void fall() override {
@@ -54,6 +66,7 @@ protected:
     int fallingSpeed;
     int windowWidth, windowHeight;
     int chosenDestination;
+    int shootCounter, shootLimit;
 
     void move() {
         if (rect.x <= chosenDestination + currentSpeed && rect.x >= chosenDestination - currentSpeed) {
@@ -64,6 +77,7 @@ protected:
         } else if (rect.x > chosenDestination) {
             rect.x -= currentSpeed;
         }
+        shootCounter++;
     }
 
     void chooseDestination() {
