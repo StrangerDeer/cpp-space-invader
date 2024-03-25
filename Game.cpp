@@ -408,8 +408,13 @@ void Game::initTexture() {
 }
 
 void Game::initBackgroundElemTextures() {
+    std::vector<int> usedIndexes = {};
+    int randomIndex = Util::getRandomNumber(1, 10);
     for (const std::shared_ptr<BackgroundElement> &elem : backgroundElems) {
-        int randomIndex = Util::getRandomNumber(1, 10);
+        while ((std::find(usedIndexes.begin(), usedIndexes.end(), randomIndex) != usedIndexes.end())) {
+            randomIndex = Util::getRandomNumber(1, 10);
+        }
+        usedIndexes.push_back(randomIndex);
         std::string filepath = BACKGROUND_ELEM_FILEPATH + std::to_string(randomIndex) + TEXTURE_FILE_EXTENSION;
         std::shared_ptr<BackgroundTexture> backgroundTexture = std::make_shared<BackgroundTexture>(renderer, elem, filepath);
         backgroundTextures.push_back(backgroundTexture);
