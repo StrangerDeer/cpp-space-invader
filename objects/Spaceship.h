@@ -32,9 +32,9 @@ public:
         rect.x -= speed;
     }
 
-    std::shared_ptr<SpaceshipBullet> shoot(int spaceshipWidth, int spaceshipHeight){
-      int x = rect.x + spaceshipWidth / 2;
-      int y = rect.y + spaceshipHeight / 2;
+    std::shared_ptr<SpaceshipBullet> shoot(){
+      int x = rect.x + width / 2;
+      int y = rect.y + height / 2;
 
       std::shared_ptr<SpaceshipBullet> bullet = std::make_shared<SpaceshipBullet>(x, y);
 
