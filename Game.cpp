@@ -4,7 +4,7 @@ void Game::run() {
 
   backgroundMusic->playMusic();
 
-  while(isRunning){
+  while(isRunning == 1){
     frameStart = SDL_GetTicks();
     handleEvent();
     handleCollisions();
@@ -20,6 +20,11 @@ void Game::run() {
         }
       }
     }
+
+    if(spaceship->getHealth() == 0){
+      isRunning = 2;
+    }
+
     printTexture();
 
     frameTime = SDL_GetTicks() - frameStart;
@@ -27,6 +32,10 @@ void Game::run() {
     if(FRAME_DELAY > frameTime){
       SDL_Delay(FRAME_DELAY - frameTime);
     }
+  }
+
+  if(isRunning == 2){
+    handleGameOver();
   }
 }
 
@@ -330,7 +339,7 @@ void Game::initLogic() {
 void Game::handleEvent() {
   while (SDL_PollEvent(&event)) {
     if (event.type == QUIT || event.key.keysym.sym == QUIT_BUTTON) {
-      isRunning = false;
+      isRunning = 0;
     }
 
     if(event.type == SDL_KEYDOWN){
@@ -533,5 +542,46 @@ void Game::printTexture() {
     }
 
     SDL_RenderPresent(renderer);
+}
+
+
+void Game::handleGameOver() {
+  GameText gameOverText{renderer,
+                        DEFAULT_GAME_TEXT_FONT_PATH,
+                        DEFAULT_GAME_TEXT_FONT_SIZE,
+                        "GAME OVER",
+                        DEFAULT_GAME_TEXT_COLOR,
+                        windowWidth / 2,
+                        windowHeight / 2};
+  GameText continueText{
+      renderer,
+      DEFAULT_GAME_TEXT_FONT_PATH,
+      DEFAULT_GAME_TEXT_FONT_SIZE,
+      "Press space to continue!",
+      DEFAULT_GAME_TEXT_COLOR,
+      windowWidth / 2,
+      (windowHeight / 2) + DEFAULT_GAME_TEXT_FONT_SIZE
+  };
+
+  GameMusic gameOverMusic{"../sound/game_over.wav"};
+
+  gameOverMusic.playMusic();
+
+  while(isRunning == 2){
+    while (SDL_PollEvent(&event)) {
+      if (event.type == QUIT || event.key.keysym.sym == QUIT_BUTTON) {
+        isRunning = 0;
+      }
+
+      if(event.type == SDL_KEYDOWN){
+        if(event.key.keysym.sym == SDLK_SPACE){
+          isRunning = 1;
+        }
+      }
+    }
+    continueText.display(renderer);
+    gameOverText.display(renderer);
+    SDL_RenderPresent(renderer);
+  }
 }
 
