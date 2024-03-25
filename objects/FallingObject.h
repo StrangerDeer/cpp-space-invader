@@ -19,7 +19,7 @@ class FallingObject : public DimensionalObject {
     currentSpeed = Util::getRandomNumber(minSpeed, maxSpeed);
   }
 
-  void fall() {
+  virtual void fall() {
     rect.y += currentSpeed;
   }
 
