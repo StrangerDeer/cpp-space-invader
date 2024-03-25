@@ -27,15 +27,15 @@ void Game::run() {
 
     printTexture();
 
+    if(isRunning == 2){
+      handleGameOver();
+    }
+
     frameTime = SDL_GetTicks() - frameStart;
 
     if(FRAME_DELAY > frameTime){
       SDL_Delay(FRAME_DELAY - frameTime);
     }
-  }
-
-  if(isRunning == 2){
-    handleGameOver();
   }
 }
 
@@ -198,6 +198,47 @@ void Game::initBackgroundElements(int numberOfElems,
 }
 
 void Game::initLogic() {
+
+  if(spaceship){
+    spaceship = nullptr;
+  }
+
+  if(!stars.empty()){
+    stars.clear();
+  }
+
+  if(!asteroids.empty()){
+    asteroids.clear();
+  }
+
+  if(!dimensionalObjects.empty()){
+    dimensionalObjects.clear();
+  }
+
+  if(!backgroundElems.empty()){
+    backgroundElems.clear();
+  }
+
+  if(!pinkStars.empty()){
+    pinkStars.clear();
+  }
+
+  if(!greenStars.empty()){
+    greenStars.clear();
+  }
+
+  if(!blueStars.empty()){
+    blueStars.clear();
+  }
+
+  if(!goldStars.empty()){
+    goldStars.clear();
+  }
+
+  if(!redStars.empty()){
+    redStars.clear();
+  }
+
   constexpr int STAR_HEIGHT = 125;
   constexpr int STAR_WIDTH = 50;
 
@@ -387,8 +428,27 @@ void Game::handleEvent() {
 
 void Game::initTexture() {
 
-    int windowWidth = SDL_GetWindowSurface(window)->w;
-    int windowHeight = SDL_GetWindowSurface(window)->h;
+    if(spaceshipTexture){
+      spaceshipTexture = nullptr;
+    }
+
+    if(!starTextures.empty()){
+      starTextures.clear();
+    }
+
+    if(!asteroidTextures.empty()){
+      asteroidTextures.clear();
+    }
+
+
+    if(!spaceshipBulletsTexture.empty()){
+      spaceshipBulletsTexture.clear();
+    }
+
+
+    if(!texts.empty()){
+      texts.clear();
+    }
 
     initBackgroundElemTextures();
     initStarTextures();
@@ -582,6 +642,8 @@ void Game::handleGameOver() {
 
       if(event.type == SDL_KEYDOWN){
         if(event.key.keysym.sym == SDLK_SPACE){
+          initLogic();
+          initTexture();
           isRunning = 1;
         }
       }
