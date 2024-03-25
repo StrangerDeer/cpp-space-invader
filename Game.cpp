@@ -490,7 +490,7 @@ void Game::handleCollisions() {
         SDL_Rect asteroidRect{asteroid->rect.x, asteroid->rect.y, asteroid->width, asteroid->height};
 
         if(SDL_HasIntersection(&bulletRect, &asteroidRect)){
-          asteroid->reduceHp(bullet->damage);
+          asteroid->takeDamage();
           spaceship->bullets.erase(spaceship->bullets.begin() + i);
           spaceshipBulletsTexture.erase(spaceshipBulletsTexture.begin() + i);
 
