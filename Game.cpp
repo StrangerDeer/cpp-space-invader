@@ -51,6 +51,8 @@ void Game::makeObjectsFall() {
             elem->placeAtStartingPos(windowWidth, windowHeight);
         }
     }
+
+    alien->fall();
 }
 
 void Game::initSDL() {
@@ -325,6 +327,7 @@ void Game::initLogic() {
 
     spaceship = std::make_shared<Spaceship>(5, 75, windowWidth * 0.5, windowHeight * 0.85, 100, 100, 10, 1);
 
+    alien = std::make_shared<Alien>(5, windowWidth * 0.5, windowHeight * -1.5, 100, 100, 50, windowWidth, windowHeight);
 }
 
 void Game::handleEvent() {
@@ -405,6 +408,7 @@ void Game::initTexture() {
     texts.push_back(spacePointText);
 
     spaceshipTexture = std::make_unique<SpaceshipTexture>(renderer, spaceship);
+    alienTexture = std::make_unique<AlienTexture>(renderer, alien);
 }
 
 void Game::initBackgroundElemTextures() {
@@ -523,6 +527,7 @@ void Game::printTexture() {
     }
 
     spaceshipTexture->print(renderer, ticks);
+    alienTexture->print(renderer, ticks);
 
 
   if(!spaceshipBulletsTexture.empty()){

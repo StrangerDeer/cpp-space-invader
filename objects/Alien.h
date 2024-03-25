@@ -10,9 +10,9 @@
 
 class Alien : public HealthObject, public FallingObject, public ScoreObject {
 public:
-    Alien(int maxHp, int minSpeed, int maxSpeed, int x, int y, int width, int height, int points, int windowW, int windowH) :
-            ScoreObject(points), HealthObject(maxHp), FallingObject(x, y, width, height, minSpeed, maxSpeed, true),
-            maxHealth(maxHp), windowWidth(windowW), windowHeight(windowH){};
+    Alien(int maxHp, int x, int y, int width, int height, int points, int windowW, int windowH) :
+            ScoreObject(points), HealthObject(maxHp), FallingObject(x, y, width, height, 10, 20, true),
+            maxHealth(maxHp), windowWidth(windowW), windowHeight(windowH), fallingSpeed(5) {};
 
     std::vector<std::shared_ptr<AlienBullet>> bullets;
 
@@ -26,8 +26,8 @@ public:
     }
 
     void fall() override {
-        if (rect.y < 50) {
-            rect.y += currentSpeed;
+        if (rect.y < windowHeight * 0.035) {
+            rect.y += fallingSpeed;
         }
     }
 
@@ -46,5 +46,6 @@ public:
 
 protected:
     int maxHealth;
+    int fallingSpeed;
     int windowWidth, windowHeight;
 };

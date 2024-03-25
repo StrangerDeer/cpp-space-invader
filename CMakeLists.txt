@@ -51,6 +51,8 @@ add_executable(cpp_space_invader main.cpp
         objects/BackgroundElement.cpp
         objects/AlienBullet.h
         objects/Alien.h
+        ui/objectTextures/AlienTexture.h
+        ui/objectTextures/AlienTexture.cpp
 )
 
 target_link_libraries(cpp_space_invader

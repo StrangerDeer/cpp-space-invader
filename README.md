@@ -10,11 +10,11 @@ flowchart TD
   meteoresAppear[Meteores and stars appear]
   handleButtonPressed[Handle button press]
   handleTouch[Handle collision]
-  isSpaceshipDead{Is spaceship dead?}
-  isSpaceshipPoints{Does spaceship have
+  isSpaceshipDead{Is alien dead?}
+  isSpaceshipPoints{Does alien have
                      enough points?}
   alienAppear[Alien appears + gun boosters]
-  isSpaceshipWon{Does spaceship reach 
+  isSpaceshipWon{Does alien reach 
   end of the board?}
   bossAppear[Boss appears]
   isBossDead{Is boss dead?}
@@ -52,7 +52,7 @@ isPressedButton{Is any button pressed?}
 isMove{Is the pressed button
       left/right/up/down
       arrow key?}
-spaceshipMove[Move spaceship in direction]
+spaceshipMove[Move alien in direction]
 isSpaceShot{Is the pressed button
             space?}
 spaceshipShot[Spaceship shoots]
@@ -78,18 +78,18 @@ handleTouch[Handle collision]
 out[Out]
 
 isMeteorTouchSpaceship{Does meteor touch 
-spaceship?}
+alien?}
 isMeteorShot{Does meteor touch 
-spaceship's bullet?}
+alien's bullet?}
 isMeteorDead{Is meteor dead?}
-isStarTouch{Does star touch spaceship?}
+isStarTouch{Does star touch alien?}
 isAlienExist{Are aliens exist?}
 isAlienTouch{Does alien/alien's bullet 
-touch spaceship?}
-isSpaceshipTouchAlien{Does spaceship's bullet 
+touch alien?}
+isSpaceshipTouchAlien{Does alien's bullet 
 touch alien?}
 isAlienDead{Is alien dead?}
-isSpaceshipTouchGunBoost{Does spaceship reach 
+isSpaceshipTouchGunBoost{Does alien reach 
 gun's boost?}
 
 meteorHealthDecrease[Meteor's health decreases]
@@ -97,10 +97,10 @@ spaceshipDecreaseHealth[Spaceship's health decreases]
 spaceshipIncreasePoints[Spaceship's points increase]
 meteorFallOut[Meteor falls]
 starFallOut[Star falls]
-alienShot[Alien shoots or comes closer spaceship]
+alienShot[Alien shoots or comes closer alien]
 alienHpDecrease[Alien's Hp decreases]
 alienDead[Alien drops its gun and
-increases spaceship's point,
+increases alien's point,
 gun falls]
 spaceshipBoost[Spaceship gets gun's boost]
 spaceshipMiss[Gun's boost disappears]
