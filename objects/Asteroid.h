@@ -26,8 +26,6 @@ class Asteroid : public FallingObject, public ScoreObject, public HealthObject {
     getRandomRotation();
   }
 
-  void reduceHp(int value){health -= value;}
-
   [[nodiscard]] double getRotation() const { return angleRotation; }
 
  private:
