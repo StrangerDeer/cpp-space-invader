@@ -518,6 +518,10 @@ void Game::clearTextures() {
         alienTexture = nullptr;
     }
 
+    if (healingItemTexture) {
+        healingItemTexture = nullptr;
+    }
+
     if(!starTextures.empty()){
       starTextures.clear();
     }
@@ -533,7 +537,6 @@ void Game::clearTextures() {
     if(!alienBulletsTexture.empty()) {
         alienBulletsTexture.clear();
     }
-
 
 
     if(!texts.empty()){
