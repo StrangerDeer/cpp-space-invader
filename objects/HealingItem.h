@@ -6,15 +6,15 @@
 
 class HealingItem : public FallingObject {
 public:
-    HealingItem(int x, int y, int width, int height) :
-    FallingObject(x, y, width, height, 3, 3, true), healAmount(3) {
+    HealingItem(int x, int y, int width, int height, int alienWidth, int alienHeight) :
+    FallingObject(x, y, width, height, 3, 3, true), healAmount(1), alienWidth(alienWidth), alienHeight(alienHeight) {
         removeFromScreen();
     };
 
     void placeAtStartingPos(int x, int y) override {
         setRandomSpeed();
-        rect.x = x;
-        rect.y = y;
+        rect.x = x + alienWidth / 2;
+        rect.y = y + alienHeight / 2;
     };
 
     void removeFromScreen() {
@@ -29,4 +29,5 @@ public:
 
 private:
     int healAmount;
+    int alienWidth, alienHeight;
 };

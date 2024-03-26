@@ -51,6 +51,8 @@ void Game::makeObjectsMove() {
 
     alien->fall();
 
+    healingItem->fall();
+
     bool isAlienShooting = alien->decideIfShooting();
     if (isAlienShooting) {
         std::shared_ptr<AlienBullet> bullet = alien->shoot();
@@ -271,6 +273,12 @@ void Game::initLogic() {
   constexpr int BACKGROUND_ELEM_HEIGHT = 600;
   constexpr int NUMBER_OF_BACKGROUND_ELEMS = 10;
 
+  constexpr int HEALING_ITEM_HEIGHT = 100;
+  constexpr int HEALING_ITEM_WIDTH = 50;
+
+  constexpr int ALIEN_WIDTH = 100;
+  constexpr int ALIEN_HEIGHT = 100;
+
   int windowWidth = SDL_GetWindowSurface(window)->w;
   int windowHeight = SDL_GetWindowSurface(window)->h;
 
@@ -359,7 +367,9 @@ void Game::initLogic() {
 
     spaceship = std::make_shared<Spaceship>(10, 75, windowWidth * 0.5, windowHeight * 0.85, 100, 100, 10, 1);
 
-    alien = std::make_shared<Alien>(5, windowWidth * 0.5, windowHeight * -1.5, 100, 100, 50, windowWidth, windowHeight);
+    alien = std::make_shared<Alien>(5, windowWidth * 0.5, windowHeight * -1.5, ALIEN_WIDTH, ALIEN_HEIGHT, 50, windowWidth, windowHeight);
+
+    healingItem = std::make_shared<HealingItem>(0, 0, HEALING_ITEM_HEIGHT, HEALING_ITEM_WIDTH, ALIEN_WIDTH, ALIEN_HEIGHT);
 }
 
 void Game::clearObjects() {
@@ -369,6 +379,10 @@ void Game::clearObjects() {
 
     if (alien) {
         alien = nullptr;
+    }
+
+    if (healingItem) {
+        healingItem = nullptr;
     }
 
     if(!stars.empty()){
@@ -486,6 +500,7 @@ void Game::initTexture() {
 
     spaceshipTexture = std::make_unique<SpaceshipTexture>(renderer, spaceship);
     alienTexture = std::make_unique<AlienTexture>(renderer, alien);
+    healingItemTexture = std::make_unique<HealingItemTexture>(renderer, healingItem);
 }
 
 void Game::clearTextures() {
@@ -576,6 +591,13 @@ void Game::initStarTextures() {
 void Game::handleCollisions() {
 
   SDL_Rect spaceshipRect{spaceship->rect.x, spaceship->rect.y, spaceship->width, spaceship->height};
+  SDL_Rect healingItemRect{healingItem->rect.x, healingItem->rect.y, healingItem->width, healingItem->height};
+
+  if (SDL_HasIntersection(&spaceshipRect, &healingItemRect)) {
+      healingItem->removeFromScreen();
+      healingItem->healSpaceship(spaceship);
+      //TODO: HEAL SOUND
+  }
 
   for (auto &asteroid : asteroids) {
 
@@ -625,9 +647,12 @@ void Game::handleCollisions() {
               objectHitByBullet->playSoundEffect();
               spaceship->bullets.erase(spaceship->bullets.begin() + i);
               spaceshipBulletsTexture.erase(spaceshipBulletsTexture.begin() + i);
+              int alienX = alien->rect.x;
+              int alienY = alien->rect.y;
 
               if (alien->isDead()) {
                   alien->givePoints(spaceship);
+                  healingItem->placeAtStartingPos(alienX, alienY);
               }
 
               break;
@@ -677,6 +702,7 @@ void Game::printTexture() {
 
     spaceshipTexture->print(renderer, ticks);
     alienTexture->print(renderer, ticks);
+    healingItemTexture->print(renderer, ticks);
 
 
   if(!spaceshipBulletsTexture.empty()){
