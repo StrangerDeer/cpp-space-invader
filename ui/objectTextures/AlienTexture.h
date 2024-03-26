@@ -9,7 +9,7 @@ class AlienTexture : public TextureCreatorFromPNG {
 
 public:
     AlienTexture(SDL_Renderer* renderer, const std::shared_ptr<Alien>& alien) :
-    TextureCreatorFromPNG(renderer, "../ui/textures/spaceship.png")
+    TextureCreatorFromPNG(renderer, "../ui/textures/alien.png")
     {
         if(!alien){
             std::cerr << "Alien doesn't exist!" << std::endl;

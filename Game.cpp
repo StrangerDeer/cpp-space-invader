@@ -315,8 +315,8 @@ void Game::initLogic() {
   constexpr int HEALING_ITEM_HEIGHT = 130;
   constexpr int HEALING_ITEM_WIDTH = 70;
 
-  constexpr int ALIEN_WIDTH = 100;
-  constexpr int ALIEN_HEIGHT = 100;
+  constexpr int ALIEN_WIDTH = 180;
+  constexpr int ALIEN_HEIGHT = 120;
 
   int windowWidth = SDL_GetWindowSurface(window)->w;
   int windowHeight = SDL_GetWindowSurface(window)->h;
