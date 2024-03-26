@@ -8,7 +8,7 @@ void SpaceshipHealthGameText::display(SDL_Renderer *renderer) {
     if(spaceship->getHealth() != currentValue){
         message = std::to_string(spaceship->getHealth());
         currentValue = spaceship->getHealth();
-        loadFont();
+        loadFont(renderer);
     }
     GameText::display(renderer);
 }

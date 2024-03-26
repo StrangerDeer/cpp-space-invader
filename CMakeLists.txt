@@ -57,6 +57,9 @@ add_executable(cpp_space_invader main.cpp
         ui/objectTextures/HealingItemTexture.h
         ui/objectTextures/HealingItemTexture.h
         ui/objectTextures/HealingItemTexture.cpp
+        game-stages/OpenStage.cpp
+        game-stages/OpenStage.h
+        Config.cpp
 )
 
 target_link_libraries(cpp_space_invader

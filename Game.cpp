@@ -4,13 +4,13 @@ void Game::run() {
 
   backgroundMusic->playMusic();
 
-  while(isRunning > 0){
+  while(isRunning != QUIT_VALUE){
     frameStart = SDL_GetTicks();
 
     switch(isRunning){
-        case 1: openStage(); break;
-        case 2: middleGameStage(); break;
-        case 3: handleGameOver(); break;
+        case OPENING_STAGE_VALUE: openStage(); break;
+        case MIDDLE_GAME_STAGE_VALUE: middleGameStage(); break;
+        case GAME_OVER_STAGE_VALUE: gameOverStage(); break;
     }
 
     frameTime = SDL_GetTicks() - frameStart;
@@ -23,34 +23,31 @@ void Game::run() {
 
 
 void Game::openStage() {
-    GameText title{renderer, DEFAULT_GAME_TEXT_FONT_PATH, DEFAULT_GAME_TEXT_FONT_SIZE, "SPACE INVADER", DEFAULT_GAME_TEXT_COLOR, windowWidth / 2, windowHeight / 2};
-    GameText pressText{renderer, DEFAULT_GAME_TEXT_FONT_PATH, DEFAULT_GAME_TEXT_FONT_SIZE, "PRESS SPACE TO START", DEFAULT_GAME_TEXT_COLOR, windowWidth / 2, (windowHeight / 2) + 50};
-    GameText pressText2{renderer, DEFAULT_GAME_TEXT_FONT_PATH, DEFAULT_GAME_TEXT_FONT_SIZE, "PRESS SPACE TO START", DEFAULT_GAME_TEXT_COLOR_2, windowWidth / 2, (windowHeight / 2) + 50};
 
     ticks = SDL_GetTicks();
     while (SDL_PollEvent(&event)) {
         if (event.type == QUIT || event.key.keysym.sym == QUIT_BUTTON) {
-            isRunning = 0;
+            isRunning = QUIT_VALUE;
         }
 
         if (event.type == SDL_KEYDOWN) {
             if (event.key.keysym.sym == SDLK_SPACE) {
-                isRunning = 2;
+                isRunning = MIDDLE_GAME_STAGE_VALUE;
             }
         }
     }
 
     SDL_RenderClear(renderer);
-    title.display(renderer);
-    if(counter >= 10){
-        pressText.display(renderer);
-    } else {
-        pressText2.display(renderer);
-    }
-    if(counter == 20){
-        counter = 0;
-    }
-    counter++;
+   // title.display(renderer);
+    //if(counter >= 10){
+      //  pressText.display(renderer);
+    //} else {
+      //  pressText2.display(renderer);
+    //}
+    //if(counter == 20){
+      //  counter = 0;
+    //}
+    //counter++;
     spaceshipTexture->print(renderer, ticks);
     SDL_RenderPresent(renderer);
 }
@@ -135,6 +132,13 @@ void Game::initSDL() {
   SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
 
   SDL_GetWindowSize(window, &windowWidth, &windowHeight);
+  Config::windowWidth = windowWidth;
+  Config::windowHeight = windowHeight;
+
+  if(Config::windowWidth == 0 || Config::windowHeight == 0){
+      std::cerr << "Window size was not  initialised!" << std::endl;
+      return;
+  }
 
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
@@ -515,11 +519,11 @@ void Game::initTexture() {
     initStarTextures();
     initAsteroidTextures();
 
-    std::shared_ptr<GameText> livesText = std::make_shared<GameText>(renderer,
+    std::shared_ptr<GameText> livesText = std::make_shared<GameText>("Health: ",
                                                                      DEFAULT_GAME_TEXT_FONT_PATH,
                                                                      DEFAULT_GAME_TEXT_FONT_SIZE,
-                                                                     "Health: ",
-                                                                     DEFAULT_GAME_TEXT_COLOR, 20,windowHeight * 0.93);
+                                                                     DEFAULT_GAME_TEXT_COLOR, 20,windowHeight * 0.93,
+                                                                     renderer);
     std::shared_ptr<SpaceshipHealthGameText> spaceHealthText =
         std::make_shared<SpaceshipHealthGameText>(renderer, spaceship,
                                                   DEFAULT_GAME_TEXT_FONT_PATH,
@@ -768,32 +772,32 @@ void Game::printTexture() {
     SDL_RenderPresent(renderer);
 }
 
-void Game::handleGameOver() {
-  GameText gameOverText{renderer,
+void Game::gameOverStage() {
+  GameText gameOverText{"GAME OVER",
                         DEFAULT_GAME_TEXT_FONT_PATH,
                         DEFAULT_GAME_TEXT_FONT_SIZE,
-                        "GAME OVER",
                         DEFAULT_GAME_TEXT_COLOR,
                         windowWidth / 2,
-                        windowHeight / 2};
+                        windowHeight / 2,
+                        renderer};
   GameText continueText{
-      renderer,
+          "Press space to continue!",
       DEFAULT_GAME_TEXT_FONT_PATH,
       DEFAULT_GAME_TEXT_FONT_SIZE,
-      "Press space to continue!",
       DEFAULT_GAME_TEXT_COLOR,
       windowWidth / 2,
-      (windowHeight / 2) + DEFAULT_GAME_TEXT_FONT_SIZE
+      (windowHeight / 2) + DEFAULT_GAME_TEXT_FONT_SIZE,
+      renderer
   };
   std::string hMessage = "Your score: " + std::to_string(spaceship->getPoints());
     GameText highScoreText{
-            renderer,
+            hMessage,
             DEFAULT_GAME_TEXT_FONT_PATH,
             DEFAULT_GAME_TEXT_FONT_SIZE,
-            hMessage,
             DEFAULT_GAME_TEXT_COLOR,
             (windowWidth / 2) - 80,
-            (windowHeight / 2) - DEFAULT_GAME_TEXT_FONT_SIZE
+            (windowHeight / 2) - DEFAULT_GAME_TEXT_FONT_SIZE,
+            renderer
     };
 
   GameMusic gameOverMusic{"../sound/game_over.wav"};

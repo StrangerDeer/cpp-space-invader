@@ -148,7 +148,7 @@ private:
 
   void makeObjectsMove();
 
-  void handleGameOver();
+  void gameOverStage();
 
   void clearObjects();
 

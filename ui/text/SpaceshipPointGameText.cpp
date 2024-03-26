@@ -8,7 +8,7 @@ void SpaceshipPointGameText::display(SDL_Renderer *renderer) {
     if(spaceship->getPoints() != currentValue){
         message = std::to_string(spaceship->getPoints());
         currentValue = spaceship->getPoints();
-        loadFont();
+        loadFont(renderer);
     }
     GameText::display(renderer);
 }

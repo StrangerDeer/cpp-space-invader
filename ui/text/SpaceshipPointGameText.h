@@ -12,7 +12,7 @@
 class SpaceshipPointGameText : public GameText {
 public:
     SpaceshipPointGameText(SDL_Renderer* renderer, std::shared_ptr<Spaceship> spaceship, const std::string& fontPath, int fontSize, SDL_Color color, int x, int y) :
-    GameText(renderer, fontPath, fontSize, std::to_string(spaceship->getPoints()), color, x,y),
+    GameText(std::to_string(spaceship->getPoints()), fontPath, fontSize, color, x, y, renderer),
     spaceship(spaceship),
             currentValue(spaceship->getPoints())
     {};
