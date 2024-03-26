@@ -312,8 +312,8 @@ void Game::initLogic() {
   constexpr int BACKGROUND_ELEM_HEIGHT = 600;
   constexpr int NUMBER_OF_BACKGROUND_ELEMS = 10;
 
-  constexpr int HEALING_ITEM_HEIGHT = 100;
-  constexpr int HEALING_ITEM_WIDTH = 50;
+  constexpr int HEALING_ITEM_HEIGHT = 130;
+  constexpr int HEALING_ITEM_WIDTH = 70;
 
   constexpr int ALIEN_WIDTH = 100;
   constexpr int ALIEN_HEIGHT = 100;
@@ -408,7 +408,7 @@ void Game::initLogic() {
 
     alien = std::make_shared<Alien>(5, windowWidth * 0.5, windowHeight * -1.5, ALIEN_WIDTH, ALIEN_HEIGHT, 50, windowWidth, windowHeight);
 
-    healingItem = std::make_shared<HealingItem>(0, 0, HEALING_ITEM_HEIGHT, HEALING_ITEM_WIDTH, ALIEN_WIDTH, ALIEN_HEIGHT);
+    healingItem = std::make_shared<HealingItem>(0, 0, HEALING_ITEM_WIDTH, HEALING_ITEM_HEIGHT, ALIEN_WIDTH, ALIEN_HEIGHT);
 }
 
 void Game::clearObjects() {
