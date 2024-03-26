@@ -53,6 +53,10 @@ add_executable(cpp_space_invader main.cpp
         objects/Alien.h
         ui/objectTextures/AlienTexture.h
         ui/objectTextures/AlienTexture.cpp
+        objects/HealingItem.h
+        ui/objectTextures/HealingItemTexture.h
+        ui/objectTextures/HealingItemTexture.h
+        ui/objectTextures/HealingItemTexture.cpp
 )
 
 target_link_libraries(cpp_space_invader

@@ -28,6 +28,8 @@
 #include "sound/GameSoundEffect.h"
 #include "objects/Alien.h"
 #include "ui/objectTextures/AlienTexture.h"
+#include "objects/HealingItem.h"
+#include "ui/objectTextures/HealingItemTexture.h"
 
 
 template<typename T>
@@ -80,10 +82,12 @@ private:
 
     std::shared_ptr<Spaceship> spaceship{nullptr};
     std::shared_ptr<Alien> alien{nullptr};
+    std::shared_ptr<HealingItem> healingItem{nullptr};
 
     //UI
     std::unique_ptr<SpaceshipTexture> spaceshipTexture{nullptr};
     std::unique_ptr<AlienTexture> alienTexture{nullptr};
+    std::unique_ptr<HealingItemTexture> healingItemTexture{nullptr};
 
     shared_vector<StarTexture> starTextures{};
     shared_vector<AsteroidTexture> asteroidTextures{};
