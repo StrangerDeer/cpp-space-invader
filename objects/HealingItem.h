@@ -7,14 +7,14 @@
 class HealingItem : public FallingObject {
 public:
     HealingItem(int x, int y, int width, int height, int alienWidth, int alienHeight) :
-    FallingObject(x, y, width, height, 3, 3, true), healAmount(1), alienWidth(alienWidth), alienHeight(alienHeight) {
+    FallingObject(x, y, width, height, 5, 5, true), healAmount(1), alienWidth(alienWidth), alienHeight(alienHeight) {
         removeFromScreen();
     };
 
     void placeAtStartingPos(int x, int y) override {
         setRandomSpeed();
-        rect.x = x + alienWidth / 2;
-        rect.y = y + alienHeight / 2;
+        rect.x = x + alienWidth / 2 - width / 2;
+        rect.y = y + alienHeight / 2 - height / 2;
     };
 
     void removeFromScreen() {
