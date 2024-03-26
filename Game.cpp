@@ -785,6 +785,16 @@ void Game::handleGameOver() {
       windowWidth / 2,
       (windowHeight / 2) + DEFAULT_GAME_TEXT_FONT_SIZE
   };
+  std::string hMessage = "Your score: " + std::to_string(spaceship->getPoints());
+    GameText highScoreText{
+            renderer,
+            DEFAULT_GAME_TEXT_FONT_PATH,
+            DEFAULT_GAME_TEXT_FONT_SIZE,
+            hMessage,
+            DEFAULT_GAME_TEXT_COLOR,
+            (windowWidth / 2) - 80,
+            (windowHeight / 2) - DEFAULT_GAME_TEXT_FONT_SIZE
+    };
 
   GameMusic gameOverMusic{"../sound/game_over.wav"};
 
@@ -804,6 +814,7 @@ void Game::handleGameOver() {
         }
       }
     }
+    highScoreText.display(renderer);
     continueText.display(renderer);
     gameOverText.display(renderer);
     SDL_RenderPresent(renderer);
