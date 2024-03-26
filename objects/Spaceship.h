@@ -47,6 +47,10 @@ public:
     void moveUp(){ rect.y -= speed;}
     void moveDown(){ rect.y += speed;}
 
+    void recieveHealing(int amount) {
+        health += amount;
+    }
+
 private:
     int points;
     int fireRate;
