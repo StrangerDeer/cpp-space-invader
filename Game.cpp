@@ -4,19 +4,13 @@ void Game::run() {
 
   backgroundMusic->playMusic();
 
-  while(isRunning == 1){
+  while(isRunning > 0){
     frameStart = SDL_GetTicks();
-    handleEvent();
-    handleCollisions();
-    makeObjectsMove();
-    printTexture();
 
-    if(spaceship->getHealth() == 0){
-      isRunning = 2;
-    }
-
-    if(isRunning == 2){
-      handleGameOver();
+    switch(isRunning){
+        case 1: openStage(); break;
+        case 2: middleGameStage(); break;
+        case 3: handleGameOver(); break;
     }
 
     frameTime = SDL_GetTicks() - frameStart;
@@ -27,12 +21,57 @@ void Game::run() {
   }
 }
 
+
+void Game::openStage() {
+    GameText title{renderer, DEFAULT_GAME_TEXT_FONT_PATH, DEFAULT_GAME_TEXT_FONT_SIZE, "SPACE INVADER", DEFAULT_GAME_TEXT_COLOR, windowWidth / 2, windowHeight / 2};
+    GameText pressText{renderer, DEFAULT_GAME_TEXT_FONT_PATH, DEFAULT_GAME_TEXT_FONT_SIZE, "PRESS SPACE TO START", DEFAULT_GAME_TEXT_COLOR, windowWidth / 2, (windowHeight / 2) + 50};
+    GameText pressText2{renderer, DEFAULT_GAME_TEXT_FONT_PATH, DEFAULT_GAME_TEXT_FONT_SIZE, "PRESS SPACE TO START", DEFAULT_GAME_TEXT_COLOR_2, windowWidth / 2, (windowHeight / 2) + 50};
+
+    ticks = SDL_GetTicks();
+    while (SDL_PollEvent(&event)) {
+        if (event.type == QUIT || event.key.keysym.sym == QUIT_BUTTON) {
+            isRunning = 0;
+        }
+
+        if (event.type == SDL_KEYDOWN) {
+            if (event.key.keysym.sym == SDLK_SPACE) {
+                isRunning = 2;
+            }
+        }
+    }
+
+    SDL_RenderClear(renderer);
+    title.display(renderer);
+    if(counter >= 10){
+        pressText.display(renderer);
+    } else {
+        pressText2.display(renderer);
+    }
+    if(counter == 20){
+        counter = 0;
+    }
+    counter++;
+    spaceshipTexture->print(renderer, ticks);
+    SDL_RenderPresent(renderer);
+}
+
+void Game::middleGameStage() {
+    handleEvent();
+    handleCollisions();
+    makeObjectsMove();
+    printTexture();
+
+    if(spaceship->getHealth() == 0){
+        isRunning = 3;
+    }
+}
+
 void Game::makeObjectsMove() {
     int windowHeight = SDL_GetWindowSurface(window)->h;
     int windowWidth = SDL_GetWindowSurface(window)->w;
     for (std::shared_ptr<Star> star : stars) {
         star->fall();
-        if (star.get()->rect.y > windowHeight + 300) {
+        if (star->rect.y > windowHeight + 300) {
             star->placeAtStartingPos(windowWidth, windowHeight);
         }
     }
@@ -722,7 +761,7 @@ void Game::handleGameOver() {
 
   gameOverMusic.playMusic();
 
-  while(isRunning == 2){
+  while(isRunning == 3){
     while (SDL_PollEvent(&event)) {
       if (event.type == QUIT || event.key.keysym.sym == QUIT_BUTTON) {
         isRunning = 0;
@@ -732,7 +771,7 @@ void Game::handleGameOver() {
         if(event.key.keysym.sym == SDLK_SPACE){
           initLogic();
           initTexture();
-          isRunning = 1;
+          isRunning = 2;
         }
       }
     }
@@ -741,4 +780,6 @@ void Game::handleGameOver() {
     SDL_RenderPresent(renderer);
   }
 }
+
+
 
