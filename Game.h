@@ -62,6 +62,7 @@ private:
     int windowWidth{0};
     int windowHeight{0};
     int isRunning{1};
+    int counter{0};
     Uint32 ticks{0};
     Uint32 frameStart;
     int frameTime;
@@ -107,6 +108,8 @@ private:
     void initLogic();
     void initTexture();
     void initSounds();
+    void openStage();
+    void middleGameStage();
     void handleEvent();
     void printTexture();
 
@@ -147,9 +150,9 @@ private:
 
   void handleGameOver();
 
-    void clearObjects();
+  void clearObjects();
 
-    void clearTextures();
+  void clearTextures();
 };
 
 #endif //CPP_SPACE_INVADER_GAME_H
