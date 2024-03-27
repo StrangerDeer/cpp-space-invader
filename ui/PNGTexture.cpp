@@ -1,6 +1,6 @@
-#include "TextureCreatorFromPNG.h"
+#include "PNGTexture.h"
 
-void TextureCreatorFromPNG::loadTexture(SDL_Renderer *renderer,  const std::string& filePath) {
+void PNGTexture::loadTexture(SDL_Renderer *renderer, const std::string& filePath) {
     SDL_Surface* surface = IMG_Load(filePath.c_str());
 
     if(!surface){

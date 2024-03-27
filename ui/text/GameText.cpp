@@ -4,13 +4,13 @@
 
 #include "GameText.h"
 
-void GameText::display(SDL_Renderer *renderer) {
+void GameText::print(SDL_Renderer *renderer) {
     SDL_QueryTexture(textTexture, nullptr, nullptr, &textRect.w, &textRect.h);
 
     SDL_RenderCopy(renderer, textTexture, nullptr, &textRect);
 }
 
-void GameText::loadFont() {
+void GameText::loadFont(SDL_Renderer* renderer) {
     TTF_Font* font = nullptr;
     font = TTF_OpenFont(fontPath.c_str(), fontSize);
 

@@ -11,7 +11,7 @@ public:
         removeFromScreen();
     };
 
-    void placeAtStartingPos(int x, int y) override {
+    void placeAtSpawnPos(int x, int y) {
         setRandomSpeed();
         rect.x = x + alienWidth / 2 - width / 2;
         rect.y = y + alienHeight / 2 - height / 2;

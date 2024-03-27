@@ -12,12 +12,12 @@
 class SpaceshipHealthGameText : public GameText {
 public:
     SpaceshipHealthGameText(SDL_Renderer* renderer, std::shared_ptr<Spaceship> spaceship, const std::string& fontPath, int fontSize, SDL_Color color, int x, int y) :
-            GameText(renderer, fontPath, fontSize, std::to_string(spaceship->getHealth()), color, x,y),
+            GameText(std::to_string(spaceship->getHealth()), fontPath, fontSize, color, x,y,renderer),
             spaceship(spaceship),
             currentValue(spaceship->getHealth())
             {};
 
-    void display(SDL_Renderer* renderer) override;
+    void print(SDL_Renderer* renderer) override;
 
 private:
     int currentValue;

@@ -13,20 +13,18 @@
 
 class GameText {
 public:
-    GameText(SDL_Renderer* renderer,std::string  fontPath, int fontSize, std::string  message, const SDL_Color& color, int x, int y) :
-            textTexture(nullptr), renderer(renderer), fontPath(std::move(fontPath)), fontSize(fontSize), message(std::move(message)),
+    GameText(std::string  message, std::string  fontPath, int fontSize,  const SDL_Color& color, int x, int y, SDL_Renderer* renderer) :
+            textTexture(nullptr), fontPath(std::move(fontPath)), fontSize(fontSize), message(std::move(message)),
             textColor(color)
     {
         if(TTF_Init() < 0){
             std::cerr << "Error: TTF_Init(): " << TTF_GetError() << std::endl;
         } else {
-            loadFont();
+            loadFont(renderer);
         }
         textRect.x = x;
         textRect.y = y;
     };
-
-    GameText(const GameText& other) = delete;
 
     ~GameText(){
         if (textTexture) {
@@ -36,19 +34,18 @@ public:
         TTF_Quit();
     };
 
-    virtual void display(SDL_Renderer* renderer);
+    virtual void print(SDL_Renderer* renderer);
 
     std::string message;
 
 protected:
-    SDL_Renderer* renderer;
     std::string fontPath;
     int fontSize;
     SDL_Color textColor;
     SDL_Texture* textTexture;
     SDL_Rect textRect{};
 
-    void loadFont();
+    void loadFont(SDL_Renderer *renderer);
 };
 
 

@@ -8,14 +8,14 @@
 #include <string>
 #include <SDL_image.h>
 
-class TextureCreatorFromPNG {
+class PNGTexture {
 public:
-    TextureCreatorFromPNG(SDL_Renderer* renderer,  const std::string& filePath)
+    PNGTexture(SDL_Renderer* renderer, const std::string& filePath)
     {
         loadTexture(renderer,  filePath);
     }
 
-    ~TextureCreatorFromPNG(){
+    ~PNGTexture(){
         if(texture){
             SDL_DestroyTexture(texture);
         }

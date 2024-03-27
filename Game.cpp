@@ -4,13 +4,14 @@ void Game::run() {
 
   backgroundMusic->playMusic();
 
-  while(isRunning > 0){
+  while(*isRunning != QUIT_VALUE){
     frameStart = SDL_GetTicks();
 
-    switch(isRunning){
-        case 1: openStage(); break;
-        case 2: middleGameStage(); break;
-        case 3: handleGameOver(); break;
+    switch(*isRunning){
+        case OPENING_STAGE_VALUE: openStage->run(renderer); break;
+        case MIDDLE_GAME_STAGE_VALUE: middleGameStage(); break;
+        case GAME_OVER_STAGE_VALUE: gameOverStage(); break;
+        default:;
     }
 
     frameTime = SDL_GetTicks() - frameStart;
@@ -21,40 +22,6 @@ void Game::run() {
   }
 }
 
-
-void Game::openStage() {
-    GameText title{renderer, DEFAULT_GAME_TEXT_FONT_PATH, DEFAULT_GAME_TEXT_FONT_SIZE, "SPACE INVADER", DEFAULT_GAME_TEXT_COLOR, windowWidth / 2, windowHeight / 2};
-    GameText pressText{renderer, DEFAULT_GAME_TEXT_FONT_PATH, DEFAULT_GAME_TEXT_FONT_SIZE, "PRESS SPACE TO START", DEFAULT_GAME_TEXT_COLOR, windowWidth / 2, (windowHeight / 2) + 50};
-    GameText pressText2{renderer, DEFAULT_GAME_TEXT_FONT_PATH, DEFAULT_GAME_TEXT_FONT_SIZE, "PRESS SPACE TO START", DEFAULT_GAME_TEXT_COLOR_2, windowWidth / 2, (windowHeight / 2) + 50};
-
-    ticks = SDL_GetTicks();
-    while (SDL_PollEvent(&event)) {
-        if (event.type == QUIT || event.key.keysym.sym == QUIT_BUTTON) {
-            isRunning = 0;
-        }
-
-        if (event.type == SDL_KEYDOWN) {
-            if (event.key.keysym.sym == SDLK_SPACE) {
-                isRunning = 2;
-            }
-        }
-    }
-
-    SDL_RenderClear(renderer);
-    title.display(renderer);
-    if(counter >= 10){
-        pressText.display(renderer);
-    } else {
-        pressText2.display(renderer);
-    }
-    if(counter == 20){
-        counter = 0;
-    }
-    counter++;
-    spaceshipTexture->print(renderer, ticks);
-    SDL_RenderPresent(renderer);
-}
-
 void Game::middleGameStage() {
     handleEvent();
     handleCollisions();
@@ -62,29 +29,30 @@ void Game::middleGameStage() {
     printTexture();
 
     if(spaceship->getHealth() == 0){
-        isRunning = 3;
+        *isRunning = 3;
     }
 }
 
 void Game::makeObjectsMove() {
-    int windowHeight = SDL_GetWindowSurface(window)->h;
-    int windowWidth = SDL_GetWindowSurface(window)->w;
+  for(const std::shared_ptr<FallingObject> object : fallingObjects){
+    object->fall();
+  }
     for (std::shared_ptr<Star> star : stars) {
         star->fall();
-        if (star->rect.y > windowHeight + 300) {
-            star->placeAtStartingPos(windowWidth, windowHeight);
+        if (star->rect.y > Config::windowHeight + 300) {
+            star->placeAtStartingPos();
         }
     }
     for (std::shared_ptr<Asteroid> asteroid : asteroids) {
         asteroid->fall();
-        if (asteroid.get()->rect.y > windowHeight + 300) {
-            asteroid->placeAtStartingPos(windowWidth, windowHeight);
+        if (asteroid.get()->rect.y > Config::windowHeight + 300) {
+            asteroid->placeAtStartingPos();
         }
     }
     for (std::shared_ptr<BackgroundElement> &elem : backgroundElems) {
         elem->fall();
-        if (elem->rect.y > windowHeight + (((elem->height * 1.5) * backgroundElems.size()) - windowHeight - elem->height)) {
-            elem->placeAtStartingPos(windowWidth, windowHeight);
+        if (elem->rect.y > Config::windowHeight + (((elem->height * 1.5) * backgroundElems.size()) - Config::windowHeight - elem->height)) {
+            elem->placeAtStartingPos();
         }
     }
 
@@ -103,7 +71,7 @@ void Game::makeObjectsMove() {
         for(int i = 0; i < alien->bullets.size(); i++) {
             std::shared_ptr<AlienBullet> bullet = alien->bullets.at(i);
             bullet->move();
-            if(bullet->bulletRect.y > windowHeight){
+            if(bullet->bulletRect.y > Config::windowHeight){
                 alien->bullets.erase(alien->bullets.begin() + i);
                 alienBulletsTexture.erase(alienBulletsTexture.begin() + i);
             }
@@ -134,7 +102,15 @@ void Game::initSDL() {
 
   SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
 
+  int windowWidth, windowHeight;
   SDL_GetWindowSize(window, &windowWidth, &windowHeight);
+  Config::windowWidth = windowWidth;
+  Config::windowHeight = windowHeight;
+
+  if(Config::windowWidth == 0 || Config::windowHeight == 0){
+      std::cerr << "Window size could not  initialised!" << std::endl;
+      return;
+  }
 
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
@@ -142,6 +118,14 @@ void Game::initSDL() {
     std::cerr << "Error: Unable to create renderer!" << SDL_GetError() << std::endl;
     return;
   }
+
+  openStage = std::make_unique<OpenStage>(renderer, isRunning);
+
+  if(!openStage){
+    std::cerr << "Error: Open Stage couldn't create!"  << std::endl;
+    return;
+  }
+
 }
 
 void Game::initSounds() {
@@ -152,165 +136,9 @@ void Game::initSounds() {
   asteroidExplodes = std::make_unique<GameSoundEffect>("../sound/asteroid_explodes.wav");
 }
 
-std::shared_ptr<Star> generateStar(int windowWidth,
-                                   int windowHeight,
-                                   int width,
-                                   int height,
-                                   int minSpeed,
-                                   int maxSpeed,
-                                   int point) {
-  int x = Util::getRandomNumber(0, windowWidth);
-  int y = Util::getRandomNumber(-windowHeight * 2, (0 - windowHeight) / 2);
-  return std::make_shared<Star>(x, y, width, height, minSpeed, maxSpeed, point);
-}
-
-std::shared_ptr<Asteroid> generateAsteroid(int windowWidth,
-                                           int windowHeight,
-                                           int maxHp,
-                                           int width,
-                                           int height,
-                                           int minSpeed,
-                                           int maxSpeed,
-                                           int points) {
-  int x = Util::getRandomNumber(0, windowWidth);
-  int y = Util::getRandomNumber(-windowHeight * 3, (0 - windowHeight) / 2);
-  return std::make_shared<Asteroid>(maxHp, x, y, width, height, minSpeed, maxSpeed, points, windowWidth, windowHeight);
-}
-
-std::shared_ptr<BackgroundElement> generateBackgroundElement(int windowWidth,
-                                                             int windowHeight,
-                                                             int width,
-                                                             int height,
-                                                             int minSpeed,
-                                                             int maxSpeed) {
-    static int yPos = -windowHeight * 0.5;
-    int x = Util::getRandomNumber(0, windowWidth - width);
-    int y = yPos - height * 1.5;
-    yPos = y;
-    return std::make_shared<BackgroundElement>(x, y, width, height, minSpeed, maxSpeed, true);
-}
-
-void Game::initOneKindOfStars(int numberOfStars,
-                              int windowWidth,
-                              int windowHeight,
-                              int starWidth,
-                              int starHeight,
-                              int minSpeed,
-                              int maxSpeed,
-                              int point,
-                              shared_vector<Star> &starVector) {
-  for (int i = 0; i < numberOfStars; ++i) {
-    std::shared_ptr<Star> s = generateStar(windowWidth,
-                                           windowHeight,
-                                           starWidth,
-                                           starHeight,
-                                           minSpeed,
-                                           maxSpeed,
-                                           point);
-    stars.push_back(s);
-    starVector.push_back(s);
-    dimensionalObjects.push_back(s);
-  }
-}
-
-void Game::initOneKindOfAsteroids(int numberOfAsteroids,
-                                  int windowWidth,
-                                  int windowHeight,
-                                  int maxHp,
-                                  int width,
-                                  int height,
-                                  int minSpeed,
-                                  int maxSpeed,
-                                  int point) {
-  for (int i = 0; i < numberOfAsteroids; ++i) {
-    std::shared_ptr<Asteroid>
-        a = generateAsteroid(windowWidth,
-                             windowHeight,
-                             maxHp,
-                             width,
-                             height,
-                             minSpeed,
-                             maxSpeed,
-                             point);
-    asteroids.push_back(a);
-    dimensionalObjects.push_back(a);
-  }
-}
-
-
-void Game::initBackgroundElements(int numberOfElems,
-                                  int windowWidth,
-                                  int windowHeight,
-                                  int width,
-                                  int height,
-                                  int minSpeed,
-                                  int maxSpeed) {
-    for (int i = 0; i < numberOfElems; ++i) {
-        std::shared_ptr<BackgroundElement>
-                elem = generateBackgroundElement(windowWidth,
-                                                 windowHeight,
-                                                 width,
-                                                 height,
-                                                 minSpeed,
-                                                 maxSpeed);
-        backgroundElems.push_back(elem);
-    }
-}
-
 void Game::initLogic() {
 
     clearObjects();
-
-    constexpr int STAR_HEIGHT = 125;
-  constexpr int STAR_WIDTH = 50;
-
-  constexpr int NUMBER_OF_PINK_STARS = 7;
-  constexpr int NUMBER_OF_GREEN_STARS = 5;
-  constexpr int NUMBER_OF_BLUE_STARS = 3;
-  constexpr int NUMBER_OF_GOLD_STARS = 2;
-  constexpr int NUMBER_OF_RED_STARS = 1;
-
-  constexpr int POINT_FOR_PINK_STARS = 5;
-  constexpr int POINT_FOR_GREEN_STARS = 10;
-  constexpr int POINT_FOR_BLUE_STARS = 15;
-  constexpr int POINT_FOR_GOLD_STARS = 25;
-  constexpr int POINT_FOR_RED_STARS = 50;
-
-  constexpr int MIN_SPEED_FOR_PINK_STARS = 2;
-  constexpr int MIN_SPEED_FOR_GREEN_STARS = 3;
-  constexpr int MIN_SPEED_FOR_BLUE_STARS = 5;
-  constexpr int MIN_SPEED_FOR_GOLD_STARS = 7;
-  constexpr int MIN_SPEED_FOR_RED_STARS = 10;
-
-  constexpr int MAX_SPEED_FOR_PINK_STARS = 5;
-  constexpr int MAX_SPEED_FOR_GREEN_STARS = 7;
-  constexpr int MAX_SPEED_FOR_BLUE_STARS = 10;
-  constexpr int MAX_SPEED_FOR_GOLD_STARS = 15;
-  constexpr int MAX_SPEED_FOR_RED_STARS = 25;
-
-  constexpr int SMALL_ASTEROID_HEIGHT = 70;
-  constexpr int MEDIUM_ASTEROID_HEIGHT = 120;
-  constexpr int LARGE_ASTEROID_HEIGHT = 250;
-
-  constexpr int NUMBER_OF_SMALL_ASTEROIDS = 12;
-  constexpr int NUMBER_OF_MEDIUM_ASTEROIDS = 7;
-  constexpr int NUMBER_OF_LARGE_ASTEROIDS = 3;
-
-  constexpr int HEALTH_OF_SMALL_ASTEROIDS = 1;
-  constexpr int HEALTH_OF_MEDIUM_ASTEROIDS = 3;
-  constexpr int HEALTH_OF_LARGE_ASTEROIDS = 5;
-
-  constexpr int POINT_FOR_SMALL_ASTEROIDS = 1;
-  constexpr int POINT_FOR_MEDIUM_ASTEROIDS = 3;
-  constexpr int POINT_FOR_LARGE_ASTEROIDS = 5;
-
-  constexpr int MIN_SPEED_FOR_ASTEROIDS = 2;
-  constexpr int MAX_SPEED_FOR_ASTEROIDS = 9;
-
-  constexpr int MIN_SPEED_FOR_BACKGROUND_ELEM = 1;
-  constexpr int MAX_SPEED_FOR_BACKGROUND_ELEM = 1;
-  constexpr int BACKGROUND_ELEM_HEIGHT = 600;
-  constexpr int NUMBER_OF_BACKGROUND_ELEMS = 10;
 
   constexpr int HEALING_ITEM_HEIGHT = 130;
   constexpr int HEALING_ITEM_WIDTH = 70;
@@ -318,95 +146,13 @@ void Game::initLogic() {
   constexpr int ALIEN_WIDTH = 180;
   constexpr int ALIEN_HEIGHT = 120;
 
-  int windowWidth = SDL_GetWindowSurface(window)->w;
-  int windowHeight = SDL_GetWindowSurface(window)->h;
+  initBackgroundElements();
+  initStars();
+  initAsteroids();
 
-  initBackgroundElements(NUMBER_OF_BACKGROUND_ELEMS,
-                           windowWidth,
-                           windowHeight,
-                           BACKGROUND_ELEM_HEIGHT,
-                           BACKGROUND_ELEM_HEIGHT,
-                           MIN_SPEED_FOR_BACKGROUND_ELEM,
-                           MAX_SPEED_FOR_BACKGROUND_ELEM);
+  spaceship = std::make_shared<Spaceship>(10, 75, Config::windowWidth * 0.5, Config::windowHeight * 0.85, 100, 100, 10, 1);
 
-  initOneKindOfStars(NUMBER_OF_PINK_STARS,
-                     windowWidth,
-                     windowHeight,
-                     STAR_WIDTH,
-                     STAR_HEIGHT,
-                     MIN_SPEED_FOR_PINK_STARS,
-                     MAX_SPEED_FOR_PINK_STARS,
-                     POINT_FOR_PINK_STARS,
-                     pinkStars);
-  initOneKindOfStars(NUMBER_OF_GREEN_STARS,
-                     windowWidth,
-                     windowHeight,
-                     STAR_WIDTH,
-                     STAR_HEIGHT,
-                     MIN_SPEED_FOR_GREEN_STARS,
-                     MAX_SPEED_FOR_GREEN_STARS,
-                     POINT_FOR_GREEN_STARS,
-                     greenStars);
-  initOneKindOfStars(NUMBER_OF_BLUE_STARS,
-                     windowWidth,
-                     windowHeight,
-                     STAR_WIDTH,
-                     STAR_HEIGHT,
-                     MIN_SPEED_FOR_BLUE_STARS,
-                     MAX_SPEED_FOR_BLUE_STARS,
-                     POINT_FOR_BLUE_STARS,
-                     blueStars);
-  initOneKindOfStars(NUMBER_OF_GOLD_STARS,
-                     windowWidth,
-                     windowHeight,
-                     STAR_WIDTH,
-                     STAR_HEIGHT,
-                     MIN_SPEED_FOR_GOLD_STARS,
-                     MAX_SPEED_FOR_GOLD_STARS,
-                     POINT_FOR_GOLD_STARS,
-                     goldStars);
-  initOneKindOfStars(NUMBER_OF_RED_STARS,
-                     windowWidth,
-                     windowHeight,
-                     STAR_WIDTH,
-                     STAR_HEIGHT,
-                     MIN_SPEED_FOR_RED_STARS,
-                     MAX_SPEED_FOR_RED_STARS,
-                     POINT_FOR_RED_STARS,
-                     redStars);
-
-  initOneKindOfAsteroids(NUMBER_OF_SMALL_ASTEROIDS,
-                         windowWidth,
-                         windowHeight,
-                         HEALTH_OF_SMALL_ASTEROIDS,
-                         SMALL_ASTEROID_HEIGHT,
-                         SMALL_ASTEROID_HEIGHT,
-                         MIN_SPEED_FOR_ASTEROIDS,
-                         MAX_SPEED_FOR_ASTEROIDS,
-                         POINT_FOR_SMALL_ASTEROIDS);
-  initOneKindOfAsteroids(NUMBER_OF_MEDIUM_ASTEROIDS,
-                         windowWidth,
-                         windowHeight,
-                         HEALTH_OF_MEDIUM_ASTEROIDS,
-                         MEDIUM_ASTEROID_HEIGHT,
-                         MEDIUM_ASTEROID_HEIGHT,
-                         MIN_SPEED_FOR_ASTEROIDS,
-                         MAX_SPEED_FOR_ASTEROIDS,
-                         POINT_FOR_MEDIUM_ASTEROIDS);
-  initOneKindOfAsteroids(NUMBER_OF_LARGE_ASTEROIDS,
-                         windowWidth,
-                         windowHeight,
-                         HEALTH_OF_LARGE_ASTEROIDS,
-                         LARGE_ASTEROID_HEIGHT,
-                         LARGE_ASTEROID_HEIGHT,
-                         MIN_SPEED_FOR_ASTEROIDS,
-                         MAX_SPEED_FOR_ASTEROIDS,
-                         POINT_FOR_LARGE_ASTEROIDS);
-
-
-    spaceship = std::make_shared<Spaceship>(10, 75, windowWidth * 0.5, windowHeight * 0.85, 100, 100, 10, 1);
-
-    alien = std::make_shared<Alien>(5, windowWidth * 0.5, windowHeight * -15, ALIEN_WIDTH, ALIEN_HEIGHT, 50, windowWidth, windowHeight);
+    alien = std::make_shared<Alien>(5, Config::windowWidth * 0.5, Config::windowHeight * -15, ALIEN_WIDTH, ALIEN_HEIGHT, 50);
 
     healingItem = std::make_shared<HealingItem>(0, 0, HEALING_ITEM_WIDTH, HEALING_ITEM_HEIGHT, ALIEN_WIDTH, ALIEN_HEIGHT);
 }
@@ -439,38 +185,18 @@ void Game::clearObjects() {
     if(!backgroundElems.empty()){
       backgroundElems.clear();
     }
-
-    if(!pinkStars.empty()){
-      pinkStars.clear();
-    }
-
-    if(!greenStars.empty()){
-      greenStars.clear();
-    }
-
-    if(!blueStars.empty()){
-      blueStars.clear();
-    }
-
-    if(!goldStars.empty()){
-      goldStars.clear();
-    }
-
-    if(!redStars.empty()){
-      redStars.clear();
-    }
 }
 
 void Game::handleEvent() {
   while (SDL_PollEvent(&event)) {
     if (event.type == QUIT || event.key.keysym.sym == QUIT_BUTTON) {
-      isRunning = 0;
+      *isRunning = 0;
     }
 
     if(event.type == SDL_KEYDOWN){
       switch (event.key.keysym.sym) {
         case MOVE_DOWN_BUTTON:
-          if(spaceship->rect.y + 50 + spaceship->height < windowHeight){
+          if(spaceship->rect.y + 50 + spaceship->height < Config::windowHeight){
             spaceship->moveDown();
           }
           break;
@@ -480,7 +206,7 @@ void Game::handleEvent() {
           }
           break;
         case MOVE_RIGHT_BUTTON:
-          if(spaceship->rect.x + 60 + spaceship->width < windowWidth){
+          if(spaceship->rect.x + 60 + spaceship->width < Config::windowWidth){
             spaceship->moveRight();
           }
           break;
@@ -515,31 +241,34 @@ void Game::initTexture() {
     initStarTextures();
     initAsteroidTextures();
 
-    std::shared_ptr<GameText> livesText = std::make_shared<GameText>(renderer,
+    std::shared_ptr<GameText> livesText = std::make_shared<GameText>("Health: ",
                                                                      DEFAULT_GAME_TEXT_FONT_PATH,
                                                                      DEFAULT_GAME_TEXT_FONT_SIZE,
-                                                                     "Health: ",
-                                                                     DEFAULT_GAME_TEXT_COLOR, 20,windowHeight * 0.93);
+                                                                     DEFAULT_GAME_TEXT_COLOR, 20,Config::windowHeight * 0.93,
+                                                                     renderer);
     std::shared_ptr<SpaceshipHealthGameText> spaceHealthText =
         std::make_shared<SpaceshipHealthGameText>(renderer, spaceship,
                                                   DEFAULT_GAME_TEXT_FONT_PATH,
                                                   DEFAULT_GAME_TEXT_FONT_SIZE,
-                                                  DEFAULT_GAME_TEXT_COLOR, 175,windowHeight * 0.93);
+                                                  DEFAULT_GAME_TEXT_COLOR, 175,Config::windowHeight * 0.93);
 
     std::shared_ptr<SpaceshipPointGameText> spacePointText = std::make_shared<SpaceshipPointGameText>(
             renderer, spaceship,
             DEFAULT_GAME_TEXT_FONT_PATH,
             DEFAULT_GAME_TEXT_FONT_SIZE,
             DEFAULT_GAME_TEXT_COLOR,
-            windowWidth - 150,windowHeight * 0.93);
+            Config::windowWidth - 150,
+            Config::windowHeight * 0.93);
 
     texts.push_back(livesText);
     texts.push_back(spaceHealthText);
     texts.push_back(spacePointText);
 
-    spaceshipTexture = std::make_unique<SpaceshipTexture>(renderer, spaceship);
+    spaceshipTexture = std::make_shared<SpaceshipTexture>(renderer, spaceship);
     alienTexture = std::make_unique<AlienTexture>(renderer, alien);
     healingItemTexture = std::make_unique<HealingItemTexture>(renderer, healingItem);
+
+    openStage->addTexture(spaceshipTexture);
 }
 
 void Game::clearTextures() {
@@ -608,24 +337,28 @@ void Game::initAsteroidTextures() {
 
 void Game::initStarTextures() {
 
-  for (const std::shared_ptr<Star> &bluestar : blueStars) {
-    std::shared_ptr<StarTexture> starTexture = std::make_shared<StarTexture>(renderer, bluestar, BLUE_STAR_FILEPATH);
-    starTextures.push_back(starTexture);
-  }
-  for (const std::shared_ptr<Star> &greenstar : greenStars) {
-    std::shared_ptr<StarTexture> starTexture = std::make_shared<StarTexture>(renderer, greenstar, GREEN_STAR_FILEPATH);
-    starTextures.push_back(starTexture);
-  }
-  for (const std::shared_ptr<Star> &pinkStar : pinkStars) {
-    std::shared_ptr<StarTexture> starTexture = std::make_shared<StarTexture>(renderer, pinkStar, PINK_STAR_FILEPATH);
-    starTextures.push_back(starTexture);
-  }
-  for (const std::shared_ptr<Star> &goldstar : goldStars) {
-    std::shared_ptr<StarTexture> starTexture = std::make_shared<StarTexture>(renderer, goldstar, GOLD_STAR_FILEPATH);
-    starTextures.push_back(starTexture);
-  }
-  for (const std::shared_ptr<Star> &redstar : redStars) {
-    std::shared_ptr<StarTexture> starTexture = std::make_shared<StarTexture>(renderer, redstar, RED_STAR_FILEPATH);
+  for(const std::shared_ptr<Star> star : stars){
+    std::shared_ptr<StarTexture> starTexture = nullptr;
+
+    switch (star->textureId) {
+      case PINK_STAR_TEXTURE_ID:
+        starTexture = std::make_shared<StarTexture>(renderer, star, PINK_STAR_FILEPATH);
+        break;
+      case GREEN_STAR_TEXTURE_ID:
+        starTexture = std::make_shared<StarTexture>(renderer, star, GREEN_STAR_FILEPATH);
+        break;
+      case BLUE_STAR_TEXTURE_ID:
+        starTexture = std::make_shared<StarTexture>(renderer, star, BLUE_STAR_FILEPATH);
+        break;
+      case GOLD_STAR_TEXTURE_ID:
+        starTexture = std::make_shared<StarTexture>(renderer, star, GOLD_STAR_FILEPATH);
+        break;
+      case RED_STAR_TEXTURE_ID:
+        starTexture = std::make_shared<StarTexture>(renderer, star, RED_STAR_FILEPATH);
+        break;
+      default:;
+    }
+
     starTextures.push_back(starTexture);
   }
 }
@@ -657,7 +390,7 @@ void Game::handleCollisions() {
 
     if (SDL_HasIntersection(&spaceshipRect, &starRect)) {
       starPickUpSoundEffect->playSoundEffect();
-      star->placeAtStartingPos(windowWidth, windowHeight);
+      star->placeAtStartingPos();
       star->givePoints(spaceship);
     }
   }
@@ -694,7 +427,7 @@ void Game::handleCollisions() {
 
               if (alien->isDead()) {
                   alien->givePoints(spaceship);
-                  healingItem->placeAtStartingPos(alienX, alienY);
+                  healingItem->placeAtSpawnPos(alienX, alienY);
               }
 
               break;
@@ -762,53 +495,173 @@ void Game::printTexture() {
   spaceshipTexture->print(renderer, ticks);
 
     for(std::shared_ptr<GameText> text : texts){
-        text->display(renderer);
+      text->print(renderer);
     }
 
     SDL_RenderPresent(renderer);
 }
 
-void Game::handleGameOver() {
-  GameText gameOverText{renderer,
+void Game::gameOverStage() {
+  GameText gameOverText{"GAME OVER",
                         DEFAULT_GAME_TEXT_FONT_PATH,
                         DEFAULT_GAME_TEXT_FONT_SIZE,
-                        "GAME OVER",
                         DEFAULT_GAME_TEXT_COLOR,
-                        windowWidth / 2,
-                        windowHeight / 2};
+                        Config::windowWidth / 2,
+                        Config::windowHeight / 2,
+                        renderer};
   GameText continueText{
-      renderer,
+          "Press space to restart!",
       DEFAULT_GAME_TEXT_FONT_PATH,
       DEFAULT_GAME_TEXT_FONT_SIZE,
-      "Press space to continue!",
       DEFAULT_GAME_TEXT_COLOR,
-      windowWidth / 2,
-      (windowHeight / 2) + DEFAULT_GAME_TEXT_FONT_SIZE
+      Config::windowWidth / 2,
+      (Config::windowHeight / 2) + DEFAULT_GAME_TEXT_FONT_SIZE,
+      renderer
   };
+  std::string hMessage = "Your score: " + std::to_string(spaceship->getPoints());
+    GameText highScoreText{
+            hMessage,
+            DEFAULT_GAME_TEXT_FONT_PATH,
+            DEFAULT_GAME_TEXT_FONT_SIZE,
+            DEFAULT_GAME_TEXT_COLOR,
+            (Config::windowWidth / 2) - 80,
+            (Config::windowHeight / 2) - DEFAULT_GAME_TEXT_FONT_SIZE,
+            renderer
+    };
 
   GameMusic gameOverMusic{"../sound/game_over.wav"};
 
   gameOverMusic.playMusic();
 
-  while(isRunning == 3){
+  while(*isRunning == 3){
     while (SDL_PollEvent(&event)) {
       if (event.type == QUIT || event.key.keysym.sym == QUIT_BUTTON) {
-        isRunning = 0;
+        *isRunning = 0;
       }
 
       if(event.type == SDL_KEYDOWN){
         if(event.key.keysym.sym == SDLK_SPACE){
           initLogic();
           initTexture();
-          isRunning = 2;
+          *isRunning = 2;
         }
       }
     }
-    continueText.display(renderer);
-    gameOverText.display(renderer);
+    highScoreText.print(renderer);
+    continueText.print(renderer);
+    gameOverText.print(renderer);
     SDL_RenderPresent(renderer);
   }
 }
 
+void Game::initStars() {
 
+  for(int i = 0; i < PINK_STAR_MAX_NUMBER; i++){
+    std::shared_ptr<Star> pink = std::make_shared<Star>(PINK_STAR_TEXTURE_ID,
+                                                        STAR_WIDTH,
+                                                        STAR_HEIGHT,
+                                                        PINK_STAR_MIN_SPEED,
+                                                        PINK_STAR_MAX_SPEED,
+                                                        PINK_STAR_POINT);
+    stars.push_back(pink);
+    dimensionalObjects.push_back(pink);
+  }
 
+  for(int i = 0; i < GREEN_STAR_MAX_NUMBER; i++){
+    std::shared_ptr<Star> green = std::make_shared<Star>(GREEN_STAR_TEXTURE_ID,
+                                                        STAR_WIDTH,
+                                                        STAR_HEIGHT,
+                                                        GREEN_STAR_MIN_SPEED,
+                                                        GREEN_STAR_MAX_SPEED,
+                                                        GREEN_STAR_POINT);
+    stars.push_back(green);
+    dimensionalObjects.push_back(green);
+  }
+
+  for(int i = 0; i < BLUE_STAR_MAX_NUMBER; i++){
+    std::shared_ptr<Star> blue = std::make_shared<Star>(BLUE_STAR_TEXTURE_ID,
+                                                         STAR_WIDTH,
+                                                         STAR_HEIGHT,
+                                                         BLUE_STAR_MIN_SPEED,
+                                                         BLUE_STAR_MAX_SPEED,
+                                                         BLUE_STAR_POINT);
+    stars.push_back(blue);
+    dimensionalObjects.push_back(blue);
+  }
+
+  for(int i = 0; i < GOLD_STAR_MAX_NUMBER; i++){
+    std::shared_ptr<Star> gold = std::make_shared<Star>(GOLD_STAR_TEXTURE_ID,
+                                                         STAR_WIDTH,
+                                                         STAR_HEIGHT,
+                                                         GOLD_STAR_MIN_SPEED,
+                                                         GOLD_STAR_MAX_SPEED,
+                                                         GOLD_STAR_POINT);
+    stars.push_back(gold);
+    dimensionalObjects.push_back(gold);
+  }
+
+  for(int i = 0; i < RED_STAR_MAX_NUMBER; i++){
+    std::shared_ptr<Star> red = std::make_shared<Star>(RED_STAR_TEXTURE_ID,
+                                                         STAR_WIDTH,
+                                                         STAR_HEIGHT,
+                                                         RED_STAR_MIN_SPEED,
+                                                         RED_STAR_MAX_SPEED,
+                                                         RED_STAR_POINT);
+    stars.push_back(red);
+    dimensionalObjects.push_back(red);
+  }
+}
+
+void Game::initAsteroids() {
+
+  for(int i = 0; i < SMALL_ASTEROID_MAX_NUMBER; i++){
+    std::shared_ptr<Asteroid> a = std::make_shared<Asteroid>(SMALL_ASTEROID_HEALTH,
+                                                             SMALL_ASTEROID_HEIGHT,
+                                                             SMALL_ASTEROID_HEIGHT,
+                                                             MIN_SPEED_FOR_ASTEROIDS,
+                                                             MAX_SPEED_FOR_ASTEROIDS,
+                                                             SMALL_ASTEROIDS_POINT);
+    asteroids.push_back(a);
+  }
+
+  for(int i = 0; i < MEDIUM_ASTEROID_MAX_NUMBER; i++){
+    std::shared_ptr<Asteroid> a = std::make_shared<Asteroid>(MEDIUM_ASTEROID_HEALTH,
+                                                             MEDIUM_ASTEROID_HEIGHT,
+                                                             MEDIUM_ASTEROID_HEIGHT,
+                                                             MIN_SPEED_FOR_ASTEROIDS,
+                                                             MAX_SPEED_FOR_ASTEROIDS,
+                                                             MEDIUM_ASTEROIDS_POINT);
+    asteroids.push_back(a);
+  }
+
+  for(int i = 0; i < LARGE_ASTEROID_MAX_NUMBER; i++){
+    std::shared_ptr<Asteroid> a = std::make_shared<Asteroid>(LARGE_ASTEROID_HEALTH,
+                                                             LARGE_ASTEROID_HEIGHT,
+                                                             LARGE_ASTEROID_HEIGHT,
+                                                             MIN_SPEED_FOR_ASTEROIDS,
+                                                             MAX_SPEED_FOR_ASTEROIDS,
+                                                             LARGE_ASTEROIDS_POINT);
+    asteroids.push_back(a);
+  }
+}
+
+void Game::initBackgroundElements() {
+  for (int i = 0; i < NUMBER_OF_BACKGROUND_ELEMENTS; ++i) {
+    std::shared_ptr<BackgroundElement> elem = generateBackgroundElement();
+    backgroundElems.push_back(elem);
+  }
+}
+
+std::shared_ptr<BackgroundElement> Game::generateBackgroundElement() {
+  static int yPos = -(Config::windowHeight) * 0.5;
+  int x = Util::getRandomNumber(0, Config::windowWidth - BACKGROUND_ELEMENT_SIZE);
+  int y = yPos - BACKGROUND_ELEMENT_SIZE * 1.5;
+  yPos = y;
+  return std::make_shared<BackgroundElement>(x,
+                                             y,
+                                             BACKGROUND_ELEMENT_SIZE,
+                                             BACKGROUND_ELEMENT_SIZE,
+                                             BACKGROUND_ELEMENT_SPEED,
+                                             BACKGROUND_ELEMENT_SPEED,
+                                             true);
+}

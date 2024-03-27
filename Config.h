@@ -5,6 +5,11 @@
 #define MAX_FPS 60
 #define FRAME_DELAY (1000 / MAX_FPS)
 
+#define QUIT_VALUE 0
+#define OPENING_STAGE_VALUE 1
+#define MIDDLE_GAME_STAGE_VALUE 2
+#define GAME_OVER_STAGE_VALUE 3
+
 #define QUIT SDL_QUIT
 #define QUIT_BUTTON SDLK_ESCAPE
 #define MOVE_DOWN_BUTTON SDLK_DOWN
@@ -17,7 +22,7 @@
 
 #define DEFAULT_GAME_TEXT_FONT_SIZE 50
 #define DEFAULT_GAME_TEXT_COLOR SDL_Color{0,255,0,255}
-#define DEFAULT_GAME_TEXT_COLOR_2 SDL_Color{100,255,255,255}
+#define DEFAULT_GAME_TEXT_COLOR_2 SDL_Color{175,255,0,255}
 
 namespace fs = std::filesystem;
 using path = fs::path;
@@ -33,3 +38,8 @@ using path = fs::path;
 #define DEFAULT_GAME_TEXT_FONT_PATH (path("..") / "ui" / "text" / "Open 24 Display St.ttf").string()
 #define BACKGROUND_MUSIC_FILEPATH (path("..") / "sound" / "background.wav").string()
 #define SPACESHIP_SHOOT_SOUND_EFFECT_FILEPATH (path("..") / "sound" / "spaceshipShootSoundeffect.wav").string()
+
+class Config {
+public:
+    static int windowWidth, windowHeight;
+};

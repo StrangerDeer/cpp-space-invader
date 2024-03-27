@@ -12,9 +12,9 @@ BackgroundElement::BackgroundElement(int x, int y, int width, int height, int mi
     elements.push_back(static_cast<const std::shared_ptr<BackgroundElement>>(this));
 }
 
-void BackgroundElement::placeAtStartingPos(int windowWidth, int windowsHeight) {
-    static int yPos = -windowsHeight * 1;
-    int x = Util::getRandomNumber(0, windowWidth - width);
+void BackgroundElement::placeAtStartingPos() {
+    static int yPos = -Config::windowHeight * 1;
+    int x = Util::getRandomNumber(0, Config::windowWidth - width);
     setRandomSpeed();
     rect.x = x;
     rect.y = yPos;

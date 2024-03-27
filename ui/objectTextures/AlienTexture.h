@@ -3,13 +3,13 @@
 
 #include <iostream>
 #include "../../objects/Alien.h"
-#include "../TextureCreatorFromPNG.h"
+#include "../PNGTexture.h"
 
-class AlienTexture : public TextureCreatorFromPNG {
+class AlienTexture : public PNGTexture {
 
 public:
     AlienTexture(SDL_Renderer* renderer, const std::shared_ptr<Alien>& alien) :
-    TextureCreatorFromPNG(renderer, "../ui/textures/alien.png")
+        PNGTexture(renderer, "../ui/textures/alien.png")
     {
         if(!alien){
             std::cerr << "Alien doesn't exist!" << std::endl;

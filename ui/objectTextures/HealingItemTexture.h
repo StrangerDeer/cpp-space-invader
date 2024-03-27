@@ -1,13 +1,13 @@
 #pragma once
 
 
-#include "../TextureCreatorFromPNG.h"
+#include "../PNGTexture.h"
 #include "../../objects/HealingItem.h"
 
-class HealingItemTexture : public TextureCreatorFromPNG {
+class HealingItemTexture : public PNGTexture {
 public:
     HealingItemTexture(SDL_Renderer* renderer, const std::shared_ptr<HealingItem>& healingItem) :
-    TextureCreatorFromPNG(renderer, "../ui/textures/healingitem.png")
+        PNGTexture(renderer, "../ui/textures/healingitem.png")
     {
         if(!healingItem){
             std::cerr << "HealingItem doesn't exist!" << std::endl;

@@ -2,15 +2,15 @@
 
 #include <SDL_render.h>
 #include <memory>
-#include "../TextureCreatorFromPNG.h"
+#include "../PNGTexture.h"
 #include "../../objects/Star.h"
 #include "../../objects/Asteroid.h"
 
-class AsteroidTexture : public TextureCreatorFromPNG {
+class AsteroidTexture : public PNGTexture {
 
 public:
     AsteroidTexture(SDL_Renderer* renderer, const std::shared_ptr<Asteroid>& asteroid1, const std::string& filepath) :
-            TextureCreatorFromPNG(renderer, filepath)
+        PNGTexture(renderer, filepath)
     {
         if(!asteroid1){
             std::cerr << "Asteroid1 doesn't exist!" << std::endl;
