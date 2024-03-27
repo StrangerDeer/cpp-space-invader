@@ -66,6 +66,7 @@ add_executable(cpp_space_invader main.cpp
         game-stages/MiddleGameStage.h
         objects/Star.cpp
         ConfigGameItems.h
+        objects/Asteroid.cpp
 )
 
 target_link_libraries(cpp_space_invader

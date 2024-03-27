@@ -73,7 +73,7 @@ private:
     shared_vector<FallingObject> fallingObjects;
     shared_vector<Star> stars;
     shared_vector<Asteroid> asteroids;
-    shared_vector<DimensionalObject> dimensionalObjects;
+    //shared_vector<DimensionalObject> dimensionalObjects;
     shared_vector<BackgroundElement> backgroundElems;
 
     std::shared_ptr<Spaceship> spaceship{nullptr};
@@ -111,21 +111,21 @@ private:
     void initStars();
     void initAsteroids();
 
-  void initBackgroundElements();
-  std::shared_ptr<BackgroundElement> generateBackgroundElement();
+    void initBackgroundElements();
+    std::shared_ptr<BackgroundElement> generateBackgroundElement();
 
-  void initStarTextures();
-  void initAsteroidTextures();
-  void initBackgroundElemTextures();
+    void initStarTextures();
+    void initAsteroidTextures();
+    void initBackgroundElemTextures();
 
-  void handleCollisions();
+    void handleCollisions();
 
-  void makeObjectsMove();
+    void makeObjectsMove();
 
-  void gameOverStage();
+    void gameOverStage();
 
-  void clearObjects();
-  void clearTextures();
+    void clearObjects();
+    void clearTextures();
 };
 
 #endif //CPP_SPACE_INVADER_GAME_H

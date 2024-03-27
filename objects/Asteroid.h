@@ -29,6 +29,8 @@ class Asteroid : public FallingObject, public ScoreObject, public HealthObject {
 
   [[nodiscard]] double getRotation() const { return angleRotation; }
 
+  void fall() override;
+
  private:
   int maxHealth;
   double angleRotation;
