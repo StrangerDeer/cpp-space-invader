@@ -3,14 +3,14 @@
 
 #include <utility>
 
-#include "../TextureCreatorFromPNG.h"
+#include "../PNGTexture.h"
 #include "../../objects/Spaceship.h"
 
-class SpaceshipTexture : public TextureCreatorFromPNG {
+class SpaceshipTexture : public PNGTexture {
 
 public:
     SpaceshipTexture(SDL_Renderer* renderer, const std::shared_ptr<Spaceship>& spaceship) :
-    TextureCreatorFromPNG(renderer, "../ui/textures/spaceship.png")
+        PNGTexture(renderer, "../ui/textures/spaceship.png")
     {
         if(!spaceship){
             std::cerr << "Spaceship doesn't exist!" << std::endl;

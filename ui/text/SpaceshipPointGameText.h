@@ -17,7 +17,7 @@ public:
             currentValue(spaceship->getPoints())
     {};
 
-    void display(SDL_Renderer* renderer) override;
+    void print(SDL_Renderer* renderer) override;
 
 private:
     int currentValue;

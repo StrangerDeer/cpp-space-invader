@@ -9,6 +9,7 @@
 #include <chrono>
 
 #include "Config.h"
+#include "ConfigGameItems.h"
 
 #include "objects/Spaceship.h"
 #include "objects/Star.h"
@@ -30,7 +31,7 @@
 #include "ui/objectTextures/AlienTexture.h"
 #include "objects/HealingItem.h"
 #include "ui/objectTextures/HealingItemTexture.h"
-
+#include "game-stages/OpenStage.h"
 
 template<typename T>
 using shared_vector = std::vector<std::shared_ptr<T>>;
@@ -59,33 +60,28 @@ private:
     SDL_Renderer *renderer{nullptr};
     SDL_Event event;
 
-    int windowWidth{0};
-    int windowHeight{0};
-    int isRunning{1};
+    std::shared_ptr<int> isRunning{std::make_shared<int>(1)};
     int counter{0};
     Uint32 ticks{0};
     Uint32 frameStart;
     int frameTime;
     std::chrono::steady_clock::time_point lastShootTime;
 
+    std::unique_ptr<OpenStage> openStage{nullptr};
+
     //Logic
+    shared_vector<FallingObject> fallingObjects;
     shared_vector<Star> stars;
     shared_vector<Asteroid> asteroids;
     shared_vector<DimensionalObject> dimensionalObjects;
     shared_vector<BackgroundElement> backgroundElems;
-
-    shared_vector<Star> pinkStars;
-    shared_vector<Star> greenStars;
-    shared_vector<Star> blueStars;
-    shared_vector<Star> goldStars;
-    shared_vector<Star> redStars;
 
     std::shared_ptr<Spaceship> spaceship{nullptr};
     std::shared_ptr<Alien> alien{nullptr};
     std::shared_ptr<HealingItem> healingItem{nullptr};
 
     //UI
-    std::unique_ptr<SpaceshipTexture> spaceshipTexture{nullptr};
+    std::shared_ptr<SpaceshipTexture> spaceshipTexture{nullptr};
     std::unique_ptr<AlienTexture> alienTexture{nullptr};
     std::unique_ptr<HealingItemTexture> healingItemTexture{nullptr};
 
@@ -108,37 +104,15 @@ private:
     void initLogic();
     void initTexture();
     void initSounds();
-    void openStage();
     void middleGameStage();
     void handleEvent();
     void printTexture();
 
-    void initOneKindOfStars(int numberOfStars,
-                          int windowWidth,
-                          int windowHeight,
-                          int starWidth,
-                          int starHeight,
-                          int minSpeed,
-                          int maxSpeed,
-                          int point,
-                          shared_vector<Star> &starVector);
-    void initOneKindOfAsteroids(int numberOfAsteroids,
-                              int windowWidth,
-                              int windowHeight,
-                              int maxHp,
-                              int width,
-                              int height,
-                              int minSpeed,
-                              int maxSpeed,
-                              int point);
+    void initStars();
+    void initAsteroids();
 
-  void initBackgroundElements(int numberOfElems,
-                              int windowWidth,
-                              int windowHeight,
-                              int width,
-                              int height,
-                              int minSpeed,
-                              int maxSpeed);
+  void initBackgroundElements();
+  std::shared_ptr<BackgroundElement> generateBackgroundElement();
 
   void initStarTextures();
   void initAsteroidTextures();
@@ -151,7 +125,6 @@ private:
   void gameOverStage();
 
   void clearObjects();
-
   void clearTextures();
 };
 

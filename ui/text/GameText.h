@@ -34,7 +34,7 @@ public:
         TTF_Quit();
     };
 
-    virtual void display(SDL_Renderer* renderer);
+    virtual void print(SDL_Renderer* renderer);
 
     std::string message;
 

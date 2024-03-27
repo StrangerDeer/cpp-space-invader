@@ -22,7 +22,7 @@
 
 #define DEFAULT_GAME_TEXT_FONT_SIZE 50
 #define DEFAULT_GAME_TEXT_COLOR SDL_Color{0,255,0,255}
-#define DEFAULT_GAME_TEXT_COLOR_2 SDL_Color{100,255,255,255}
+#define DEFAULT_GAME_TEXT_COLOR_2 SDL_Color{175,255,0,255}
 
 namespace fs = std::filesystem;
 using path = fs::path;

@@ -4,11 +4,11 @@
 
 #include "SpaceshipHealthGameText.h"
 
-void SpaceshipHealthGameText::display(SDL_Renderer *renderer) {
+void SpaceshipHealthGameText::print(SDL_Renderer *renderer) {
     if(spaceship->getHealth() != currentValue){
         message = std::to_string(spaceship->getHealth());
         currentValue = spaceship->getHealth();
         loadFont(renderer);
     }
-    GameText::display(renderer);
+  GameText::print(renderer);
 }

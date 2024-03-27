@@ -11,9 +11,9 @@
 
 class Alien : public HealthObject, public FallingObject, public ScoreObject {
 public:
-    Alien(int maxHp, int x, int y, int width, int height, int points, int windowW, int windowH) :
+    Alien(int maxHp, int x, int y, int width, int height, int points) :
             ScoreObject(points), HealthObject(maxHp), FallingObject(x, y, width, height, 2, 15, true),
-            maxHealth(maxHp), windowWidth(windowW), windowHeight(windowH), fallingSpeed(5), shootCounter(0), shootLimit(30) {
+            maxHealth(maxHp), fallingSpeed(5), shootCounter(0), shootLimit(30) {
         chooseDestination();
     };
 
@@ -41,7 +41,7 @@ public:
     }
 
     void fall() override {
-        if (rect.y < windowHeight * 0.035) {
+        if (rect.y < Config::windowHeight * 0.035) {
             rect.y += fallingSpeed;
         } else {
             move();
@@ -57,14 +57,13 @@ public:
     };
 
     void reset() {
-        placeAtStartingPos(windowWidth, windowHeight);
+        placeAtStartingPos();
         health = maxHealth;
     }
 
 protected:
     int maxHealth;
     int fallingSpeed;
-    int windowWidth, windowHeight;
     int chosenDestination;
     int shootCounter, shootLimit;
 
@@ -82,10 +81,10 @@ protected:
 
     void chooseDestination() {
         setRandomSpeed();
-        if (rect.x >= windowWidth / 2) {
-            chosenDestination = Util::getRandomNumber(0, windowWidth / 2);
+        if (rect.x >= Config::windowWidth / 2) {
+            chosenDestination = Util::getRandomNumber(0, Config::windowWidth / 2);
         } else {
-            chosenDestination = Util::getRandomNumber(windowWidth / 2, windowWidth - width);
+            chosenDestination = Util::getRandomNumber(Config::windowWidth / 2, Config::windowWidth - width);
         }
     }
 };

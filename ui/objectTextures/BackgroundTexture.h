@@ -1,14 +1,14 @@
 #pragma once
 
 
-#include "../TextureCreatorFromPNG.h"
+#include "../PNGTexture.h"
 #include "../../objects/FallingObject.h"
 
-class BackgroundTexture : public TextureCreatorFromPNG {
+class BackgroundTexture : public PNGTexture {
 
 public:
     BackgroundTexture(SDL_Renderer* renderer, const std::shared_ptr<FallingObject>& backgroundElem, const std::string& filepath) :
-            TextureCreatorFromPNG(renderer, filepath)
+        PNGTexture(renderer, filepath)
     {
         if(!backgroundElem){
             std::cerr << "BackgroundElem doesn't exist!" << std::endl;

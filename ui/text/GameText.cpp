@@ -4,7 +4,7 @@
 
 #include "GameText.h"
 
-void GameText::display(SDL_Renderer *renderer) {
+void GameText::print(SDL_Renderer *renderer) {
     SDL_QueryTexture(textTexture, nullptr, nullptr, &textRect.w, &textRect.h);
 
     SDL_RenderCopy(renderer, textTexture, nullptr, &textRect);

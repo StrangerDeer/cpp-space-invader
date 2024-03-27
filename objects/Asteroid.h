@@ -5,15 +5,16 @@
 
 class Asteroid : public FallingObject, public ScoreObject, public HealthObject {
  public:
-  Asteroid(int maxHp, int x, int y, int width, int height, int minSpeed, int maxSpeed, int points, int windowWidth, int windowHeight) :
-      HealthObject(maxHp), FallingObject(x, y, width, height, minSpeed, maxSpeed, true),
-      ScoreObject(points), maxHealth(maxHp), windowWidth(windowWidth), windowHeight(windowHeight) {
+  Asteroid(int maxHp, int width, int height, int minSpeed, int maxSpeed, int points) :
+      HealthObject(maxHp), FallingObject(Util::getRandomNumber(0, Config::windowWidth),
+                                         Util::getRandomNumber(-Config::windowHeight * 3, (0 - Config::windowHeight) / 2),
+                                         width, height, minSpeed, maxSpeed, true),
+      ScoreObject(points), maxHealth(maxHp) {
         getRandomRotation();
   };
 
   bool isDead() {
     if (health <= 0) {
-      //TODO: set reset arguments according to window
       reset();
       return true;
     }
@@ -21,7 +22,7 @@ class Asteroid : public FallingObject, public ScoreObject, public HealthObject {
   };
 
   void reset() {
-    placeAtStartingPos(windowWidth, windowHeight);
+    placeAtStartingPos();
     health = maxHealth;
     getRandomRotation();
   }
@@ -31,7 +32,6 @@ class Asteroid : public FallingObject, public ScoreObject, public HealthObject {
  private:
   int maxHealth;
   double angleRotation;
-  int windowWidth, windowHeight;
 
   void getRandomRotation() {
     int rotation = Util::getRandomNumber(1, 7);

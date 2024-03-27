@@ -1,6 +1,7 @@
 #pragma once
 #include "DimensionalObject.h"
 #include "../Util.h"
+#include "../Config.h"
 
 class FallingObject : public DimensionalObject {
  public:
@@ -9,10 +10,10 @@ class FallingObject : public DimensionalObject {
     setRandomSpeed();
   };
 
-  virtual void placeAtStartingPos(int windowWidth, int windowsHeight) {
+  virtual void placeAtStartingPos() {
     setRandomSpeed();
-    rect.x = Util::getRandomNumber(0, windowWidth);
-    rect.y = Util::getRandomNumber(-windowsHeight * 3, 0 - rect.h);
+    rect.x = Util::getRandomNumber(0, Config::windowWidth);
+    rect.y = Util::getRandomNumber(-Config::windowHeight * 3, 0 - rect.h);
   };
 
   void setRandomSpeed() {

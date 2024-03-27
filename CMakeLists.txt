@@ -24,8 +24,8 @@ add_executable(cpp_space_invader main.cpp
         ui/TextureCreator.h
         ui/objectTextures/SpaceshipTexture.cpp
         ui/objectTextures/SpaceshipTexture.h
-        ui/TextureCreatorFromPNG.cpp
-        ui/TextureCreatorFromPNG.h
+        ui/PNGTexture.cpp
+        ui/PNGTexture.h
         ui/objectTextures/StarTexture.h
         ui/objectTextures/StarTexture.cpp
         ui/objectTextures/AsteroidTexture.h
@@ -60,6 +60,12 @@ add_executable(cpp_space_invader main.cpp
         game-stages/OpenStage.cpp
         game-stages/OpenStage.h
         Config.cpp
+        ui/text/GameTextChangeColorAnim.cpp
+        ui/text/GameTextChangeColorAnim.h
+        game-stages/MiddleGameStage.cpp
+        game-stages/MiddleGameStage.h
+        objects/Star.cpp
+        ConfigGameItems.h
 )
 
 target_link_libraries(cpp_space_invader

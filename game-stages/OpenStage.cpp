@@ -1,32 +1,60 @@
-#include <array>
 #include "OpenStage.h"
 
 void OpenStage::initGameTexts(SDL_Renderer* renderer) {
-    std::vector<GameText> textsObj = {
-            {"SPACE INVADER",
-             DEFAULT_GAME_TEXT_FONT_PATH,
-             DEFAULT_GAME_TEXT_FONT_SIZE,
-             DEFAULT_GAME_TEXT_COLOR,
-             Config::windowWidth / 2,
-             Config::windowHeight / 2,
-             renderer},
-            {"PRESS SPACE TO START",
-             DEFAULT_GAME_TEXT_FONT_PATH,
-             DEFAULT_GAME_TEXT_FONT_SIZE,
-             DEFAULT_GAME_TEXT_COLOR,
-             Config::windowWidth / 2,
-             (Config::windowHeight / 2) + 50,
-             renderer},
-            {"PRESS SPACE TO START",
-             DEFAULT_GAME_TEXT_FONT_PATH,
-             DEFAULT_GAME_TEXT_FONT_SIZE,
-             DEFAULT_GAME_TEXT_COLOR_2,
-             Config::windowWidth / 2,
-             (Config::windowHeight / 2) + 50,
-             renderer}};
 
-    for(int i = 0; i < textsObj.size(); i++){
-        std::shared_ptr<GameText> text_ptr = std::make_shared<GameText>(textsObj.at(i));
-        texts.push_back(text_ptr);
+    texts.push_back(std::make_shared<GameText>(
+        "SPACE INVADERS",
+        DEFAULT_GAME_TEXT_FONT_PATH,
+        200,
+        DEFAULT_GAME_TEXT_COLOR,
+        Config::windowWidth * 0.20,
+        Config::windowHeight * 0.25,
+        renderer
+        ));
+
+    texts.push_back(std::make_shared<GameTextChangeColorAnim>(
+        "PRESS SPACE TO START",
+        DEFAULT_GAME_TEXT_FONT_PATH,
+        DEFAULT_GAME_TEXT_FONT_SIZE,
+        DEFAULT_GAME_TEXT_COLOR,
+        DEFAULT_GAME_TEXT_COLOR_2,
+        Config::windowWidth * 0.35,
+        (Config::windowHeight * 0.5) + 50,
+        40,
+        renderer
+        ));
+}
+
+void OpenStage::run(SDL_Renderer* renderer) {
+    handleEvent();
+    printer(renderer);
+}
+
+void OpenStage::handleEvent() {
+  while (SDL_PollEvent(&event)) {
+    if (event.type == QUIT || event.key.keysym.sym == QUIT_BUTTON) {
+      *isRunning = QUIT_VALUE;
     }
+
+    if (event.type == SDL_KEYDOWN) {
+      if (event.key.keysym.sym == SDLK_SPACE) {
+        *isRunning = MIDDLE_GAME_STAGE_VALUE;
+      }
+    }
+  }
+}
+
+void OpenStage::printer(SDL_Renderer* renderer) {
+  SDL_RenderClear(renderer);
+  for(const std::shared_ptr<GameText> text : texts){
+    text->print(renderer);
+  }
+
+  if(!itemTextures.empty()){
+    for(const std::shared_ptr<PNGTexture> texture : itemTextures){
+      texture->print(renderer, SDL_GetTicks());
+    }
+  }
+
+  SDL_RenderPresent(renderer);
 }

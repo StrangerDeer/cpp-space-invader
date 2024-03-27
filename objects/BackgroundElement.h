@@ -8,6 +8,6 @@ class BackgroundElement : public FallingObject {
 public:
     BackgroundElement(int x, int y, int width, int height, int minSpeed, int maxSpeed, bool resettable);
 
-    void placeAtStartingPos(int windowWidth, int windowsHeight) override;
+    void placeAtStartingPos() override;
 
 };
