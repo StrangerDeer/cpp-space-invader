@@ -127,7 +127,7 @@ void Game::initLogic() {
   initStars();
   initAsteroids();
 
-  spaceship = std::make_shared<Spaceship>(10, 75, Config::windowWidth * 0.5, Config::windowHeight * 0.85, 100, 100, 10, 1);
+  spaceship = std::make_shared<Spaceship>(10, 75, Config::windowWidth * 0.5 - 50, Config::windowHeight * 0.85, 100, 100, 10, 1);
 
   alien = std::make_shared<Alien>(5, Config::windowWidth * 0.5, Config::windowHeight * -15, 50);
 

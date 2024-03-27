@@ -7,7 +7,7 @@ void OpenStage::initGameTexts(SDL_Renderer* renderer) {
         DEFAULT_GAME_TEXT_FONT_PATH,
         200,
         DEFAULT_GAME_TEXT_COLOR,
-        Config::windowWidth * 0.20,
+        Config::windowWidth * 0.125,
         Config::windowHeight * 0.25,
         renderer
         ));
