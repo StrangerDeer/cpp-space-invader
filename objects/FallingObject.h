@@ -11,7 +11,7 @@ class FallingObject : public DimensionalObject {
 
   virtual void placeAtStartingPos(int windowWidth, int windowsHeight) {
     setRandomSpeed();
-    rect.x = Util::getRandomNumber(0, windowWidth);
+    rect.x = Util::getRandomNumber(0, windowWidth - width);
     rect.y = Util::getRandomNumber(-windowsHeight * 3, 0 - rect.h);
   };
 

@@ -183,7 +183,7 @@ std::shared_ptr<BackgroundElement> generateBackgroundElement(int windowWidth,
                                                              int height,
                                                              int minSpeed,
                                                              int maxSpeed) {
-    static int yPos = -windowHeight * 1;
+    static int yPos = -windowHeight * 0.5;
     int x = Util::getRandomNumber(0, windowWidth - width);
     int y = yPos - height * 1.5;
     yPos = y;
@@ -312,11 +312,11 @@ void Game::initLogic() {
   constexpr int BACKGROUND_ELEM_HEIGHT = 600;
   constexpr int NUMBER_OF_BACKGROUND_ELEMS = 10;
 
-  constexpr int HEALING_ITEM_HEIGHT = 100;
-  constexpr int HEALING_ITEM_WIDTH = 50;
+  constexpr int HEALING_ITEM_HEIGHT = 130;
+  constexpr int HEALING_ITEM_WIDTH = 70;
 
-  constexpr int ALIEN_WIDTH = 100;
-  constexpr int ALIEN_HEIGHT = 100;
+  constexpr int ALIEN_WIDTH = 180;
+  constexpr int ALIEN_HEIGHT = 120;
 
   int windowWidth = SDL_GetWindowSurface(window)->w;
   int windowHeight = SDL_GetWindowSurface(window)->h;
@@ -406,9 +406,9 @@ void Game::initLogic() {
 
     spaceship = std::make_shared<Spaceship>(10, 75, windowWidth * 0.5, windowHeight * 0.85, 100, 100, 10, 1);
 
-    alien = std::make_shared<Alien>(5, windowWidth * 0.5, windowHeight * -1.5, ALIEN_WIDTH, ALIEN_HEIGHT, 50, windowWidth, windowHeight);
+    alien = std::make_shared<Alien>(5, windowWidth * 0.5, windowHeight * -15, ALIEN_WIDTH, ALIEN_HEIGHT, 50, windowWidth, windowHeight);
 
-    healingItem = std::make_shared<HealingItem>(0, 0, HEALING_ITEM_HEIGHT, HEALING_ITEM_WIDTH, ALIEN_WIDTH, ALIEN_HEIGHT);
+    healingItem = std::make_shared<HealingItem>(0, 0, HEALING_ITEM_WIDTH, HEALING_ITEM_HEIGHT, ALIEN_WIDTH, ALIEN_HEIGHT);
 }
 
 void Game::clearObjects() {
@@ -496,7 +496,7 @@ void Game::handleEvent() {
 
             if(timeSinceLastShoot >= (1.0 / spaceship->getFirerate()) * 1000){
               std::shared_ptr<SpaceshipBullet> bullet = spaceship->shoot();
-              std::shared_ptr<BulletTexture> spaceShipBulletTexture = std::make_shared<BulletTexture>(renderer, bullet, SDL_Color{0, 255, 0, 255});
+              std::shared_ptr<BulletTexture> spaceShipBulletTexture = std::make_shared<BulletTexture>(renderer, bullet, SDL_Color{0, 255, 175, 255});
               spaceshipBulletsTexture.push_back(spaceShipBulletTexture);
               spaceshipShootSoundEffect->playSoundEffect();
               lastShootTime = now;

@@ -41,7 +41,7 @@ public:
     }
 
     void fall() override {
-        if (rect.y < windowHeight * 0.035) {
+        if (rect.y < windowHeight * 0.005) {
             rect.y += fallingSpeed;
         } else {
             move();
@@ -57,7 +57,7 @@ public:
     };
 
     void reset() {
-        placeAtStartingPos(windowWidth, windowHeight);
+        placeAtStartingPos(windowWidth, windowHeight * 3);
         health = maxHealth;
     }
 
