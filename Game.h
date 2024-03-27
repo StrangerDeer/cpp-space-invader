@@ -99,6 +99,7 @@ private:
     std::unique_ptr<GameSoundEffect> starPickUpSoundEffect{nullptr};
     std::unique_ptr<GameSoundEffect> objectHitByBullet{nullptr};
     std::unique_ptr<GameSoundEffect> asteroidExplodes{nullptr};
+    std::unique_ptr<GameSoundEffect> healingPickUp{nullptr};
 
     void initSDL();
     void initLogic();

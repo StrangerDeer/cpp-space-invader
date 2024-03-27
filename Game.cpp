@@ -116,6 +116,7 @@ void Game::initSounds() {
   starPickUpSoundEffect = std::make_unique<GameSoundEffect>("../sound/star_pick_up.wav");
   objectHitByBullet = std::make_unique<GameSoundEffect>("../sound/asteroid_hit_by_bullet.wav");
   asteroidExplodes = std::make_unique<GameSoundEffect>("../sound/asteroid_explodes.wav");
+  healingPickUp = std::make_unique<GameSoundEffect>("../sound/healing_pick_up.wav");
 }
 
 void Game::initLogic() {
@@ -345,7 +346,7 @@ void Game::handleCollisions() {
   if (SDL_HasIntersection(&spaceshipRect, &healingItemRect)) {
       healingItem->removeFromScreen();
       healingItem->healSpaceship(spaceship);
-      //TODO: HEAL SOUND
+      healingPickUp->playSoundEffect();
   }
 
   for (auto &asteroid : asteroids) {
