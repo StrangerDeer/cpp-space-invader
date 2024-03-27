@@ -11,8 +11,8 @@
 
 class Alien : public HealthObject, public FallingObject, public ScoreObject {
 public:
-    Alien(int maxHp, int x, int y, int width, int height, int points) :
-            ScoreObject(points), HealthObject(maxHp), FallingObject(x, y, width, height, 2, 15, true),
+    Alien(int maxHp, int x, int y, int points) :
+            ScoreObject(points), HealthObject(maxHp), FallingObject(x, y, 180, 120, 2, 15, true),
             maxHealth(maxHp), fallingSpeed(5), shootCounter(0), shootLimit(30) {
         chooseDestination();
     };
@@ -62,7 +62,9 @@ public:
     }
 
     void placeAtStartingPos() override {
-      //windowWidth, windowHeight * 3
+      setRandomSpeed();
+      rect.x = Util::getRandomNumber(0, Config::windowWidth - width);
+      rect.y = Util::getRandomNumber(-Config::windowHeight * 9, 0 - rect.h);
     }
 
 protected:

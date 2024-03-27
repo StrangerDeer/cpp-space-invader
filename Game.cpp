@@ -37,57 +37,39 @@ void Game::makeObjectsMove() {
   for(const std::shared_ptr<FallingObject> object : fallingObjects){
     object->fall();
   }
-    for (std::shared_ptr<Star> star : stars) {
-        star->fall();
-        if (star->rect.y > Config::windowHeight + 300) {
-            star->placeAtStartingPos();
-        }
-    }
-    for (std::shared_ptr<Asteroid> asteroid : asteroids) {
-        asteroid->fall();
-        if (asteroid.get()->rect.y > Config::windowHeight + 300) {
-            asteroid->placeAtStartingPos();
-        }
-    }
-    for (std::shared_ptr<BackgroundElement> &elem : backgroundElems) {
-        elem->fall();
-        if (elem->rect.y > Config::windowHeight + (((elem->height * 1.5) * backgroundElems.size()) - Config::windowHeight - elem->height)) {
-            elem->placeAtStartingPos();
-        }
-    }
 
-    alien->fall();
+  alien->fall();
 
-    healingItem->fall();
+  healingItem->fall();
 
-    bool isAlienShooting = alien->decideIfShooting();
-    if (isAlienShooting) {
-        std::shared_ptr<AlienBullet> bullet = alien->shoot();
-        std::shared_ptr<BulletTexture> alienBulletTexture = std::make_shared<BulletTexture>(renderer, bullet, SDL_Color{255, 0, 0, 255});
-        alienBulletsTexture.push_back(alienBulletTexture);
+  bool isAlienShooting = alien->decideIfShooting();
+  if (isAlienShooting) {
+    std::shared_ptr<AlienBullet> bullet = alien->shoot();
+    std::shared_ptr<BulletTexture> alienBulletTexture = std::make_shared<BulletTexture>(renderer, bullet, SDL_Color{255, 0, 0, 255});
+    alienBulletsTexture.push_back(alienBulletTexture);
+  }
+
+  if (!alien->bullets.empty()){
+    for(int i = 0; i < alien->bullets.size(); i++) {
+      std::shared_ptr<AlienBullet> bullet = alien->bullets.at(i);
+      bullet->move();
+      if(bullet->bulletRect.y > Config::windowHeight){
+        alien->bullets.erase(alien->bullets.begin() + i);
+        alienBulletsTexture.erase(alienBulletsTexture.begin() + i);
+      }
     }
+  }
 
-    if (!alien->bullets.empty()){
-        for(int i = 0; i < alien->bullets.size(); i++) {
-            std::shared_ptr<AlienBullet> bullet = alien->bullets.at(i);
-            bullet->move();
-            if(bullet->bulletRect.y > Config::windowHeight){
-                alien->bullets.erase(alien->bullets.begin() + i);
-                alienBulletsTexture.erase(alienBulletsTexture.begin() + i);
-            }
-        }
+  if(!spaceship->bullets.empty()){
+    for(int i = 0; i < spaceship->bullets.size(); i++){
+      std::shared_ptr<SpaceshipBullet> bullet = spaceship->bullets.at(i);
+      bullet->move();
+      if(bullet->bulletRect.y < 0){
+        spaceship->bullets.erase(spaceship->bullets.begin() + i);
+        spaceshipBulletsTexture.erase(spaceshipBulletsTexture.begin() + i);
+      }
     }
-
-    if(!spaceship->bullets.empty()){
-        for(int i = 0; i < spaceship->bullets.size(); i++){
-            std::shared_ptr<SpaceshipBullet> bullet = spaceship->bullets.at(i);
-            bullet->move();
-            if(bullet->bulletRect.y < 0){
-                spaceship->bullets.erase(spaceship->bullets.begin() + i);
-                spaceshipBulletsTexture.erase(spaceshipBulletsTexture.begin() + i);
-            }
-        }
-    }
+  }
 }
 
 void Game::initSDL() {
@@ -134,17 +116,12 @@ void Game::initSounds() {
   starPickUpSoundEffect = std::make_unique<GameSoundEffect>("../sound/star_pick_up.wav");
   objectHitByBullet = std::make_unique<GameSoundEffect>("../sound/asteroid_hit_by_bullet.wav");
   asteroidExplodes = std::make_unique<GameSoundEffect>("../sound/asteroid_explodes.wav");
+  healingPickUp = std::make_unique<GameSoundEffect>("../sound/healing_pick_up.wav");
 }
 
 void Game::initLogic() {
 
-    clearObjects();
-
-  constexpr int HEALING_ITEM_HEIGHT = 130;
-  constexpr int HEALING_ITEM_WIDTH = 70;
-
-  constexpr int ALIEN_WIDTH = 180;
-  constexpr int ALIEN_HEIGHT = 120;
+  clearObjects();
 
   initBackgroundElements();
   initStars();
@@ -152,9 +129,9 @@ void Game::initLogic() {
 
   spaceship = std::make_shared<Spaceship>(10, 75, Config::windowWidth * 0.5, Config::windowHeight * 0.85, 100, 100, 10, 1);
 
-    alien = std::make_shared<Alien>(5, Config::windowWidth * 0.5, Config::windowHeight * -15, ALIEN_WIDTH, ALIEN_HEIGHT, 50);
+  alien = std::make_shared<Alien>(5, Config::windowWidth * 0.5, Config::windowHeight * -15, 50);
 
-    healingItem = std::make_shared<HealingItem>(0, 0, HEALING_ITEM_WIDTH, HEALING_ITEM_HEIGHT, ALIEN_WIDTH, ALIEN_HEIGHT);
+  healingItem = std::make_shared<HealingItem>(0, 0, alien->rect.w, alien->rect.h);
 }
 
 void Game::clearObjects() {
@@ -178,9 +155,9 @@ void Game::clearObjects() {
       asteroids.clear();
     }
 
-    if(!dimensionalObjects.empty()){
-      dimensionalObjects.clear();
-    }
+    //if(!dimensionalObjects.empty()){
+      //dimensionalObjects.clear();
+    //}
 
     if(!backgroundElems.empty()){
       backgroundElems.clear();
@@ -272,8 +249,6 @@ void Game::initTexture() {
 }
 
 void Game::clearTextures() {
-
-
     if(!backgroundTextures.empty()) {
         backgroundTextures.clear();
     }
@@ -371,7 +346,7 @@ void Game::handleCollisions() {
   if (SDL_HasIntersection(&spaceshipRect, &healingItemRect)) {
       healingItem->removeFromScreen();
       healingItem->healSpaceship(spaceship);
-      //TODO: HEAL SOUND
+      healingPickUp->playSoundEffect();
   }
 
   for (auto &asteroid : asteroids) {
@@ -564,7 +539,7 @@ void Game::initStars() {
                                                         PINK_STAR_MAX_SPEED,
                                                         PINK_STAR_POINT);
     stars.push_back(pink);
-    dimensionalObjects.push_back(pink);
+    fallingObjects.push_back(pink);
   }
 
   for(int i = 0; i < GREEN_STAR_MAX_NUMBER; i++){
@@ -575,7 +550,7 @@ void Game::initStars() {
                                                         GREEN_STAR_MAX_SPEED,
                                                         GREEN_STAR_POINT);
     stars.push_back(green);
-    dimensionalObjects.push_back(green);
+    fallingObjects.push_back(green);
   }
 
   for(int i = 0; i < BLUE_STAR_MAX_NUMBER; i++){
@@ -586,7 +561,7 @@ void Game::initStars() {
                                                          BLUE_STAR_MAX_SPEED,
                                                          BLUE_STAR_POINT);
     stars.push_back(blue);
-    dimensionalObjects.push_back(blue);
+    fallingObjects.push_back(blue);
   }
 
   for(int i = 0; i < GOLD_STAR_MAX_NUMBER; i++){
@@ -597,7 +572,7 @@ void Game::initStars() {
                                                          GOLD_STAR_MAX_SPEED,
                                                          GOLD_STAR_POINT);
     stars.push_back(gold);
-    dimensionalObjects.push_back(gold);
+    fallingObjects.push_back(gold);
   }
 
   for(int i = 0; i < RED_STAR_MAX_NUMBER; i++){
@@ -608,7 +583,7 @@ void Game::initStars() {
                                                          RED_STAR_MAX_SPEED,
                                                          RED_STAR_POINT);
     stars.push_back(red);
-    dimensionalObjects.push_back(red);
+    fallingObjects.push_back(red);
   }
 }
 
@@ -622,6 +597,7 @@ void Game::initAsteroids() {
                                                              MAX_SPEED_FOR_ASTEROIDS,
                                                              SMALL_ASTEROIDS_POINT);
     asteroids.push_back(a);
+    fallingObjects.push_back(a);
   }
 
   for(int i = 0; i < MEDIUM_ASTEROID_MAX_NUMBER; i++){
@@ -632,6 +608,7 @@ void Game::initAsteroids() {
                                                              MAX_SPEED_FOR_ASTEROIDS,
                                                              MEDIUM_ASTEROIDS_POINT);
     asteroids.push_back(a);
+    fallingObjects.push_back(a);
   }
 
   for(int i = 0; i < LARGE_ASTEROID_MAX_NUMBER; i++){
@@ -642,6 +619,7 @@ void Game::initAsteroids() {
                                                              MAX_SPEED_FOR_ASTEROIDS,
                                                              LARGE_ASTEROIDS_POINT);
     asteroids.push_back(a);
+    fallingObjects.push_back(a);
   }
 }
 
@@ -649,6 +627,7 @@ void Game::initBackgroundElements() {
   for (int i = 0; i < NUMBER_OF_BACKGROUND_ELEMENTS; ++i) {
     std::shared_ptr<BackgroundElement> elem = generateBackgroundElement();
     backgroundElems.push_back(elem);
+    fallingObjects.push_back(elem);
   }
 }
 

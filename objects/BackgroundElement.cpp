@@ -19,3 +19,10 @@ void BackgroundElement::placeAtStartingPos() {
     rect.x = x;
     rect.y = yPos;
 }
+
+void BackgroundElement::fall() {
+  FallingObject::fall();
+  if (rect.y > Config::windowHeight + (((height * 1.5) * NUMBER_OF_BACKGROUND_ELEMENTS) - Config::windowHeight - height)) {
+    placeAtStartingPos();
+  }
+}

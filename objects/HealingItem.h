@@ -6,8 +6,8 @@
 
 class HealingItem : public FallingObject {
 public:
-    HealingItem(int x, int y, int width, int height, int alienWidth, int alienHeight) :
-    FallingObject(x, y, width, height, 5, 5, true), healAmount(1), alienWidth(alienWidth), alienHeight(alienHeight) {
+    HealingItem(int x, int y, int alienWidth, int alienHeight) :
+    FallingObject(x, y, 70, 130, 5, 5, true), healAmount(1), alienWidth(alienWidth), alienHeight(alienHeight) {
         removeFromScreen();
     };
 
