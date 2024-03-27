@@ -140,11 +140,11 @@ void Game::initLogic() {
 
     clearObjects();
 
-  constexpr int HEALING_ITEM_HEIGHT = 100;
-  constexpr int HEALING_ITEM_WIDTH = 50;
+  constexpr int HEALING_ITEM_HEIGHT = 130;
+  constexpr int HEALING_ITEM_WIDTH = 70;
 
-  constexpr int ALIEN_WIDTH = 100;
-  constexpr int ALIEN_HEIGHT = 100;
+  constexpr int ALIEN_WIDTH = 180;
+  constexpr int ALIEN_HEIGHT = 120;
 
   initBackgroundElements();
   initStars();
@@ -152,9 +152,9 @@ void Game::initLogic() {
 
   spaceship = std::make_shared<Spaceship>(10, 75, Config::windowWidth * 0.5, Config::windowHeight * 0.85, 100, 100, 10, 1);
 
-    alien = std::make_shared<Alien>(5, Config::windowWidth * 0.5, Config::windowHeight * -1.5, ALIEN_WIDTH, ALIEN_HEIGHT, 50);
+    alien = std::make_shared<Alien>(5, Config::windowWidth * 0.5, Config::windowHeight * -15, ALIEN_WIDTH, ALIEN_HEIGHT, 50);
 
-    healingItem = std::make_shared<HealingItem>(0, 0, HEALING_ITEM_HEIGHT, HEALING_ITEM_WIDTH, ALIEN_WIDTH, ALIEN_HEIGHT);
+    healingItem = std::make_shared<HealingItem>(0, 0, HEALING_ITEM_WIDTH, HEALING_ITEM_HEIGHT, ALIEN_WIDTH, ALIEN_HEIGHT);
 }
 
 void Game::clearObjects() {
@@ -222,7 +222,7 @@ void Game::handleEvent() {
 
             if(timeSinceLastShoot >= (1.0 / spaceship->getFirerate()) * 1000){
               std::shared_ptr<SpaceshipBullet> bullet = spaceship->shoot();
-              std::shared_ptr<BulletTexture> spaceShipBulletTexture = std::make_shared<BulletTexture>(renderer, bullet, SDL_Color{0, 255, 0, 255});
+              std::shared_ptr<BulletTexture> spaceShipBulletTexture = std::make_shared<BulletTexture>(renderer, bullet, SDL_Color{0, 255, 175, 255});
               spaceshipBulletsTexture.push_back(spaceShipBulletTexture);
               spaceshipShootSoundEffect->playSoundEffect();
               lastShootTime = now;
@@ -257,7 +257,8 @@ void Game::initTexture() {
             DEFAULT_GAME_TEXT_FONT_PATH,
             DEFAULT_GAME_TEXT_FONT_SIZE,
             DEFAULT_GAME_TEXT_COLOR,
-            Config::windowWidth - 150,Config::windowHeight * 0.93);
+            Config::windowWidth - 150,
+            Config::windowHeight * 0.93);
 
     texts.push_back(livesText);
     texts.push_back(spaceHealthText);
@@ -509,7 +510,7 @@ void Game::gameOverStage() {
                         Config::windowHeight / 2,
                         renderer};
   GameText continueText{
-          "Press space to continue!",
+          "Press space to restart!",
       DEFAULT_GAME_TEXT_FONT_PATH,
       DEFAULT_GAME_TEXT_FONT_SIZE,
       DEFAULT_GAME_TEXT_COLOR,
@@ -652,7 +653,7 @@ void Game::initBackgroundElements() {
 }
 
 std::shared_ptr<BackgroundElement> Game::generateBackgroundElement() {
-  static int yPos = -(Config::windowHeight) * 1;
+  static int yPos = -(Config::windowHeight) * 0.5;
   int x = Util::getRandomNumber(0, Config::windowWidth - BACKGROUND_ELEMENT_SIZE);
   int y = yPos - BACKGROUND_ELEMENT_SIZE * 1.5;
   yPos = y;

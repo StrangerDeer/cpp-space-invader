@@ -7,7 +7,7 @@
 class HealingItemTexture : public PNGTexture {
 public:
     HealingItemTexture(SDL_Renderer* renderer, const std::shared_ptr<HealingItem>& healingItem) :
-        PNGTexture(renderer, "../ui/textures/spaceship.png")
+        PNGTexture(renderer, "../ui/textures/healingitem.png")
     {
         if(!healingItem){
             std::cerr << "HealingItem doesn't exist!" << std::endl;
