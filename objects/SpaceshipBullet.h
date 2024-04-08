@@ -9,7 +9,7 @@ class SpaceshipBullet {
   SpaceshipBullet(int x, int y, int speed) :
   speed(speed), width(10), height(25), damage(1)
   {
-    bulletRect.x = x;
+    bulletRect.x = x-5;
     bulletRect.y = y;
     bulletRect.w = width;
     bulletRect.h = height;
