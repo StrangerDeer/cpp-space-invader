@@ -95,7 +95,8 @@ When starting the game, you will be met with the title screen. After pressing sp
 <br>
 Throughout the game, you have to catch falling stars ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/101d6603-5af6-4966-afa9-ed064d48026b) to score points (bottom right of the screen) and avoid asteroids ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/94c297bf-4ec2-4ffa-96a1-9d528a85d719) which deplete the spaceship's health upon impact (bottom left of the screen).
 
-After a while, you will be meeting hostile aliens ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/b3eff62b-e956-4f28-a8d8-8cf0f13ce163) who will not hesitate to open fire at your spaceship. Their movement is pretty unpredictable, but they can be defeated. Once defeated, it will drop a healing bubble ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/e7175e9a-6d23-4390-92d8-d8f587710131) that you can pick up to restore some of your spaceship's health.
+After a while, you will be meeting hostile aliens ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/b3eff62b-e956-4f28-a8d8-8cf0f13ce163) who will not hesitate to open fire at your spaceship. Their movement is pretty unpredictable, but they can be defeated. Once defeated, it will drop eiher a healing bubble ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/e7175e9a-6d23-4390-92d8-d8f587710131) which restores some of your spaceship's health, or a gun booster bubble ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/6c61fdc9-fa82-430b-9d6f-ee71ad5d402a) which will level up your spaceship's gun, increasing its fire rate.
+
 
 ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/ae859575-f5ff-4d0a-b832-70b6a6feab40)
 ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/5494d712-ad30-494c-8210-e01d63fd3495)
