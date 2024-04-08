@@ -160,6 +160,8 @@ Once your spaceship's health reaches zero, you will get a game over scene with y
 - [ ] Menu
 - [ ] Text for current game difficulty (speed)
 - [ ] Webpage for storing high scores
+- [ ] Shield pickup that protects the spaceship when taking damage
+- [ ] Gun pickup that adds more lines of fire
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
