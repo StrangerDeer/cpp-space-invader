@@ -68,6 +68,7 @@ add_executable(cpp_space_invader main.cpp
         ConfigGameItems.h
         objects/Asteroid.cpp
         objects/PickUpItem.h
+        objects/GunBoosterItem.h
 )
 
 target_link_libraries(cpp_space_invader

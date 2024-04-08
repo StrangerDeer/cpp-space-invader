@@ -51,6 +51,10 @@ public:
         health += amount;
     }
 
+    void increaseFireRate() {
+        fireRate++;
+    }
+
 private:
     int points;
     int fireRate;
