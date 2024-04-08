@@ -8,7 +8,7 @@
 class GunBoosterTexture : public PNGTexture {
 public:
     GunBoosterTexture(SDL_Renderer* renderer, const std::shared_ptr<GunBoosterItem>& gunBoosterItem) :
-        PNGTexture(renderer, "../ui/textures/spaceship.png")
+        PNGTexture(renderer, "../ui/textures/gunbooster.png")
     {
     if(!gunBoosterItem){
         std::cerr << "GunBooster doesn't exist!" << std::endl;
