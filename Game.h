@@ -15,6 +15,8 @@
 #include "objects/Star.h"
 #include "objects/Asteroid.h"
 #include "objects/BackgroundElement.h"
+#include "objects/Alien.h"
+#include "objects/HealingItem.h"
 
 #include "ui/objectTextures/BulletTexture.h"
 #include "ui/objectTextures/SpaceshipTexture.h"
@@ -24,13 +26,11 @@
 #include "ui/text/GameText.h"
 #include "ui/text/SpaceshipHealthGameText.h"
 #include "ui/text/SpaceshipPointGameText.h"
+#include "ui/objectTextures/HealingItemTexture.h"
+#include "ui/objectTextures/AlienTexture.h"
 
 #include "sound/GameMusic.h"
 #include "sound/GameSoundEffect.h"
-#include "objects/Alien.h"
-#include "ui/objectTextures/AlienTexture.h"
-#include "objects/HealingItem.h"
-#include "ui/objectTextures/HealingItemTexture.h"
 #include "game-stages/OpenStage.h"
 
 template<typename T>
