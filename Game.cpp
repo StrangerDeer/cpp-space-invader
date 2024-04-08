@@ -41,6 +41,7 @@ void Game::makeObjectsMove() {
   alien->fall();
 
   healingItem->fall();
+  gunBooster->fall();
 
   bool isAlienShooting = alien->decideIfShooting();
   if (isAlienShooting) {
@@ -127,11 +128,14 @@ void Game::initLogic() {
   initStars();
   initAsteroids();
 
-  spaceship = std::make_shared<Spaceship>(10, 75, Config::windowWidth * 0.5 - 50, Config::windowHeight * 0.85, 100, 100, 10, 1);
+  spaceship = std::make_shared<Spaceship>(10, 75, Config::windowWidth * 0.5 - 50, Config::windowHeight * 0.85, 100, 100, 3, 1);
 
   alien = std::make_shared<Alien>(5, Config::windowWidth * 0.5, Config::windowHeight * -15, 50);
 
   healingItem = std::make_shared<HealingItem>(0, 0, alien->rect.w, alien->rect.h);
+  gunBooster = std::make_shared<GunBoosterItem>(0, 0, alien->rect.w, alien->rect.h);
+  pickUps.push_back(healingItem);
+  pickUps.push_back(gunBooster);
 }
 
 void Game::clearObjects() {
@@ -145,6 +149,10 @@ void Game::clearObjects() {
 
     if (healingItem) {
         healingItem = nullptr;
+    }
+
+    if (gunBooster) {
+        gunBooster = nullptr;
     }
 
     if(!stars.empty()){
@@ -221,13 +229,25 @@ void Game::initTexture() {
     std::shared_ptr<GameText> livesText = std::make_shared<GameText>("Health: ",
                                                                      DEFAULT_GAME_TEXT_FONT_PATH,
                                                                      DEFAULT_GAME_TEXT_FONT_SIZE,
-                                                                     DEFAULT_GAME_TEXT_COLOR, 20,Config::windowHeight * 0.93,
+                                                                     DEFAULT_GAME_TEXT_COLOR, 20,Config::windowHeight * 0.87,
                                                                      renderer);
     std::shared_ptr<SpaceshipHealthGameText> spaceHealthText =
         std::make_shared<SpaceshipHealthGameText>(renderer, spaceship,
                                                   DEFAULT_GAME_TEXT_FONT_PATH,
                                                   DEFAULT_GAME_TEXT_FONT_SIZE,
-                                                  DEFAULT_GAME_TEXT_COLOR, 175,Config::windowHeight * 0.93);
+                                                  DEFAULT_GAME_TEXT_COLOR, 175,Config::windowHeight * 0.87);
+
+    std::shared_ptr<GameText> lvlText = std::make_shared<GameText>("Gun Lvl: ",
+                                                                   DEFAULT_GAME_TEXT_FONT_PATH,
+                                                                   DEFAULT_GAME_TEXT_FONT_SIZE,
+                                                                   DEFAULT_GAME_TEXT_COLOR, 20, Config::windowHeight * 0.93,
+                                                                   renderer);
+
+    std::shared_ptr<SpaceshipGunLvlGameText> spaceLvlText =
+            std::make_shared<SpaceshipGunLvlGameText>(renderer, spaceship,
+                                                      DEFAULT_GAME_TEXT_FONT_PATH,
+                                                      DEFAULT_GAME_TEXT_FONT_SIZE,
+                                                      DEFAULT_GAME_TEXT_COLOR, 195,Config::windowHeight * 0.93);
 
     std::shared_ptr<SpaceshipPointGameText> spacePointText = std::make_shared<SpaceshipPointGameText>(
             renderer, spaceship,
@@ -239,11 +259,14 @@ void Game::initTexture() {
 
     texts.push_back(livesText);
     texts.push_back(spaceHealthText);
+    texts.push_back(lvlText);
+    texts.push_back(spaceLvlText);
     texts.push_back(spacePointText);
 
     spaceshipTexture = std::make_shared<SpaceshipTexture>(renderer, spaceship);
     alienTexture = std::make_unique<AlienTexture>(renderer, alien);
     healingItemTexture = std::make_unique<HealingItemTexture>(renderer, healingItem);
+    gunBoosterTexture = std::make_unique<GunBoosterTexture>(renderer, gunBooster);
 
     openStage->addTexture(spaceshipTexture);
 }
@@ -263,6 +286,10 @@ void Game::clearTextures() {
 
     if (healingItemTexture) {
         healingItemTexture = nullptr;
+    }
+
+    if (gunBoosterTexture) {
+        gunBoosterTexture = nullptr;
     }
 
     if(!starTextures.empty()){
@@ -342,6 +369,13 @@ void Game::handleCollisions() {
 
   SDL_Rect spaceshipRect{spaceship->rect.x, spaceship->rect.y, spaceship->width, spaceship->height};
   SDL_Rect healingItemRect{healingItem->rect.x, healingItem->rect.y, healingItem->width, healingItem->height};
+  SDL_Rect gunBoosterRect{gunBooster->rect.x, gunBooster->rect.y, gunBooster->width, gunBooster->height};
+
+  if (SDL_HasIntersection(&spaceshipRect, &gunBoosterRect)) {
+      gunBooster->removeFromScreen();
+      gunBooster->increaseSpaceshipFireRate(spaceship);
+      healingPickUp->playSoundEffect();
+  }
 
   if (SDL_HasIntersection(&spaceshipRect, &healingItemRect)) {
       healingItem->removeFromScreen();
@@ -402,7 +436,8 @@ void Game::handleCollisions() {
 
               if (alien->isDead()) {
                   alien->givePoints(spaceship);
-                  healingItem->placeAtSpawnPos(alienX, alienY);
+                  int randomIndex = Util::getRandomNumber(0, 1);
+                  pickUps[randomIndex]->placeAtSpawnPos(alienX, alienY);
               }
 
               break;
@@ -453,6 +488,7 @@ void Game::printTexture() {
     spaceshipTexture->print(renderer, ticks);
     alienTexture->print(renderer, ticks);
     healingItemTexture->print(renderer, ticks);
+    gunBoosterTexture->print(renderer, ticks);
 
 
   if(!spaceshipBulletsTexture.empty()){
