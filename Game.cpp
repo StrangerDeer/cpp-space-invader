@@ -229,13 +229,25 @@ void Game::initTexture() {
     std::shared_ptr<GameText> livesText = std::make_shared<GameText>("Health: ",
                                                                      DEFAULT_GAME_TEXT_FONT_PATH,
                                                                      DEFAULT_GAME_TEXT_FONT_SIZE,
-                                                                     DEFAULT_GAME_TEXT_COLOR, 20,Config::windowHeight * 0.93,
+                                                                     DEFAULT_GAME_TEXT_COLOR, 20,Config::windowHeight * 0.87,
                                                                      renderer);
     std::shared_ptr<SpaceshipHealthGameText> spaceHealthText =
         std::make_shared<SpaceshipHealthGameText>(renderer, spaceship,
                                                   DEFAULT_GAME_TEXT_FONT_PATH,
                                                   DEFAULT_GAME_TEXT_FONT_SIZE,
-                                                  DEFAULT_GAME_TEXT_COLOR, 175,Config::windowHeight * 0.93);
+                                                  DEFAULT_GAME_TEXT_COLOR, 175,Config::windowHeight * 0.87);
+
+    std::shared_ptr<GameText> lvlText = std::make_shared<GameText>("Gun Lvl: ",
+                                                                   DEFAULT_GAME_TEXT_FONT_PATH,
+                                                                   DEFAULT_GAME_TEXT_FONT_SIZE,
+                                                                   DEFAULT_GAME_TEXT_COLOR, 20, Config::windowHeight * 0.93,
+                                                                   renderer);
+
+    std::shared_ptr<SpaceshipGunLvlGameText> spaceLvlText =
+            std::make_shared<SpaceshipGunLvlGameText>(renderer, spaceship,
+                                                      DEFAULT_GAME_TEXT_FONT_PATH,
+                                                      DEFAULT_GAME_TEXT_FONT_SIZE,
+                                                      DEFAULT_GAME_TEXT_COLOR, 195,Config::windowHeight * 0.93);
 
     std::shared_ptr<SpaceshipPointGameText> spacePointText = std::make_shared<SpaceshipPointGameText>(
             renderer, spaceship,
@@ -247,6 +259,8 @@ void Game::initTexture() {
 
     texts.push_back(livesText);
     texts.push_back(spaceHealthText);
+    texts.push_back(lvlText);
+    texts.push_back(spaceLvlText);
     texts.push_back(spacePointText);
 
     spaceshipTexture = std::make_shared<SpaceshipTexture>(renderer, spaceship);

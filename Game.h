@@ -30,6 +30,7 @@
 #include "ui/text/GameText.h"
 #include "ui/text/SpaceshipHealthGameText.h"
 #include "ui/text/SpaceshipPointGameText.h"
+#include "ui/text/SpaceshipGunLvlGameText.h"
 
 #include "sound/GameMusic.h"
 #include "sound/GameSoundEffect.h"
