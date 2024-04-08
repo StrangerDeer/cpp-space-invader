@@ -125,7 +125,10 @@ Once your spaceship's health reaches zero, you will get a game over scene with y
   - [X] Random movement
   - [X] Randomly firing
     - [X] Damage spaceship when shot
-  - [X] Drop healing item
+  - [X] Drop items
+    - [X] Healing item
+    - [X] Gun booster
+    - [X] Randomize drops
 - [X] Ability to shoot
   - [X] Damage asteroids when shot
   - [X] Damage alien when shot
@@ -142,15 +145,21 @@ Once your spaceship's health reaches zero, you will get a game over scene with y
 - [X] Start scene
 - [X] Game over scene
   - [X] Can restart
+- [X] Gun booster
+  - [X] Increase bullet speed
+  - [X] Increase fire rate
 
 ### Planned Features:
 - [ ] Looping background music
 - [ ] Installer
 - [ ] Restrict spaceship movement so collision with an alien is no longer possible
-- [ ] Speed boost items
 - [ ] Increase game speed based on score
+- [ ] Increase alien HP based on score
 - [ ] Fix background images not appearing when restarting after a game over
 - [ ] Fix music not playing when restarting after a game over
+- [ ] Menu
+- [ ] Text for current game difficulty (speed)
+- [ ] Webpage for storing high scores
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
