@@ -17,17 +17,19 @@
 #include "objects/BackgroundElement.h"
 #include "objects/Alien.h"
 #include "objects/HealingItem.h"
+#include "objects/GunBoosterItem.h"
 
 #include "ui/objectTextures/BulletTexture.h"
 #include "ui/objectTextures/SpaceshipTexture.h"
 #include "ui/objectTextures/StarTexture.h"
 #include "ui/objectTextures/AsteroidTexture.h"
 #include "ui/objectTextures/BackgroundTexture.h"
+#include "ui/objectTextures/HealingItemTexture.h"
+#include "ui/objectTextures/AlienTexture.h"
+#include "ui/objectTextures/GunBoosterTexture.h"
 #include "ui/text/GameText.h"
 #include "ui/text/SpaceshipHealthGameText.h"
 #include "ui/text/SpaceshipPointGameText.h"
-#include "ui/objectTextures/HealingItemTexture.h"
-#include "ui/objectTextures/AlienTexture.h"
 
 #include "sound/GameMusic.h"
 #include "sound/GameSoundEffect.h"
@@ -79,11 +81,14 @@ private:
     std::shared_ptr<Spaceship> spaceship{nullptr};
     std::shared_ptr<Alien> alien{nullptr};
     std::shared_ptr<HealingItem> healingItem{nullptr};
+    std::shared_ptr<GunBoosterItem> gunBooster{nullptr};
+    shared_vector<PickUpItem> pickUps{};
 
     //UI
     std::shared_ptr<SpaceshipTexture> spaceshipTexture{nullptr};
     std::unique_ptr<AlienTexture> alienTexture{nullptr};
     std::unique_ptr<HealingItemTexture> healingItemTexture{nullptr};
+    std::unique_ptr<GunBoosterTexture> gunBoosterTexture{nullptr};
 
     shared_vector<StarTexture> starTextures{};
     shared_vector<AsteroidTexture> asteroidTextures{};
