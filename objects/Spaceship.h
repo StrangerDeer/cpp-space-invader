@@ -10,7 +10,7 @@ class Spaceship : public DimensionalObject, public FlyingObject, public HealthOb
 public:
     Spaceship(int health, int speed, int x, int y, int width, int height, int fireRate, int lineOfFire) :
             HealthObject(health), FlyingObject(speed), DimensionalObject(x, y, width, height), fireRate(fireRate),
-            lineOfFire(lineOfFire) {
+            lineOfFire(lineOfFire), bulletSpeed(10) {
         points = 0;
     };
 
@@ -36,7 +36,7 @@ public:
       int x = rect.x + width / 2;
       int y = rect.y + height / 2;
 
-      std::shared_ptr<SpaceshipBullet> bullet = std::make_shared<SpaceshipBullet>(x, y);
+      std::shared_ptr<SpaceshipBullet> bullet = std::make_shared<SpaceshipBullet>(x, y, bulletSpeed);
 
       bullets.push_back(bullet);
 
@@ -53,11 +53,13 @@ public:
 
     void increaseFireRate() {
         fireRate++;
+        bulletSpeed++;
     }
 
 private:
     int points;
     int fireRate;
+    int bulletSpeed;
     int lineOfFire;
 };
 
