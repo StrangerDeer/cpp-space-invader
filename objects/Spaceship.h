@@ -10,7 +10,7 @@ class Spaceship : public DimensionalObject, public FlyingObject, public HealthOb
 public:
     Spaceship(int health, int speed, int x, int y, int width, int height, int fireRate, int lineOfFire) :
             HealthObject(health), FlyingObject(speed), DimensionalObject(x, y, width, height), fireRate(fireRate),
-            lineOfFire(lineOfFire), bulletSpeed(10) {
+            lineOfFire(lineOfFire), bulletSpeed(10), gunLvl(1) {
         points = 0;
     };
 
@@ -54,12 +54,18 @@ public:
     void increaseFireRate() {
         fireRate++;
         bulletSpeed++;
+        gunLvl++;
+    }
+
+    int getGunLvl() {
+        return gunLvl;
     }
 
 private:
     int points;
     int fireRate;
     int bulletSpeed;
+    int gunLvl;
     int lineOfFire;
 };
 
