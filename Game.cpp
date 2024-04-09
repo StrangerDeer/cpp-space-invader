@@ -41,7 +41,7 @@ void Game::increaseGameDifficulty() const {
     if (diffIncrease > gameDifficulty) {
         gameDifficulty = diffIncrease;
         if (gameDifficulty % 2 == 0) {
-            alien->increaseHealth();
+            alien->increaseDifficulty();
         }
         for(const std::shared_ptr<FallingObject> object : fallingObjects){
             object->increaseSpeed();
