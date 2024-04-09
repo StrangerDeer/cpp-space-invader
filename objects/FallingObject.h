@@ -24,6 +24,11 @@ class FallingObject : public DimensionalObject {
     rect.y += currentSpeed;
   }
 
+  void increaseSpeed() {
+      minSpeed = minSpeed + 1;
+      maxSpeed = maxSpeed + 1;
+  }
+
  protected:
   int minSpeed;
   int maxSpeed;

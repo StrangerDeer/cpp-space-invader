@@ -67,6 +67,10 @@ public:
       rect.y = Util::getRandomNumber(-Config::windowHeight * 9, 0 - rect.h);
     }
 
+    void increaseHealth() {
+        maxHealth++;
+    }
+
 protected:
     int maxHealth;
     int fallingSpeed;

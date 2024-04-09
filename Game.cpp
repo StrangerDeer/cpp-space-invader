@@ -28,8 +28,24 @@ void Game::middleGameStage() {
     makeObjectsMove();
     printTexture();
 
+    increaseGameDifficulty();
+
     if(spaceship->getHealth() == 0){
         *isRunning = 3;
+    }
+}
+
+void Game::increaseGameDifficulty() const {
+    static int gameDifficulty = 0;
+    int diffIncrease = spaceship->getPoints() / 250;
+    if (diffIncrease > gameDifficulty) {
+        gameDifficulty = diffIncrease;
+        if (gameDifficulty % 2 == 0) {
+            alien->increaseHealth();
+        }
+        for(const std::shared_ptr<FallingObject> object : fallingObjects){
+            object->increaseSpeed();
+        }
     }
 }
 
