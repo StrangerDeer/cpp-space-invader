@@ -63,7 +63,7 @@ public:
     }
 
     void increaseTravelSpeed() {
-        int randomNum = Util::getRandomNumber(12000, 17000);
+        int randomNum = Util::getRandomNumber(12000, 15000);
         travelSpeed += randomNum;
     }
 

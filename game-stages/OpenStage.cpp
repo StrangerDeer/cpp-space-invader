@@ -3,7 +3,7 @@
 void OpenStage::initGameTexts(SDL_Renderer* renderer) {
 
     texts.push_back(std::make_shared<GameText>(
-        "SPACE INVADERS",
+        "STELLAR STORM",
         DEFAULT_GAME_TEXT_FONT_PATH,
         200,
         DEFAULT_GAME_TEXT_COLOR,

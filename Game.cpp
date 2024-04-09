@@ -100,7 +100,7 @@ void Game::makeObjectsMove() {
 void Game::initSDL() {
   SDL_Init(SDL_INIT_EVERYTHING);
 
-  window = SDL_CreateWindow("Space Invader", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1000, 1000,
+  window = SDL_CreateWindow("Stellar Storm", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1000, 1000,
                             SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_OPENGL);
   if (!window) {
     std::cerr << "Error: Unable to create window!" << SDL_GetError() << std::endl;
@@ -294,7 +294,7 @@ void Game::initTexture() {
                                                       DEFAULT_GAME_TEXT_FONT_PATH,
                                                       DEFAULT_GAME_TEXT_FONT_SIZE,
                                                       DEFAULT_GAME_TEXT_COLOR,
-                                                      Config::windowWidth - 250,
+                                                      Config::windowWidth - 280,
                                                       Config::windowHeight * 0.93);
 
     texts.push_back(livesText);
