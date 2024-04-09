@@ -38,7 +38,7 @@ void Game::middleGameStage() {
 
 void Game::increaseGameDifficulty() const {
     static int gameDifficulty = 0;
-    int diffIncrease = spaceship->getPoints() / 250;
+    int diffIncrease = spaceship->getPoints() / 500;
     if (diffIncrease > gameDifficulty) {
         gameDifficulty = diffIncrease;
         spaceship->increaseTravelSpeed();
@@ -56,6 +56,10 @@ void Game::increaseGameDifficulty() const {
 void Game::makeObjectsMove() {
   for(const std::shared_ptr<FallingObject> object : fallingObjects){
     object->fall();
+  }
+
+  for(const std::shared_ptr<FallingObject> bgElem : backgroundElems) {
+      bgElem->fall();
   }
 
   alien->fall();
@@ -274,7 +278,7 @@ void Game::initTexture() {
                                                 DEFAULT_GAME_TEXT_FONT_PATH,
                                                 DEFAULT_GAME_TEXT_FONT_SIZE,
                                                 DEFAULT_GAME_TEXT_COLOR,
-                                                Config::windowWidth - 75,
+                                                Config::windowWidth - 100,
                                                 Config::windowHeight * 0.02);
 
     std::shared_ptr<GameText> travelSpeedText = std::make_shared<GameText>("Travelling at ",
@@ -474,8 +478,12 @@ void Game::handleCollisions() {
 
               if (alien->isDead()) {
                   alien->givePoints(spaceship);
-                  int randomIndex = Util::getRandomNumber(0, 1);
-                  pickUps[randomIndex]->placeAtSpawnPos(alienX, alienY);
+                  if (spaceship->getGunLvl() <= 5) {
+                      int randomIndex = Util::getRandomNumber(0, 1);
+                      pickUps[randomIndex]->placeAtSpawnPos(alienX, alienY);
+                  } else {
+                      healingItem->placeAtSpawnPos(alienX, alienY);
+                  }
               }
 
               break;
@@ -701,7 +709,6 @@ void Game::initBackgroundElements() {
   for (int i = 0; i < NUMBER_OF_BACKGROUND_ELEMENTS; ++i) {
     std::shared_ptr<BackgroundElement> elem = generateBackgroundElement();
     backgroundElems.push_back(elem);
-    fallingObjects.push_back(elem);
   }
 }
 
