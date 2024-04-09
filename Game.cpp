@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "ui/text/SpaceshipTravelSpeedGameText.h"
 
 void Game::run() {
 
@@ -28,14 +29,37 @@ void Game::middleGameStage() {
     makeObjectsMove();
     printTexture();
 
-    if(spaceship->getHealth() == 0){
+    increaseGameDifficulty();
+
+    if(spaceship->getHealth() <= 0){
         *isRunning = 3;
+    }
+}
+
+void Game::increaseGameDifficulty() const {
+    static int gameDifficulty = 0;
+    int diffIncrease = spaceship->getPoints() / 500;
+    if (diffIncrease > gameDifficulty) {
+        gameDifficulty = diffIncrease;
+        spaceship->increaseTravelSpeed();
+
+        if (gameDifficulty % 2 == 0) {
+            alien->increaseDifficulty();
+        }
+
+        for(const std::shared_ptr<FallingObject> object : fallingObjects){
+            object->increaseSpeed();
+        }
     }
 }
 
 void Game::makeObjectsMove() {
   for(const std::shared_ptr<FallingObject> object : fallingObjects){
     object->fall();
+  }
+
+  for(const std::shared_ptr<FallingObject> bgElem : backgroundElems) {
+      bgElem->fall();
   }
 
   alien->fall();
@@ -76,7 +100,7 @@ void Game::makeObjectsMove() {
 void Game::initSDL() {
   SDL_Init(SDL_INIT_EVERYTHING);
 
-  window = SDL_CreateWindow("Space Invader", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1000, 1000,
+  window = SDL_CreateWindow("Stellar Storm", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1000, 1000,
                             SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_OPENGL);
   if (!window) {
     std::cerr << "Error: Unable to create window!" << SDL_GetError() << std::endl;
@@ -250,18 +274,36 @@ void Game::initTexture() {
                                                       DEFAULT_GAME_TEXT_COLOR, 195,Config::windowHeight * 0.93);
 
     std::shared_ptr<SpaceshipPointGameText> spacePointText = std::make_shared<SpaceshipPointGameText>(
-            renderer, spaceship,
-            DEFAULT_GAME_TEXT_FONT_PATH,
-            DEFAULT_GAME_TEXT_FONT_SIZE,
-            DEFAULT_GAME_TEXT_COLOR,
-            Config::windowWidth - 150,
-            Config::windowHeight * 0.93);
+                                                renderer, spaceship,
+                                                DEFAULT_GAME_TEXT_FONT_PATH,
+                                                DEFAULT_GAME_TEXT_FONT_SIZE,
+                                                DEFAULT_GAME_TEXT_COLOR,
+                                                Config::windowWidth - 100,
+                                                Config::windowHeight * 0.02);
+
+    std::shared_ptr<GameText> travelSpeedText = std::make_shared<GameText>("Travelling at ",
+                                                                   DEFAULT_GAME_TEXT_FONT_PATH,
+                                                                   DEFAULT_GAME_TEXT_FONT_SIZE,
+                                                                   DEFAULT_GAME_TEXT_COLOR,
+                                                                   Config::windowWidth - 280,
+                                                                   Config::windowHeight * 0.87,
+                                                                   renderer);
+
+    std::shared_ptr<SpaceshipTravelSpeedGameText> spaceTravelSpeed =
+            std::make_shared<SpaceshipTravelSpeedGameText>(renderer, spaceship,
+                                                      DEFAULT_GAME_TEXT_FONT_PATH,
+                                                      DEFAULT_GAME_TEXT_FONT_SIZE,
+                                                      DEFAULT_GAME_TEXT_COLOR,
+                                                      Config::windowWidth - 280,
+                                                      Config::windowHeight * 0.93);
 
     texts.push_back(livesText);
     texts.push_back(spaceHealthText);
     texts.push_back(lvlText);
     texts.push_back(spaceLvlText);
     texts.push_back(spacePointText);
+    texts.push_back(travelSpeedText);
+    texts.push_back(spaceTravelSpeed);
 
     spaceshipTexture = std::make_shared<SpaceshipTexture>(renderer, spaceship);
     alienTexture = std::make_unique<AlienTexture>(renderer, alien);
@@ -436,8 +478,12 @@ void Game::handleCollisions() {
 
               if (alien->isDead()) {
                   alien->givePoints(spaceship);
-                  int randomIndex = Util::getRandomNumber(0, 1);
-                  pickUps[randomIndex]->placeAtSpawnPos(alienX, alienY);
+                  if (spaceship->getGunLvl() <= 5) {
+                      int randomIndex = Util::getRandomNumber(0, 1);
+                      pickUps[randomIndex]->placeAtSpawnPos(alienX, alienY);
+                  } else {
+                      healingItem->placeAtSpawnPos(alienX, alienY);
+                  }
               }
 
               break;
@@ -663,7 +709,6 @@ void Game::initBackgroundElements() {
   for (int i = 0; i < NUMBER_OF_BACKGROUND_ELEMENTS; ++i) {
     std::shared_ptr<BackgroundElement> elem = generateBackgroundElement();
     backgroundElems.push_back(elem);
-    fallingObjects.push_back(elem);
   }
 }
 

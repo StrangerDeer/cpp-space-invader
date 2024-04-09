@@ -73,6 +73,8 @@ add_executable(cpp_space_invader main.cpp
         ui/objectTextures/GunBoosterTexture.cpp
         ui/text/SpaceshipGunLvlGameText.h
         ui/text/SpaceshipGunLvlGameText.cpp
+        ui/text/SpaceshipTravelSpeedGameText.h
+        ui/text/SpaceshipTravelSpeedGameText.cpp
 )
 
 target_link_libraries(cpp_space_invader

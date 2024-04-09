@@ -67,6 +67,11 @@ public:
       rect.y = Util::getRandomNumber(-Config::windowHeight * 9, 0 - rect.h);
     }
 
+    void increaseDifficulty() {
+        maxHealth = maxHealth + 1;
+        shootLimit = shootLimit - 1;
+    }
+
 protected:
     int maxHealth;
     int fallingSpeed;
