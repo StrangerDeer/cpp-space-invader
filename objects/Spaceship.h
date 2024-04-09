@@ -53,8 +53,8 @@ public:
     }
 
     void increaseFireRate() {
-        fireRate++;
-        bulletSpeed++;
+        fireRate+=2;
+        bulletSpeed+=2;
         gunLvl++;
     }
 
