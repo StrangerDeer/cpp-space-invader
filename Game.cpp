@@ -30,7 +30,7 @@ void Game::middleGameStage() {
 
     increaseGameDifficulty();
 
-    if(spaceship->getHealth() == 0){
+    if(spaceship->getHealth() <= 0){
         *isRunning = 3;
     }
 }
