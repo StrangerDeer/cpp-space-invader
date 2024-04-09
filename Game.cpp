@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "ui/text/SpaceshipTravelSpeedGameText.h"
 
 void Game::run() {
 
@@ -40,9 +41,12 @@ void Game::increaseGameDifficulty() const {
     int diffIncrease = spaceship->getPoints() / 250;
     if (diffIncrease > gameDifficulty) {
         gameDifficulty = diffIncrease;
+        spaceship->increaseTravelSpeed();
+
         if (gameDifficulty % 2 == 0) {
             alien->increaseDifficulty();
         }
+
         for(const std::shared_ptr<FallingObject> object : fallingObjects){
             object->increaseSpeed();
         }
@@ -266,18 +270,36 @@ void Game::initTexture() {
                                                       DEFAULT_GAME_TEXT_COLOR, 195,Config::windowHeight * 0.93);
 
     std::shared_ptr<SpaceshipPointGameText> spacePointText = std::make_shared<SpaceshipPointGameText>(
-            renderer, spaceship,
-            DEFAULT_GAME_TEXT_FONT_PATH,
-            DEFAULT_GAME_TEXT_FONT_SIZE,
-            DEFAULT_GAME_TEXT_COLOR,
-            Config::windowWidth - 150,
-            Config::windowHeight * 0.93);
+                                                renderer, spaceship,
+                                                DEFAULT_GAME_TEXT_FONT_PATH,
+                                                DEFAULT_GAME_TEXT_FONT_SIZE,
+                                                DEFAULT_GAME_TEXT_COLOR,
+                                                Config::windowWidth - 75,
+                                                Config::windowHeight * 0.02);
+
+    std::shared_ptr<GameText> travelSpeedText = std::make_shared<GameText>("Travelling at ",
+                                                                   DEFAULT_GAME_TEXT_FONT_PATH,
+                                                                   DEFAULT_GAME_TEXT_FONT_SIZE,
+                                                                   DEFAULT_GAME_TEXT_COLOR,
+                                                                   Config::windowWidth - 280,
+                                                                   Config::windowHeight * 0.87,
+                                                                   renderer);
+
+    std::shared_ptr<SpaceshipTravelSpeedGameText> spaceTravelSpeed =
+            std::make_shared<SpaceshipTravelSpeedGameText>(renderer, spaceship,
+                                                      DEFAULT_GAME_TEXT_FONT_PATH,
+                                                      DEFAULT_GAME_TEXT_FONT_SIZE,
+                                                      DEFAULT_GAME_TEXT_COLOR,
+                                                      Config::windowWidth - 250,
+                                                      Config::windowHeight * 0.93);
 
     texts.push_back(livesText);
     texts.push_back(spaceHealthText);
     texts.push_back(lvlText);
     texts.push_back(spaceLvlText);
     texts.push_back(spacePointText);
+    texts.push_back(travelSpeedText);
+    texts.push_back(spaceTravelSpeed);
 
     spaceshipTexture = std::make_shared<SpaceshipTexture>(renderer, spaceship);
     alienTexture = std::make_unique<AlienTexture>(renderer, alien);

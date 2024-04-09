@@ -4,13 +4,14 @@
 #include "FlyingObject.h"
 #include "HealthObject.h"
 #include "SpaceshipBullet.h"
+#include "../Util.h"
 
 class Spaceship : public DimensionalObject, public FlyingObject, public HealthObject
 {
 public:
     Spaceship(int health, int speed, int x, int y, int width, int height, int fireRate, int lineOfFire) :
             HealthObject(health), FlyingObject(speed), DimensionalObject(x, y, width, height), fireRate(fireRate),
-            lineOfFire(lineOfFire), bulletSpeed(10), gunLvl(1) {
+            lineOfFire(lineOfFire), bulletSpeed(10), gunLvl(1), travelSpeed(23500) {
         points = 0;
     };
 
@@ -57,11 +58,21 @@ public:
         gunLvl++;
     }
 
-    int getGunLvl() {
+    int getGunLvl() const {
         return gunLvl;
     }
 
+    void increaseTravelSpeed() {
+        int randomNum = Util::getRandomNumber(12000, 17000);
+        travelSpeed += randomNum;
+    }
+
+    int getTravelSpeed() const {
+        return travelSpeed;
+    }
+
 private:
+    int travelSpeed;
     int points;
     int fireRate;
     int bulletSpeed;
