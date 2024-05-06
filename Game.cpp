@@ -559,7 +559,11 @@ void Game::printTexture() {
 }
 
 void Game::gameOverStage() {
-  GameText gameOverText{"GAME OVER",
+     Util::setTimeEnd((double)clock() / (double)CLOCKS_PER_SEC);
+    elapsedTime = Util::getTimeDuration();
+    std::cout << "Elapsed: " << elapsedTime << std::endl;
+
+    GameText gameOverText{"GAME OVER",
                         DEFAULT_GAME_TEXT_FONT_PATH,
                         DEFAULT_GAME_TEXT_FONT_SIZE,
                         DEFAULT_GAME_TEXT_COLOR,

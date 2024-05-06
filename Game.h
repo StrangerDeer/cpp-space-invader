@@ -69,6 +69,7 @@ private:
     Uint32 frameStart;
     int frameTime;
     std::chrono::steady_clock::time_point lastShootTime;
+    int elapsedTime;
 
     std::unique_ptr<OpenStage> openStage{nullptr};
 
