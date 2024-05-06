@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdlib> // For rand()
 #include <ctime>   // For time()
+#include <time.h>
 
 class Util {
 public:
@@ -10,7 +11,16 @@ public:
         return rand() % (max - min + 1) + min;
     }
 
+    static void setTimeBegin(double begin);
+    static void setTimeEnd(double end);
+    static int getTimeDuration();
+
+    static double timeBegin;
+    static double timeEnd;
+
 private:
+
+
     // Helper function to initialize the random number generator
     static void initialize() {
         static bool initialized = false;
