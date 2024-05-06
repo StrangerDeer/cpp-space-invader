@@ -563,6 +563,11 @@ void Game::gameOverStage() {
     elapsedTime = Util::getTimeDuration();
     std::cout << "Elapsed: " << elapsedTime << std::endl;
 
+    httplib::Client cli("http://cpp-httplib-server.yhirose.repl.co");
+    std::string data = "{\"Name\":\"TestFromGame\",\"Score\":" + std::to_string(spaceship->getPoints()) + ",\"TimeSurvived\":" + std::to_string(elapsedTime) + "}";
+    cli.Post("https://localhost:7059/api/highscores/add-new", data, "application/json");
+
+
     GameText gameOverText{"GAME OVER",
                         DEFAULT_GAME_TEXT_FONT_PATH,
                         DEFAULT_GAME_TEXT_FONT_SIZE,
