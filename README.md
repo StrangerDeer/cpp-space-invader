@@ -149,20 +149,22 @@ Once your spaceship's health reaches zero, you will get a game over scene with y
 - [X] Gun booster
   - [X] Increase bullet speed
   - [X] Increase fire rate
+  - [X] Picking up increases alien and asteroids' HP
+- [X] Increase game speed based on score
+- [X] Increase alien HP based on score
+- [X] Text for current game difficulty (speed)
+- [X] Gun pickup that adds more lines of fire
+  - [X] Picking up increases alien and asteroids' HP
 
 ### Planned Features:
 - [ ] Looping background music
 - [ ] Installer
 - [ ] Restrict spaceship movement so collision with an alien is no longer possible
-- [ ] Increase game speed based on score
-- [ ] Increase alien HP based on score
 - [ ] Fix background images not appearing when restarting after a game over
 - [ ] Fix music not playing when restarting after a game over
 - [ ] Menu
-- [ ] Text for current game difficulty (speed)
 - [ ] Webpage for storing high scores
 - [ ] Shield pickup that protects the spaceship when taking damage
-- [ ] Gun pickup that adds more lines of fire
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
