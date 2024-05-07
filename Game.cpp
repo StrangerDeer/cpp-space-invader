@@ -42,13 +42,16 @@ void Game::increaseGameDifficulty() const {
     if (diffIncrease > gameDifficulty) {
         gameDifficulty = diffIncrease;
         spaceship->increaseTravelSpeed();
-
-        if (gameDifficulty % 2 == 0) {
-            alien->increaseDifficulty();
-        }
+        alien->increaseDifficulty();
 
         for(const std::shared_ptr<FallingObject> object : fallingObjects){
             object->increaseSpeed();
+        }
+
+        if (gameDifficulty % 2) {
+            for (const std::shared_ptr<Asteroid> asteroid : asteroids) {
+                asteroid->increaseHealth();
+            }
         }
     }
 }
@@ -429,11 +432,19 @@ void Game::handleCollisions() {
         fireLineBooster->removeFromScreen();
         fireLineBooster->increaseSpaceshipFireLine(spaceship);
         healingPickUp->playSoundEffect();
+        alien->increaseDifficulty();
+        for(const std::shared_ptr<Asteroid> asteroid : asteroids) {
+            asteroid->increaseHealth();
+        }
     }
 
   if (SDL_HasIntersection(&spaceshipRect, &gunBoosterRect)) {
       gunBooster->removeFromScreen();
       gunBooster->increaseSpaceshipFireRate(spaceship);
+      alien->increaseDifficulty();
+      for(const std::shared_ptr<Asteroid> asteroid : asteroids) {
+          asteroid->increaseHealth();
+      }
       healingPickUp->playSoundEffect();
   }
 

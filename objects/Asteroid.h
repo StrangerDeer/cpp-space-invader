@@ -31,6 +31,10 @@ class Asteroid : public FallingObject, public ScoreObject, public HealthObject {
 
   void fall() override;
 
+  void increaseHealth() {
+      maxHealth++;
+  }
+
  private:
   int maxHealth;
   double angleRotation;
