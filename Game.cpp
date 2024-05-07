@@ -149,10 +149,11 @@ void Game::initLogic() {
   clearObjects();
 
   initBackgroundElements();
+  initBackgroundElements();
   initStars();
   initAsteroids();
 
-  spaceship = std::make_shared<Spaceship>(10, 75, Config::windowWidth * 0.5 - 50, Config::windowHeight * 0.85, 100, 100, 3, 1);
+  spaceship = std::make_shared<Spaceship>(10, 75, Config::windowWidth * 0.5 - 50, Config::windowHeight * 0.85, 100, 100, 3);
 
   alien = std::make_shared<Alien>(5, Config::windowWidth * 0.5, Config::windowHeight * -15, 50);
 
@@ -230,9 +231,11 @@ void Game::handleEvent() {
             auto timeSinceLastShoot = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastShootTime).count();
 
             if(timeSinceLastShoot >= (1.0 / spaceship->getFirerate()) * 1000){
-              std::shared_ptr<SpaceshipBullet> bullet = spaceship->shoot();
-              std::shared_ptr<BulletTexture> spaceShipBulletTexture = std::make_shared<BulletTexture>(renderer, bullet, SDL_Color{0, 255, 175, 255});
-              spaceshipBulletsTexture.push_back(spaceShipBulletTexture);
+                std::vector<std::shared_ptr<SpaceshipBullet>> bullets = spaceship->shoot();
+                for (std::shared_ptr<SpaceshipBullet> bullet : bullets) {
+                    std::shared_ptr<BulletTexture> spaceShipBulletTexture = std::make_shared<BulletTexture>(renderer, bullet, SDL_Color{0, 255, 175, 255});
+                    spaceshipBulletsTexture.push_back(spaceShipBulletTexture);
+                }
               spaceshipShootSoundEffect->playSoundEffect();
               lastShootTime = now;
             }
