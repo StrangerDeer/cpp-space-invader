@@ -171,6 +171,9 @@ Once your spaceship's health reaches zero, you will get a game over scene with y
 - [ ] Menu
 - [ ] Webpage for storing high scores
 - [ ] Shield pickup that protects the spaceship when taking damage
+- [ ] Add WASD to controls
+- [ ] Enable pausing the game
+- [ ] Time slowing pickup that slows objects down around the spaceship
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
