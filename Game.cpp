@@ -42,13 +42,16 @@ void Game::increaseGameDifficulty() const {
     if (diffIncrease > gameDifficulty) {
         gameDifficulty = diffIncrease;
         spaceship->increaseTravelSpeed();
-
-        if (gameDifficulty % 2 == 0) {
-            alien->increaseDifficulty();
-        }
+        alien->increaseDifficulty();
 
         for(const std::shared_ptr<FallingObject> object : fallingObjects){
             object->increaseSpeed();
+        }
+
+        if (gameDifficulty % 2) {
+            for (const std::shared_ptr<Asteroid> asteroid : asteroids) {
+                asteroid->increaseHealth();
+            }
         }
     }
 }
@@ -66,6 +69,7 @@ void Game::makeObjectsMove() {
 
   healingItem->fall();
   gunBooster->fall();
+  fireLineBooster->fall();
 
   bool isAlienShooting = alien->decideIfShooting();
   if (isAlienShooting) {
@@ -152,14 +156,13 @@ void Game::initLogic() {
   initStars();
   initAsteroids();
 
-  spaceship = std::make_shared<Spaceship>(10, 75, Config::windowWidth * 0.5 - 50, Config::windowHeight * 0.85, 100, 100, 3, 1);
+  spaceship = std::make_shared<Spaceship>(10, 75, Config::windowWidth * 0.5 - 50, Config::windowHeight * 0.85, 100, 100, 3);
 
   alien = std::make_shared<Alien>(5, Config::windowWidth * 0.5, Config::windowHeight * -15, 50);
 
   healingItem = std::make_shared<HealingItem>(0, 0, alien->rect.w, alien->rect.h);
   gunBooster = std::make_shared<GunBoosterItem>(0, 0, alien->rect.w, alien->rect.h);
-  pickUps.push_back(healingItem);
-  pickUps.push_back(gunBooster);
+  fireLineBooster = std::make_shared<FireLineItem>(0, 0, alien->rect.w, alien->rect.h);
 }
 
 void Game::clearObjects() {
@@ -177,6 +180,10 @@ void Game::clearObjects() {
 
     if (gunBooster) {
         gunBooster = nullptr;
+    }
+
+    if (fireLineBooster) {
+        fireLineBooster = nullptr;
     }
 
     if(!stars.empty()){
@@ -230,9 +237,11 @@ void Game::handleEvent() {
             auto timeSinceLastShoot = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastShootTime).count();
 
             if(timeSinceLastShoot >= (1.0 / spaceship->getFirerate()) * 1000){
-              std::shared_ptr<SpaceshipBullet> bullet = spaceship->shoot();
-              std::shared_ptr<BulletTexture> spaceShipBulletTexture = std::make_shared<BulletTexture>(renderer, bullet, SDL_Color{0, 255, 175, 255});
-              spaceshipBulletsTexture.push_back(spaceShipBulletTexture);
+                std::vector<std::shared_ptr<SpaceshipBullet>> bullets = spaceship->shoot();
+                for (std::shared_ptr<SpaceshipBullet> bullet : bullets) {
+                    std::shared_ptr<BulletTexture> spaceShipBulletTexture = std::make_shared<BulletTexture>(renderer, bullet, SDL_Color{0, 255, 175, 255});
+                    spaceshipBulletsTexture.push_back(spaceShipBulletTexture);
+                }
               spaceshipShootSoundEffect->playSoundEffect();
               lastShootTime = now;
             }
@@ -309,6 +318,7 @@ void Game::initTexture() {
     alienTexture = std::make_unique<AlienTexture>(renderer, alien);
     healingItemTexture = std::make_unique<HealingItemTexture>(renderer, healingItem);
     gunBoosterTexture = std::make_unique<GunBoosterTexture>(renderer, gunBooster);
+    fireLineBoosterTexture = std::make_unique<FireLineBoosterTexture>(renderer, fireLineBooster);
 
     openStage->addTexture(spaceshipTexture);
 }
@@ -332,6 +342,10 @@ void Game::clearTextures() {
 
     if (gunBoosterTexture) {
         gunBoosterTexture = nullptr;
+    }
+
+    if (fireLineBoosterTexture) {
+        fireLineBoosterTexture = nullptr;
     }
 
     if(!starTextures.empty()){
@@ -412,10 +426,25 @@ void Game::handleCollisions() {
   SDL_Rect spaceshipRect{spaceship->rect.x, spaceship->rect.y, spaceship->width, spaceship->height};
   SDL_Rect healingItemRect{healingItem->rect.x, healingItem->rect.y, healingItem->width, healingItem->height};
   SDL_Rect gunBoosterRect{gunBooster->rect.x, gunBooster->rect.y, gunBooster->width, gunBooster->height};
+  SDL_Rect fireLineBoosterRect{fireLineBooster->rect.x, fireLineBooster->rect.y, fireLineBooster->width, fireLineBooster->height};
+
+    if (SDL_HasIntersection(&spaceshipRect, &fireLineBoosterRect)) {
+        fireLineBooster->removeFromScreen();
+        fireLineBooster->increaseSpaceshipFireLine(spaceship);
+        healingPickUp->playSoundEffect();
+        alien->increaseDifficulty();
+        for(const std::shared_ptr<Asteroid> asteroid : asteroids) {
+            asteroid->increaseHealth();
+        }
+    }
 
   if (SDL_HasIntersection(&spaceshipRect, &gunBoosterRect)) {
       gunBooster->removeFromScreen();
       gunBooster->increaseSpaceshipFireRate(spaceship);
+      alien->increaseDifficulty();
+      for(const std::shared_ptr<Asteroid> asteroid : asteroids) {
+          asteroid->increaseHealth();
+      }
       healingPickUp->playSoundEffect();
   }
 
@@ -478,12 +507,19 @@ void Game::handleCollisions() {
 
               if (alien->isDead()) {
                   alien->givePoints(spaceship);
-                  if (spaceship->getGunLvl() <= 5) {
-                      int randomIndex = Util::getRandomNumber(0, 1);
-                      pickUps[randomIndex]->placeAtSpawnPos(alienX, alienY);
-                  } else {
-                      healingItem->placeAtSpawnPos(alienX, alienY);
+                  pickUps.clear();
+                  pickUps.push_back(healingItem);
+                  int maxRandomIndex = 0;
+                  if (spaceship->getGunLvl() < 5) {
+                      pickUps.push_back(gunBooster);
+                      maxRandomIndex++;
                   }
+                  if (spaceship->getLinesOfFire() < 5) {
+                      pickUps.push_back(fireLineBooster);
+                      maxRandomIndex++;
+                  }
+                  int randomIndex = Util::getRandomNumber(0, maxRandomIndex);
+                  pickUps[randomIndex]->placeAtSpawnPos(alienX, alienY);
               }
 
               break;
@@ -535,6 +571,7 @@ void Game::printTexture() {
     alienTexture->print(renderer, ticks);
     healingItemTexture->print(renderer, ticks);
     gunBoosterTexture->print(renderer, ticks);
+    fireLineBoosterTexture->print(renderer, ticks);
 
 
   if(!spaceshipBulletsTexture.empty()){

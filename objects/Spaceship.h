@@ -9,9 +9,9 @@
 class Spaceship : public DimensionalObject, public FlyingObject, public HealthObject
 {
 public:
-    Spaceship(int health, int speed, int x, int y, int width, int height, int fireRate, int lineOfFire) :
+    Spaceship(int health, int speed, int x, int y, int width, int height, int fireRate) :
             HealthObject(health), FlyingObject(speed), DimensionalObject(x, y, width, height), fireRate(fireRate),
-            lineOfFire(lineOfFire), bulletSpeed(10), gunLvl(1), travelSpeed(23500) {
+            linesOfFire(1), bulletSpeed(10), gunLvl(1), travelSpeed(23500) {
         points = 0;
     };
 
@@ -33,15 +33,19 @@ public:
         rect.x -= speed;
     }
 
-    std::shared_ptr<SpaceshipBullet> shoot(){
+    std::vector<std::shared_ptr<SpaceshipBullet>> shoot(){
       int x = rect.x + width / 2;
       int y = rect.y + height / 2;
 
-      std::shared_ptr<SpaceshipBullet> bullet = std::make_shared<SpaceshipBullet>(x, y, bulletSpeed);
+      std::vector<std::shared_ptr<SpaceshipBullet>> newBullets;
 
-      bullets.push_back(bullet);
+      for (int i = 1; i <= linesOfFire; i++) {
+          std::shared_ptr<SpaceshipBullet> bullet = std::make_shared<SpaceshipBullet>(x, y, bulletSpeed, i, linesOfFire);
+          bullets.push_back(bullet);
+          newBullets.push_back(bullet);
+      }
 
-      return bullet;
+      return newBullets;
     }
 
     void moveRight(){ rect.x += speed; }
@@ -56,6 +60,14 @@ public:
         fireRate+=2;
         bulletSpeed+=2;
         gunLvl++;
+    }
+
+    void increaseLinesOfFire() {
+        linesOfFire++;
+    }
+
+    int getLinesOfFire() {
+        return linesOfFire;
     }
 
     int getGunLvl() const {
@@ -77,6 +89,6 @@ private:
     int fireRate;
     int bulletSpeed;
     int gunLvl;
-    int lineOfFire;
+    int linesOfFire;
 };
 
