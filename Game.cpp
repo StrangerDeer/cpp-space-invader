@@ -559,11 +559,14 @@ void Game::printTexture() {
 }
 
 void Game::gameOverStage() {
-  GameText gameOverText{"GAME OVER",
+     Util::setTimeEnd((double)clock() / (double)CLOCKS_PER_SEC);
+    elapsedTime = Util::getTimeDuration();
+
+    GameText gameOverText{"GAME OVER",
                         DEFAULT_GAME_TEXT_FONT_PATH,
                         DEFAULT_GAME_TEXT_FONT_SIZE,
                         DEFAULT_GAME_TEXT_COLOR,
-                        Config::windowWidth / 2,
+                        Config::windowWidth / 2 - 80,
                         Config::windowHeight / 2,
                         renderer};
   GameText continueText{
@@ -571,13 +574,23 @@ void Game::gameOverStage() {
       DEFAULT_GAME_TEXT_FONT_PATH,
       DEFAULT_GAME_TEXT_FONT_SIZE,
       DEFAULT_GAME_TEXT_COLOR,
-      Config::windowWidth / 2,
+      Config::windowWidth / 2 - 80,
       (Config::windowHeight / 2) + DEFAULT_GAME_TEXT_FONT_SIZE,
       renderer
   };
   std::string hMessage = "Your score: " + std::to_string(spaceship->getPoints());
     GameText highScoreText{
             hMessage,
+            DEFAULT_GAME_TEXT_FONT_PATH,
+            DEFAULT_GAME_TEXT_FONT_SIZE,
+            DEFAULT_GAME_TEXT_COLOR,
+            (Config::windowWidth / 2) - 80,
+            (Config::windowHeight / 2) - DEFAULT_GAME_TEXT_FONT_SIZE * 2,
+            renderer
+    };
+    std::string tMessage = "Time survived: " + std::to_string(elapsedTime);
+    GameText timeText{
+            tMessage,
             DEFAULT_GAME_TEXT_FONT_PATH,
             DEFAULT_GAME_TEXT_FONT_SIZE,
             DEFAULT_GAME_TEXT_COLOR,
@@ -605,6 +618,7 @@ void Game::gameOverStage() {
       }
     }
     highScoreText.print(renderer);
+    timeText.print(renderer);
     continueText.print(renderer);
     gameOverText.print(renderer);
     SDL_RenderPresent(renderer);

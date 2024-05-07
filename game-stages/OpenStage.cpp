@@ -38,6 +38,7 @@ void OpenStage::handleEvent() {
 
     if (event.type == SDL_KEYDOWN) {
       if (event.key.keysym.sym == SDLK_SPACE) {
+          Util::setTimeBegin(((double)clock()) / (double)CLOCKS_PER_SEC);
         *isRunning = MIDDLE_GAME_STAGE_VALUE;
       }
     }

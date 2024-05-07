@@ -75,6 +75,7 @@ add_executable(cpp_space_invader main.cpp
         ui/text/SpaceshipGunLvlGameText.cpp
         ui/text/SpaceshipTravelSpeedGameText.h
         ui/text/SpaceshipTravelSpeedGameText.cpp
+        Util.cpp
 )
 
 target_link_libraries(cpp_space_invader

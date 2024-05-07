@@ -4,6 +4,8 @@
 #include <SDL.h>
 #include <SDL_mixer.h>
 
+#include "httplib.h"
+
 #include <iostream>
 #include <vector>
 #include <chrono>
@@ -69,6 +71,7 @@ private:
     Uint32 frameStart;
     int frameTime;
     std::chrono::steady_clock::time_point lastShootTime;
+    int elapsedTime;
 
     std::unique_ptr<OpenStage> openStage{nullptr};
 
