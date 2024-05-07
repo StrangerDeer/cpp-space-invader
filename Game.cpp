@@ -149,7 +149,6 @@ void Game::initLogic() {
   clearObjects();
 
   initBackgroundElements();
-  initBackgroundElements();
   initStars();
   initAsteroids();
 
