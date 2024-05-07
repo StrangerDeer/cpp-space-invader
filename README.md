@@ -89,23 +89,29 @@ Controls:
 <br>
 <br>
 
-![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/5b3b9cad-12c9-4a39-a054-675b96117459)
+![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/56e15a26-0663-428f-9301-9a9cdeeaf0f1)
 
 When starting the game, you will be met with the title screen. After pressing space, the game will begin, and you can control your spaceship ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/b1f7fc10-cc44-432b-ac6c-b581e3293d38).
 <br>
-Throughout the game, you have to catch falling stars ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/101d6603-5af6-4966-afa9-ed064d48026b) to score points (bottom right of the screen) and avoid asteroids ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/94c297bf-4ec2-4ffa-96a1-9d528a85d719) which deplete the spaceship's health upon impact (bottom left of the screen).
 
-After a while, you will be meeting hostile aliens ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/b3eff62b-e956-4f28-a8d8-8cf0f13ce163) who will not hesitate to open fire at your spaceship. Their movement is pretty unpredictable, but they can be defeated. Once defeated, it will drop eiher a healing bubble ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/e7175e9a-6d23-4390-92d8-d8f587710131) which restores some of your spaceship's health, or a gun booster bubble ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/6c61fdc9-fa82-430b-9d6f-ee71ad5d402a) which will level up your spaceship's gun, increasing its fire rate.
+Throughout the game, you have to catch falling stars ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/101d6603-5af6-4966-afa9-ed064d48026b) to score points (top right of the screen) and avoid asteroids ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/94c297bf-4ec2-4ffa-96a1-9d528a85d719) which deplete the spaceship's health upon impact (bottom left of the screen).
 
+After a while, you will be meeting hostile aliens ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/b3eff62b-e956-4f28-a8d8-8cf0f13ce163) who will not hesitate to open fire at your spaceship. Their movement is pretty unpredictable, but they can be defeated. Once defeated, it will drop one of the following items:
+- a healing bubble ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/e7175e9a-6d23-4390-92d8-d8f587710131) which restores some of your spaceship's health
+- a gun booster bubble ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/6c61fdc9-fa82-430b-9d6f-ee71ad5d402a) which will level up your spaceship's gun, increasing its fire rate
+- a gun expansion bubble ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/1c2fafdb-5e72-4dc0-8fcd-0662702b0f0f) which adds more lines of fire to the spacheship's gun
 
-![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/ae859575-f5ff-4d0a-b832-70b6a6feab40)
-![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/5494d712-ad30-494c-8210-e01d63fd3495)
+The more stars you catch, the spaceship's travelling speed increases, and aliens will become harder to defeat.
+
+![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/6107fdc2-2c63-4cd2-8531-b7c20bf481b4)
+![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/dfd45d64-5067-48ed-bc50-aceb5d58c16c)
+
 <br>
 <br>
 
 Once your spaceship's health reaches zero, you will get a game over scene with your score displayed. You can press space to start again.
 
-![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/eb9e2872-fa12-48e8-97e1-5ff802e3fdac)
+![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/480ae7f6-f9ec-4908-a4b9-880515736d40)
 
 
 <img src="https://github.com/rBabett/hyperbloom/assets/113454591/d0164a49-36f2-4c45-8ed7-ad62696df50d" width="120" height="120"/>
