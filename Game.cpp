@@ -66,6 +66,7 @@ void Game::makeObjectsMove() {
 
   healingItem->fall();
   gunBooster->fall();
+  fireLineBooster->fall();
 
   bool isAlienShooting = alien->decideIfShooting();
   if (isAlienShooting) {
@@ -158,8 +159,7 @@ void Game::initLogic() {
 
   healingItem = std::make_shared<HealingItem>(0, 0, alien->rect.w, alien->rect.h);
   gunBooster = std::make_shared<GunBoosterItem>(0, 0, alien->rect.w, alien->rect.h);
-  pickUps.push_back(healingItem);
-  pickUps.push_back(gunBooster);
+  fireLineBooster = std::make_shared<FireLineItem>(0, 0, alien->rect.w, alien->rect.h);
 }
 
 void Game::clearObjects() {
@@ -177,6 +177,10 @@ void Game::clearObjects() {
 
     if (gunBooster) {
         gunBooster = nullptr;
+    }
+
+    if (fireLineBooster) {
+        fireLineBooster = nullptr;
     }
 
     if(!stars.empty()){
@@ -311,6 +315,7 @@ void Game::initTexture() {
     alienTexture = std::make_unique<AlienTexture>(renderer, alien);
     healingItemTexture = std::make_unique<HealingItemTexture>(renderer, healingItem);
     gunBoosterTexture = std::make_unique<GunBoosterTexture>(renderer, gunBooster);
+    fireLineBoosterTexture = std::make_unique<FireLineBoosterTexture>(renderer, fireLineBooster);
 
     openStage->addTexture(spaceshipTexture);
 }
@@ -334,6 +339,10 @@ void Game::clearTextures() {
 
     if (gunBoosterTexture) {
         gunBoosterTexture = nullptr;
+    }
+
+    if (fireLineBoosterTexture) {
+        fireLineBoosterTexture = nullptr;
     }
 
     if(!starTextures.empty()){
@@ -414,6 +423,13 @@ void Game::handleCollisions() {
   SDL_Rect spaceshipRect{spaceship->rect.x, spaceship->rect.y, spaceship->width, spaceship->height};
   SDL_Rect healingItemRect{healingItem->rect.x, healingItem->rect.y, healingItem->width, healingItem->height};
   SDL_Rect gunBoosterRect{gunBooster->rect.x, gunBooster->rect.y, gunBooster->width, gunBooster->height};
+  SDL_Rect fireLineBoosterRect{fireLineBooster->rect.x, fireLineBooster->rect.y, fireLineBooster->width, fireLineBooster->height};
+
+    if (SDL_HasIntersection(&spaceshipRect, &fireLineBoosterRect)) {
+        fireLineBooster->removeFromScreen();
+        fireLineBooster->increaseSpaceshipFireLine(spaceship);
+        healingPickUp->playSoundEffect();
+    }
 
   if (SDL_HasIntersection(&spaceshipRect, &gunBoosterRect)) {
       gunBooster->removeFromScreen();
@@ -480,12 +496,19 @@ void Game::handleCollisions() {
 
               if (alien->isDead()) {
                   alien->givePoints(spaceship);
-                  if (spaceship->getGunLvl() <= 5) {
-                      int randomIndex = Util::getRandomNumber(0, 1);
-                      pickUps[randomIndex]->placeAtSpawnPos(alienX, alienY);
-                  } else {
-                      healingItem->placeAtSpawnPos(alienX, alienY);
+                  pickUps.clear();
+                  pickUps.push_back(healingItem);
+                  int maxRandomIndex = 0;
+                  if (spaceship->getGunLvl() < 5) {
+                      pickUps.push_back(gunBooster);
+                      maxRandomIndex++;
                   }
+                  if (spaceship->getLinesOfFire() < 5) {
+                      pickUps.push_back(fireLineBooster);
+                      maxRandomIndex++;
+                  }
+                  int randomIndex = Util::getRandomNumber(0, maxRandomIndex);
+                  pickUps[randomIndex]->placeAtSpawnPos(alienX, alienY);
               }
 
               break;
@@ -537,6 +560,7 @@ void Game::printTexture() {
     alienTexture->print(renderer, ticks);
     healingItemTexture->print(renderer, ticks);
     gunBoosterTexture->print(renderer, ticks);
+    fireLineBoosterTexture->print(renderer, ticks);
 
 
   if(!spaceshipBulletsTexture.empty()){

@@ -66,6 +66,10 @@ public:
         linesOfFire++;
     }
 
+    int getLinesOfFire() {
+        return linesOfFire;
+    }
+
     int getGunLvl() const {
         return gunLvl;
     }

@@ -37,6 +37,8 @@
 #include "sound/GameMusic.h"
 #include "sound/GameSoundEffect.h"
 #include "game-stages/OpenStage.h"
+#include "objects/FireLineItem.h"
+#include "ui/objectTextures/FireLineBoosterTexture.h"
 
 template<typename T>
 using shared_vector = std::vector<std::shared_ptr<T>>;
@@ -86,6 +88,7 @@ private:
     std::shared_ptr<Alien> alien{nullptr};
     std::shared_ptr<HealingItem> healingItem{nullptr};
     std::shared_ptr<GunBoosterItem> gunBooster{nullptr};
+    std::shared_ptr<FireLineItem> fireLineBooster{nullptr};
     shared_vector<PickUpItem> pickUps{};
 
     //UI
@@ -93,6 +96,7 @@ private:
     std::unique_ptr<AlienTexture> alienTexture{nullptr};
     std::unique_ptr<HealingItemTexture> healingItemTexture{nullptr};
     std::unique_ptr<GunBoosterTexture> gunBoosterTexture{nullptr};
+    std::unique_ptr<FireLineBoosterTexture> fireLineBoosterTexture{nullptr};
 
     shared_vector<StarTexture> starTextures{};
     shared_vector<AsteroidTexture> asteroidTextures{};
