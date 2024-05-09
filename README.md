@@ -99,7 +99,7 @@ Throughout the game, you have to catch falling stars ![image](https://github.com
 After a while, you will be meeting hostile aliens ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/b3eff62b-e956-4f28-a8d8-8cf0f13ce163) who will not hesitate to open fire at your spaceship. Their movement is pretty unpredictable, but they can be defeated. Once defeated, it will drop one of the following items:
 - a healing bubble ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/e7175e9a-6d23-4390-92d8-d8f587710131) which restores some of your spaceship's health
 - a gun booster bubble ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/6c61fdc9-fa82-430b-9d6f-ee71ad5d402a) which will level up your spaceship's gun, increasing its fire rate
-- a gun expansion bubble ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/1c2fafdb-5e72-4dc0-8fcd-0662702b0f0f) which adds more lines of fire to the spacheship's gun
+- a gun expansion bubble ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/1c2fafdb-5e72-4dc0-8fcd-0662702b0f0f) which adds more lines of fire to the spaceship's gun
 
 The more stars you catch, the spaceship's travelling speed increases, and aliens will become harder to defeat.
 
