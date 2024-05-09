@@ -8,11 +8,12 @@
 #include "AlienBullet.h"
 #include "FallingObject.h"
 #include "ScoreObject.h"
+#include "../ConfigGameItems.h"
 
 class Alien : public HealthObject, public FallingObject, public ScoreObject {
 public:
     Alien(int maxHp, int x, int y, int points) :
-            ScoreObject(points), HealthObject(maxHp), FallingObject(x, y, 180, 120, 2, 15, true),
+            ScoreObject(points), HealthObject(maxHp), FallingObject(x, y, 180, 120, 2, 15, true, DEFAULT_Y_MULTIPLIER),
             maxHealth(maxHp), fallingSpeed(5), shootCounter(0), shootLimit(30) {
         chooseDestination();
     };

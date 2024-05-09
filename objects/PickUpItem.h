@@ -1,11 +1,12 @@
 #pragma once
 
 #include "FallingObject.h"
+#include "../ConfigGameItems.h"
 
 class PickUpItem : public FallingObject {
 public:
     PickUpItem(int x, int y, int alienWidth, int alienHeight) :
-            FallingObject(x, y, 70, 130, 5, 5, true), alienWidth(alienWidth), alienHeight(alienHeight) {
+            FallingObject(x, y, 70, 130, 5, 5, true, DEFAULT_Y_MULTIPLIER), alienWidth(alienWidth), alienHeight(alienHeight) {
         removeFromScreen();
     };
 

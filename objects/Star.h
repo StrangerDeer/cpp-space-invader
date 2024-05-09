@@ -2,6 +2,7 @@
 
 #include "../Config.h"
 #include "FallingObject.h"
+#include "../ConfigGameItems.h"
 #include "ScoreObject.h"
 
 class Star : public FallingObject, public ScoreObject
@@ -14,7 +15,8 @@ public:
                                                height,
                                                minSpeed,
                                                maxSpeed,
-                                               true),
+                                               true,
+                                               DEFAULT_Y_MULTIPLIER),
                                                ScoreObject(points) {};
     int textureId;
 
