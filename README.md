@@ -169,7 +169,6 @@ Once your spaceship's health reaches zero, you will get a game over scene with y
 - [ ] Fix background images not appearing when restarting after a game over
 - [ ] Fix music not playing when restarting after a game over
 - [ ] Menu
-- [ ] Webpage for storing high scores
 - [ ] Shield pickup that protects the spaceship when taking damage
   - [ ] New spritesheet for the spaceship with shield
 - [ ] Add WASD to controls
@@ -177,6 +176,10 @@ Once your spaceship's health reaches zero, you will get a game over scene with y
 - [ ] Time slowing pickup that slows objects down around the spaceship
 - [ ] Crystal asteroids that drop loot
 - [ ] Extra points (star) pickup
+- [ ] New sprites for asteroids, crystal asteroids, aliens and the spaceship taking damage
+- [ ] New sprites for asteroids, crystal asteroids, aliens and the spaceship getting destroyed
+- [ ] New spaceship sprites
+  - [ ] Enable choosing between spaceships before beginning the game 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
