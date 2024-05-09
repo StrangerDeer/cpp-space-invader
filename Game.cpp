@@ -194,6 +194,10 @@ void Game::clearObjects() {
       asteroids.clear();
     }
 
+    if(!crystalAsteroids.empty()) {
+        crystalAsteroids.clear();
+    }
+
     //if(!dimensionalObjects.empty()){
       //dimensionalObjects.clear();
     //}
@@ -211,21 +215,25 @@ void Game::handleEvent() {
 
     if(event.type == SDL_KEYDOWN){
       switch (event.key.keysym.sym) {
+          case MOVE_DOWN_BUTTON2:
         case MOVE_DOWN_BUTTON:
           if(spaceship->rect.y + 50 + spaceship->height < Config::windowHeight){
             spaceship->moveDown();
           }
           break;
+          case MOVE_UP_BUTTON2:
         case MOVE_UP_BUTTON:
           if(spaceship->rect.y + 50 > 0 + spaceship->height) {
             spaceship->moveUp();
           }
           break;
+          case MOVE_RIGHT_BUTTON2:
         case MOVE_RIGHT_BUTTON:
           if(spaceship->rect.x + 60 + spaceship->width < Config::windowWidth){
             spaceship->moveRight();
           }
           break;
+          case MOVE_LEFT_BUTTON2:
         case MOVE_LEFT_BUTTON:
           if(spaceship->rect.x + 50 > 0 + spaceship->width) {
             spaceship->moveLeft();
