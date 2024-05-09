@@ -91,6 +91,7 @@ private:
     std::shared_ptr<GunBoosterItem> gunBooster{nullptr};
     std::shared_ptr<FireLineItem> fireLineBooster{nullptr};
     shared_vector<PickUpItem> pickUps{};
+    shared_vector<PickUpItem> crystalPickUps{};
 
     //UI
     std::shared_ptr<SpaceshipTexture> spaceshipTexture{nullptr};
