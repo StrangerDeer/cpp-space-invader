@@ -481,6 +481,17 @@ void Game::handleCollisions() {
       spaceship->takeDamage();
     }
   }
+
+  for (auto &crystalAst : crystalAsteroids) {
+      SDL_Rect crystalAstRect{crystalAst->rect.x, crystalAst->rect.y, crystalAst->width, crystalAst->height};
+
+      if (SDL_HasIntersection(&spaceshipRect, &crystalAstRect)) {
+          crystalAst->reset();
+          asteroidExplodes->playSoundEffect();
+          spaceship->takeDamage();
+      }
+  }
+
   for (auto &star : stars) {
 
     SDL_Rect starRect{star->rect.x, star->rect.y, star->width, star->height};
@@ -506,6 +517,8 @@ void Game::handleCollisions() {
       }
   }
 
+
+    restartLoop:
   if(!spaceship->bullets.empty()){
     for(int i = 0; i < spaceship->bullets.size(); i++){
       std::shared_ptr<SpaceshipBullet> bullet = spaceship->bullets.at(i);
@@ -560,9 +573,44 @@ void Game::handleCollisions() {
             asteroid->givePoints(spaceship);
           }
 
-          break;
+          goto restartLoop;
         }
       }
+
+        for(auto crystalAst : crystalAsteroids){
+            if(crystalAst->rect.y + crystalAst->height < 0){
+                continue;
+            }
+
+            SDL_Rect crystalAstRect{crystalAst->rect.x, crystalAst->rect.y, crystalAst->width, crystalAst->height};
+
+            if(SDL_HasIntersection(&bulletRect, &crystalAstRect)){
+                crystalAst->takeDamage();
+                spaceship->bullets.erase(spaceship->bullets.begin() + i);
+                spaceshipBulletsTexture.erase(spaceshipBulletsTexture.begin() + i);
+                int crystalX = crystalAst->rect.x;
+                int crystalY = crystalAst->rect.y;
+
+
+                if(crystalAst->isDead()){
+                    asteroidExplodes->playSoundEffect();
+                    crystalAst->givePoints(spaceship);
+
+                    crystalPickUps.clear();
+                    crystalPickUps.push_back(healingItem); //star
+                    crystalPickUps.push_back(healingItem); //star
+                    crystalPickUps.push_back(healingItem); //star
+                    crystalPickUps.push_back(healingItem); //shield
+                    crystalPickUps.push_back(healingItem); //time slow
+                    int randomIndex = Util::getRandomNumber(0, 5);
+                    crystalPickUps[randomIndex]->placeAtSpawnPos(crystalX + crystalAst->width / 2, crystalY + crystalAst->height / 2);
+                }
+
+
+                //TODO: FIX CRASH!!!!!
+                goto restartLoop;
+            }
+        }
     }
   }
 }
