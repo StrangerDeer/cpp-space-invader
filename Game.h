@@ -83,6 +83,7 @@ private:
     shared_vector<Asteroid> asteroids;
     //shared_vector<DimensionalObject> dimensionalObjects;
     shared_vector<BackgroundElement> backgroundElems;
+    shared_vector<Asteroid> crystalAsteroids;
 
     std::shared_ptr<Spaceship> spaceship{nullptr};
     std::shared_ptr<Alien> alien{nullptr};
