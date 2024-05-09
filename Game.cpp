@@ -391,6 +391,15 @@ void Game::initAsteroidTextures() {
     std::shared_ptr<AsteroidTexture> asteroidTexture = std::make_shared<AsteroidTexture>(renderer, asteroid, filepath);
     asteroidTextures.push_back(asteroidTexture);
   }
+
+    static int index = 1;
+
+  for (const std::shared_ptr<Asteroid> &asteroid : crystalAsteroids) {
+      std::string filepath = CRYSTAL_ASTEROIDS_FILEPATH + std::to_string(index) + TEXTURE_FILE_EXTENSION;
+      std::shared_ptr<AsteroidTexture> crystalAsteroidTexture = std::make_shared<AsteroidTexture>(renderer, asteroid, filepath);
+      asteroidTextures.push_back(crystalAsteroidTexture);
+      index++;
+  }
 }
 
 void Game::initStarTextures() {
@@ -728,7 +737,10 @@ void Game::initAsteroids() {
                                                              SMALL_ASTEROID_HEIGHT,
                                                              MIN_SPEED_FOR_ASTEROIDS,
                                                              MAX_SPEED_FOR_ASTEROIDS,
-                                                             SMALL_ASTEROIDS_POINT);
+                                                             SMALL_ASTEROIDS_POINT,
+                                                             ASTEROID_MIN_ROT,
+                                                             ASTEROID_MAX_ROT,
+                                                             ASTEROID_Y_MULTIPLIER);
     asteroids.push_back(a);
     fallingObjects.push_back(a);
   }
@@ -739,7 +751,10 @@ void Game::initAsteroids() {
                                                              MEDIUM_ASTEROID_HEIGHT,
                                                              MIN_SPEED_FOR_ASTEROIDS,
                                                              MAX_SPEED_FOR_ASTEROIDS,
-                                                             MEDIUM_ASTEROIDS_POINT);
+                                                             MEDIUM_ASTEROIDS_POINT,
+                                                              ASTEROID_MIN_ROT,
+                                                              ASTEROID_MAX_ROT,
+                                                              ASTEROID_Y_MULTIPLIER);
     asteroids.push_back(a);
     fallingObjects.push_back(a);
   }
@@ -750,9 +765,26 @@ void Game::initAsteroids() {
                                                              LARGE_ASTEROID_HEIGHT,
                                                              MIN_SPEED_FOR_ASTEROIDS,
                                                              MAX_SPEED_FOR_ASTEROIDS,
-                                                             LARGE_ASTEROIDS_POINT);
+                                                             LARGE_ASTEROIDS_POINT,
+                                                             ASTEROID_MIN_ROT,
+                                                             ASTEROID_MAX_ROT,
+                                                             ASTEROID_Y_MULTIPLIER);
     asteroids.push_back(a);
     fallingObjects.push_back(a);
+  }
+
+  for(int i = 0; i < CRYSTAL_ASTEROID_MAX_NUMBER; i++) {
+      std::shared_ptr<Asteroid> a = std::make_shared<Asteroid>(CRYSTAL_ASTEROID_HEALTH,
+                                                               CRYSTAL_ASTEROID_HEIGHT,
+                                                               CRYSTAL_ASTEROID_HEIGHT,
+                                                               MIN_SPEED_FOR_ASTEROIDS,
+                                                               MAX_SPEED_FOR_CRYSTAL_ASTEROIDS,
+                                                               CRYSTAL_ASTEROID_POINT,
+                                                               ASTEROID_MIN_ROT,
+                                                               CRYSTAL_ASTEROID_MAX_ROT,
+                                                               CRYSTAL_ASTEROID_Y_MULTIPLIER);
+      crystalAsteroids.push_back(a);
+      fallingObjects.push_back(a);
   }
 }
 
