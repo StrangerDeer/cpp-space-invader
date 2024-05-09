@@ -29,6 +29,7 @@ using path = fs::path;
 
 #define TEXTURE_FILEPATH (path("..") / "ui" / "textures")
 #define ASTEROIDS_FILEPATH (TEXTURE_FILEPATH / "asteroid").string()
+#define CRYSTAL_ASTEROIDS_FILEPATH (TEXTURE_FILEPATH / "crystal-asteroid").string()
 #define BACKGROUND_ELEM_FILEPATH (TEXTURE_FILEPATH / "background").string()
 #define BLUE_STAR_FILEPATH ( TEXTURE_FILEPATH / "bluestar.png").string()
 #define GREEN_STAR_FILEPATH (TEXTURE_FILEPATH / "greenstar.png" ).string()
