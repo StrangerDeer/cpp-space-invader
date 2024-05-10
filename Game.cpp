@@ -400,8 +400,8 @@ void Game::initAsteroidTextures() {
     asteroidTextures.push_back(asteroidTexture);
   }
 
-    static int index = 1;
 
+    int index = 1;
   for (const std::shared_ptr<Asteroid> &asteroid : crystalAsteroids) {
       std::string filepath = CRYSTAL_ASTEROIDS_FILEPATH + std::to_string(index) + TEXTURE_FILE_EXTENSION;
       std::shared_ptr<AsteroidTexture> crystalAsteroidTexture = std::make_shared<AsteroidTexture>(renderer, asteroid, filepath);
