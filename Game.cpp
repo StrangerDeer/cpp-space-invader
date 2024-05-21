@@ -619,7 +619,7 @@ void Game::handleCollisions() {
                     crystalPickUps.push_back(healingItem); //shield
                     crystalPickUps.push_back(healingItem); //time slow
                     int randomIndex = Util::getRandomNumber(0, 4);
-                    crystalPickUps[randomIndex]->placeAtSpawnPos(crystalX + crystalAst->width / 2, crystalY + crystalAst->height / 2);
+                    crystalPickUps[randomIndex]->placeAtSpawnPos(crystalX + crystalAst->width / 2 - starItem->width / 2, crystalY + crystalAst->height / 2 - starItem->height / 2);
                 }
 
                 goto restartLoop;
