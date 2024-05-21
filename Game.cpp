@@ -70,6 +70,7 @@ void Game::makeObjectsMove() {
   healingItem->fall();
   gunBooster->fall();
   fireLineBooster->fall();
+  starItem->fall();
 
   bool isAlienShooting = alien->decideIfShooting();
   if (isAlienShooting) {
@@ -155,15 +156,16 @@ void Game::initLogic() {
   initBackgroundElements();
   initStars();
   initAsteroids();
+  initUniqueObjects();
+}
 
-  spaceship = std::make_shared<Spaceship>(10, 75, Config::windowWidth * 0.5 - 50, Config::windowHeight * 0.85, 100, 100, 3);
-
-  alien = std::make_shared<Alien>(5, Config::windowWidth * 0.5, Config::windowHeight * -15, 50);
-
-  healingItem = std::make_shared<HealingItem>(0, 0, alien->rect.w, alien->rect.h);
-  gunBooster = std::make_shared<GunBoosterItem>(0, 0, alien->rect.w, alien->rect.h);
-  fireLineBooster = std::make_shared<FireLineItem>(0, 0, alien->rect.w, alien->rect.h);
-  starItem = std::make_shared<StarItem>(0, 0, alien->rect.w, alien->rect.h);
+void Game::initUniqueObjects() {
+    spaceship = std::make_shared<Spaceship>(10, 75, Config::windowWidth * 0.5 - 50, Config::windowHeight * 0.85, 100, 100, 3);
+    alien = std::make_shared<Alien>(5, Config::windowWidth * 0.5, Config::windowHeight * -15, 50);
+    healingItem = std::make_shared<HealingItem>(0, 0, alien->rect.w, alien->rect.h);
+    gunBooster = std::make_shared<GunBoosterItem>(0, 0, alien->rect.w, alien->rect.h);
+    fireLineBooster = std::make_shared<FireLineItem>(0, 0, alien->rect.w, alien->rect.h);
+    starItem = std::make_shared<StarItem>(0, 0, alien->rect.w, alien->rect.h);
 }
 
 void Game::clearObjects() {
@@ -202,10 +204,6 @@ void Game::clearObjects() {
     if(!crystalAsteroids.empty()) {
         crystalAsteroids.clear();
     }
-
-    //if(!dimensionalObjects.empty()){
-      //dimensionalObjects.clear();
-    //}
 
     if(!backgroundElems.empty()){
       backgroundElems.clear();
@@ -453,6 +451,15 @@ void Game::handleCollisions() {
   SDL_Rect healingItemRect{healingItem->rect.x, healingItem->rect.y, healingItem->width, healingItem->height};
   SDL_Rect gunBoosterRect{gunBooster->rect.x, gunBooster->rect.y, gunBooster->width, gunBooster->height};
   SDL_Rect fireLineBoosterRect{fireLineBooster->rect.x, fireLineBooster->rect.y, fireLineBooster->width, fireLineBooster->height};
+  SDL_Rect starItemRect{starItem->rect.x, starItem->rect.y, starItem->width, starItem->height};
+
+  //switch-case
+
+  if (SDL_HasIntersection(&spaceshipRect, &starItemRect)) {
+      starItem->removeFromScreen();
+      starItem->givePoints(spaceship);
+      healingPickUp->playSoundEffect();
+  }
 
     if (SDL_HasIntersection(&spaceshipRect, &fireLineBoosterRect)) {
         fireLineBooster->removeFromScreen();
@@ -606,9 +613,9 @@ void Game::handleCollisions() {
                     crystalAst->givePoints(spaceship);
 
                     crystalPickUps.clear();
-                    crystalPickUps.push_back(healingItem); //star
-                    crystalPickUps.push_back(healingItem); //star
-                    crystalPickUps.push_back(healingItem); //star
+                    crystalPickUps.push_back(starItem); //star
+                    crystalPickUps.push_back(starItem); //star
+                    crystalPickUps.push_back(starItem); //star
                     crystalPickUps.push_back(healingItem); //shield
                     crystalPickUps.push_back(healingItem); //time slow
                     int randomIndex = Util::getRandomNumber(0, 4);
@@ -644,6 +651,7 @@ void Game::printTexture() {
     healingItemTexture->print(renderer, ticks);
     gunBoosterTexture->print(renderer, ticks);
     fireLineBoosterTexture->print(renderer, ticks);
+    starItemTexture->print(renderer, ticks);
 
 
   if(!spaceshipBulletsTexture.empty()){

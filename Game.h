@@ -148,6 +148,8 @@ private:
     void clearTextures();
 
     void increaseGameDifficulty() const;
+
+    void initUniqueObjects();
 };
 
 #endif //CPP_SPACE_INVADER_GAME_H
