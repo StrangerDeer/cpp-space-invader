@@ -80,6 +80,7 @@ add_executable(cpp_space_invader main.cpp
         objects/FireLineItem.h
         ui/objectTextures/FireLineBoosterTexture.h
         ui/objectTextures/FireLineBoosterTexture.cpp
+        objects/StarItem.h
 )
 
 target_link_libraries(cpp_space_invader
