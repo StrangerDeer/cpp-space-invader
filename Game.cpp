@@ -163,6 +163,7 @@ void Game::initLogic() {
   healingItem = std::make_shared<HealingItem>(0, 0, alien->rect.w, alien->rect.h);
   gunBooster = std::make_shared<GunBoosterItem>(0, 0, alien->rect.w, alien->rect.h);
   fireLineBooster = std::make_shared<FireLineItem>(0, 0, alien->rect.w, alien->rect.h);
+  starItem = std::make_shared<StarItem>(0, 0, alien->rect.w, alien->rect.h);
 }
 
 void Game::clearObjects() {
@@ -184,6 +185,10 @@ void Game::clearObjects() {
 
     if (fireLineBooster) {
         fireLineBooster = nullptr;
+    }
+
+    if (starItem) {
+        starItem = nullptr;
     }
 
     if(!stars.empty()){
@@ -327,15 +332,12 @@ void Game::initTexture() {
     healingItemTexture = std::make_unique<HealingItemTexture>(renderer, healingItem);
     gunBoosterTexture = std::make_unique<GunBoosterTexture>(renderer, gunBooster);
     fireLineBoosterTexture = std::make_unique<FireLineBoosterTexture>(renderer, fireLineBooster);
+    starItemTexture = std::make_unique<StarItemTexture>(renderer, starItem);
 
     openStage->addTexture(spaceshipTexture);
 }
 
 void Game::clearTextures() {
-    if(!backgroundTextures.empty()) {
-        backgroundTextures.clear();
-    }
-
     if(spaceshipTexture){
         spaceshipTexture = nullptr;
     }
@@ -356,6 +358,10 @@ void Game::clearTextures() {
         fireLineBoosterTexture = nullptr;
     }
 
+    if (starItemTexture) {
+        starItemTexture = nullptr;
+    }
+
     if(!starTextures.empty()){
       starTextures.clear();
     }
@@ -372,6 +378,9 @@ void Game::clearTextures() {
         alienBulletsTexture.clear();
     }
 
+    if(!backgroundTextures.empty()) {
+        backgroundTextures.clear();
+    }
 
     if(!texts.empty()){
       texts.clear();

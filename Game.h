@@ -39,6 +39,8 @@
 #include "game-stages/OpenStage.h"
 #include "objects/FireLineItem.h"
 #include "ui/objectTextures/FireLineBoosterTexture.h"
+#include "objects/StarItem.h"
+#include "ui/objectTextures/StarItemTexture.h"
 
 template<typename T>
 using shared_vector = std::vector<std::shared_ptr<T>>;
@@ -90,6 +92,7 @@ private:
     std::shared_ptr<HealingItem> healingItem{nullptr};
     std::shared_ptr<GunBoosterItem> gunBooster{nullptr};
     std::shared_ptr<FireLineItem> fireLineBooster{nullptr};
+    std::shared_ptr<StarItem> starItem{nullptr};
     shared_vector<PickUpItem> pickUps{};
     shared_vector<PickUpItem> crystalPickUps{};
 
@@ -99,6 +102,7 @@ private:
     std::unique_ptr<HealingItemTexture> healingItemTexture{nullptr};
     std::unique_ptr<GunBoosterTexture> gunBoosterTexture{nullptr};
     std::unique_ptr<FireLineBoosterTexture> fireLineBoosterTexture{nullptr};
+    std::unique_ptr<StarItemTexture> starItemTexture{nullptr};
 
     shared_vector<StarTexture> starTextures{};
     shared_vector<AsteroidTexture> asteroidTextures{};
