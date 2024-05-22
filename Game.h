@@ -39,6 +39,8 @@
 #include "game-stages/OpenStage.h"
 #include "objects/FireLineItem.h"
 #include "ui/objectTextures/FireLineBoosterTexture.h"
+#include "objects/StarItem.h"
+#include "ui/objectTextures/StarItemTexture.h"
 
 template<typename T>
 using shared_vector = std::vector<std::shared_ptr<T>>;
@@ -83,13 +85,16 @@ private:
     shared_vector<Asteroid> asteroids;
     //shared_vector<DimensionalObject> dimensionalObjects;
     shared_vector<BackgroundElement> backgroundElems;
+    shared_vector<Asteroid> crystalAsteroids;
 
     std::shared_ptr<Spaceship> spaceship{nullptr};
     std::shared_ptr<Alien> alien{nullptr};
     std::shared_ptr<HealingItem> healingItem{nullptr};
     std::shared_ptr<GunBoosterItem> gunBooster{nullptr};
     std::shared_ptr<FireLineItem> fireLineBooster{nullptr};
+    std::shared_ptr<StarItem> starItem{nullptr};
     shared_vector<PickUpItem> pickUps{};
+    shared_vector<PickUpItem> crystalPickUps{};
 
     //UI
     std::shared_ptr<SpaceshipTexture> spaceshipTexture{nullptr};
@@ -97,6 +102,7 @@ private:
     std::unique_ptr<HealingItemTexture> healingItemTexture{nullptr};
     std::unique_ptr<GunBoosterTexture> gunBoosterTexture{nullptr};
     std::unique_ptr<FireLineBoosterTexture> fireLineBoosterTexture{nullptr};
+    std::unique_ptr<StarItemTexture> starItemTexture{nullptr};
 
     shared_vector<StarTexture> starTextures{};
     shared_vector<AsteroidTexture> asteroidTextures{};
@@ -142,6 +148,10 @@ private:
     void clearTextures();
 
     void increaseGameDifficulty() const;
+
+    void initUniqueObjects();
+
+    void spaceshipTakesDamage();
 };
 
 #endif //CPP_SPACE_INVADER_GAME_H

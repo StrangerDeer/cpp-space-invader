@@ -8,7 +8,7 @@
 static std::vector<std::shared_ptr<BackgroundElement>> elements;
 
 BackgroundElement::BackgroundElement(int x, int y, int width, int height, int minSpeed, int maxSpeed, bool resettable)
-        : FallingObject(x, y, width, height, minSpeed, maxSpeed, resettable) {
+        : FallingObject(x, y, width, height, minSpeed, maxSpeed, resettable, DEFAULT_Y_MULTIPLIER) {
     elements.push_back(static_cast<const std::shared_ptr<BackgroundElement>>(this));
 }
 

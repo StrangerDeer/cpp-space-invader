@@ -5,11 +5,11 @@
 
 class Asteroid : public FallingObject, public ScoreObject, public HealthObject {
  public:
-  Asteroid(int maxHp, int width, int height, int minSpeed, int maxSpeed, int points) :
+  Asteroid(int maxHp, int width, int height, int minSpeed, int maxSpeed, int points, int minRot, int maxRot, int maxYMultiplier, int ind) :
       HealthObject(maxHp), FallingObject(Util::getRandomNumber(0, Config::windowWidth),
-                                         Util::getRandomNumber(-Config::windowHeight * 3, (0 - Config::windowHeight) / 2),
-                                         width, height, minSpeed, maxSpeed, true),
-      ScoreObject(points), maxHealth(maxHp) {
+                                         Util::getRandomNumber(-Config::windowHeight * maxYMultiplier, (0 - Config::windowHeight) / 2),
+                                         width, height, minSpeed, maxSpeed, true, maxYMultiplier),
+      ScoreObject(points), maxHealth(maxHp), minRotation(minRot), maxRotation(maxRot), index(ind) {
         getRandomRotation();
   };
 
@@ -35,12 +35,15 @@ class Asteroid : public FallingObject, public ScoreObject, public HealthObject {
       maxHealth++;
   }
 
+  int index;
+
  private:
   int maxHealth;
   double angleRotation;
+  int minRotation, maxRotation;
 
   void getRandomRotation() {
-    int rotation = Util::getRandomNumber(1, 7);
+    int rotation = Util::getRandomNumber(minRotation, maxRotation);
     angleRotation = (double) rotation / 10;
   }
 };

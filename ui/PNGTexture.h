@@ -12,21 +12,21 @@ class PNGTexture {
 public:
     PNGTexture(SDL_Renderer* renderer, const std::string& filePath)
     {
-        loadTexture(renderer,  filePath);
+        loadTexture(renderer,  filePath, currentTexture);
     }
 
     ~PNGTexture(){
-        if(texture){
-            SDL_DestroyTexture(texture);
+        if(currentTexture){
+            SDL_DestroyTexture(currentTexture);
         }
     }
 
     virtual void print(SDL_Renderer* renderer, Uint32 ticks){};
 
 protected:
-    SDL_Texture* texture{nullptr};
+    SDL_Texture* currentTexture{nullptr};
 
-    void loadTexture(SDL_Renderer* renderer,  const std::string& filePath);
+    void loadTexture(SDL_Renderer* renderer,  const std::string& filePath, SDL_Texture*& texture);
 };
 
 

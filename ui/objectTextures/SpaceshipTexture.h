@@ -5,12 +5,13 @@
 
 #include "../PNGTexture.h"
 #include "../../objects/Spaceship.h"
+#include "../DamageTexture.h"
 
-class SpaceshipTexture : public PNGTexture {
+class SpaceshipTexture : public DamageTexture {
 
 public:
     SpaceshipTexture(SDL_Renderer* renderer, const std::shared_ptr<Spaceship>& spaceship) :
-        PNGTexture(renderer, "../ui/textures/spaceship.png")
+        DamageTexture(renderer, "../ui/textures/spaceship.png", "../ui/textures/spaceshipdamage.png")
     {
         if(!spaceship){
             std::cerr << "Spaceship doesn't exist!" << std::endl;

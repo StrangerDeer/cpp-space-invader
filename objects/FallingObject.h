@@ -5,15 +5,15 @@
 
 class FallingObject : public DimensionalObject {
  public:
-  FallingObject(int x, int y, int width, int height, int minSpeed, int maxSpeed, bool resettable) :
-      DimensionalObject(x, y, width, height), minSpeed(minSpeed), maxSpeed(maxSpeed), isResettable(resettable) {
+  FallingObject(int x, int y, int width, int height, int minSpeed, int maxSpeed, bool resettable, int yMulti) :
+      DimensionalObject(x, y, width, height), minSpeed(minSpeed), maxSpeed(maxSpeed), isResettable(resettable), yMultiplier(yMulti) {
     setRandomSpeed();
   };
 
   virtual void placeAtStartingPos() {
     setRandomSpeed();
     rect.x = Util::getRandomNumber(0, Config::windowWidth - width);
-    rect.y = Util::getRandomNumber(-Config::windowHeight * 3, 0 - rect.h);
+    rect.y = Util::getRandomNumber(-Config::windowHeight * yMultiplier, 0 - rect.h);
   };
 
   void setRandomSpeed() {
@@ -32,6 +32,7 @@ class FallingObject : public DimensionalObject {
  protected:
   int minSpeed;
   int maxSpeed;
+  int yMultiplier;
   int currentSpeed{};
   bool isResettable;
 };

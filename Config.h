@@ -16,6 +16,10 @@
 #define MOVE_UP_BUTTON SDLK_UP
 #define MOVE_RIGHT_BUTTON SDLK_RIGHT
 #define MOVE_LEFT_BUTTON SDLK_LEFT
+#define MOVE_DOWN_BUTTON2 SDLK_s
+#define MOVE_UP_BUTTON2 SDLK_w
+#define MOVE_RIGHT_BUTTON2 SDLK_d
+#define MOVE_LEFT_BUTTON2 SDLK_a
 #define SPACESHIP_SHOOT_BUTTON SDLK_SPACE
 
 #define TEXTURE_FILE_EXTENSION ".png"
@@ -29,6 +33,7 @@ using path = fs::path;
 
 #define TEXTURE_FILEPATH (path("..") / "ui" / "textures")
 #define ASTEROIDS_FILEPATH (TEXTURE_FILEPATH / "asteroid").string()
+#define CRYSTAL_ASTEROIDS_FILEPATH (TEXTURE_FILEPATH / "crystal-asteroid").string()
 #define BACKGROUND_ELEM_FILEPATH (TEXTURE_FILEPATH / "background").string()
 #define BLUE_STAR_FILEPATH ( TEXTURE_FILEPATH / "bluestar.png").string()
 #define GREEN_STAR_FILEPATH (TEXTURE_FILEPATH / "greenstar.png" ).string()

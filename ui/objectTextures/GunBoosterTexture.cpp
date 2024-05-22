@@ -6,7 +6,7 @@ void GunBoosterTexture::print(SDL_Renderer *renderer, Uint32 ticks) {
         return;
     }
 
-    SDL_QueryTexture(texture, nullptr, nullptr, &gunBoosterItem->rect.w, &gunBoosterItem->rect.h);
+    SDL_QueryTexture(currentTexture, nullptr, nullptr, &gunBoosterItem->rect.w, &gunBoosterItem->rect.h);
     SDL_Rect dstrect = { gunBoosterItem->rect.x, gunBoosterItem->rect.y, gunBoosterItem->width, gunBoosterItem->height };
-    SDL_RenderCopy(renderer, texture, nullptr, &dstrect);
+    SDL_RenderCopy(renderer, currentTexture, nullptr, &dstrect);
 }

@@ -5,12 +5,13 @@
 #include "../PNGTexture.h"
 #include "../../objects/Star.h"
 #include "../../objects/Asteroid.h"
+#include "../DamageTexture.h"
 
-class AsteroidTexture : public PNGTexture {
+class AsteroidTexture : public DamageTexture {
 
 public:
-    AsteroidTexture(SDL_Renderer* renderer, const std::shared_ptr<Asteroid>& asteroid1, const std::string& filepath) :
-        PNGTexture(renderer, filepath)
+    AsteroidTexture(SDL_Renderer* renderer, const std::shared_ptr<Asteroid>& asteroid1, const std::string& filepath, const std::string& damageFilepath, int ind) :
+        DamageTexture(renderer, filepath, damageFilepath), index(ind)
     {
         if(!asteroid1){
             std::cerr << "Asteroid1 doesn't exist!" << std::endl;
@@ -20,6 +21,7 @@ public:
     };
 
     void print(SDL_Renderer* renderer, Uint32 ticks) override;
+    int index;
 
 private:
     std::shared_ptr<Asteroid> asteroid{nullptr};
