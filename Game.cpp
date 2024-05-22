@@ -34,6 +34,9 @@ void Game::middleGameStage() {
     if(spaceship->getHealth() <= 0){
         *isRunning = 3;
     }
+
+    int ticks = SDL_GetTicks();
+    alienTexture->updateTexture(ticks);
 }
 
 void Game::increaseGameDifficulty() const {

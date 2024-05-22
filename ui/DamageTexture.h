@@ -27,7 +27,7 @@ public:
     }
 
     void swapTexture();
-    void updateTexture();
+    void updateTexture(int ticks);
 
 protected:
     SDL_Texture* damageTexture{nullptr};

@@ -9,9 +9,8 @@ void DamageTexture::swapTexture() {
     }
 }
 
-void DamageTexture::updateTexture() {
-    int ticks = SDL_GetTicks();
-    if (isSwapped && (ticks - swapStartTime) >= 1000) {  // switch back after 1 second
+void DamageTexture::updateTexture(int ticks) {
+    if (isSwapped && (ticks - swapStartTime) >= 250) {
         currentTexture = originalTexture;
         isSwapped = false;
     }
