@@ -38,6 +38,9 @@ void Game::middleGameStage() {
     int ticks = SDL_GetTicks();
     alienTexture->updateTexture(ticks);
     spaceshipTexture->updateTexture(ticks);
+    for (auto asteroid : asteroidTextures) {
+        asteroid->updateTexture(ticks);
+    }
 }
 
 void Game::increaseGameDifficulty() const {
@@ -407,7 +410,8 @@ void Game::initAsteroidTextures() {
   for (const std::shared_ptr<Asteroid> &asteroid : asteroids) {
     int randomIndex = Util::getRandomNumber(1, 5);
     std::string filepath = ASTEROIDS_FILEPATH + std::to_string(randomIndex) + TEXTURE_FILE_EXTENSION;
-    std::shared_ptr<AsteroidTexture> asteroidTexture = std::make_shared<AsteroidTexture>(renderer, asteroid, filepath);
+    std::string damageFilepath = ASTEROIDS_FILEPATH + std::to_string((randomIndex)) + "damage" + TEXTURE_FILE_EXTENSION;
+    std::shared_ptr<AsteroidTexture> asteroidTexture = std::make_shared<AsteroidTexture>(renderer, asteroid, filepath, damageFilepath, asteroid->index);
     asteroidTextures.push_back(asteroidTexture);
   }
 
@@ -415,7 +419,8 @@ void Game::initAsteroidTextures() {
     int index = 1;
   for (const std::shared_ptr<Asteroid> &asteroid : crystalAsteroids) {
       std::string filepath = CRYSTAL_ASTEROIDS_FILEPATH + std::to_string(index) + TEXTURE_FILE_EXTENSION;
-      std::shared_ptr<AsteroidTexture> crystalAsteroidTexture = std::make_shared<AsteroidTexture>(renderer, asteroid, filepath);
+      std::string damageFilepath = CRYSTAL_ASTEROIDS_FILEPATH + std::to_string((index)) + "damage" + TEXTURE_FILE_EXTENSION;
+      std::shared_ptr<AsteroidTexture> crystalAsteroidTexture = std::make_shared<AsteroidTexture>(renderer, asteroid, filepath, damageFilepath, asteroid->index);
       asteroidTextures.push_back(crystalAsteroidTexture);
       index++;
   }
@@ -583,6 +588,11 @@ void Game::handleCollisions() {
 
         if(SDL_HasIntersection(&bulletRect, &asteroidRect)){
           asteroid->takeDamage();
+          for (const auto& asteroidText : asteroidTextures) {
+              if (asteroidText->index == asteroid->index) {
+                  asteroidText->swapTexture();
+              }
+          }
           spaceship->bullets.erase(spaceship->bullets.begin() + i);
           spaceshipBulletsTexture.erase(spaceshipBulletsTexture.begin() + i);
 
@@ -604,6 +614,11 @@ void Game::handleCollisions() {
 
             if(SDL_HasIntersection(&bulletRect, &crystalAstRect)){
                 crystalAst->takeDamage();
+                for (const auto& asteroidText : asteroidTextures) {
+                    if (asteroidText->index == crystalAst->index) {
+                        asteroidText->swapTexture();
+                    }
+                }
                 spaceship->bullets.erase(spaceship->bullets.begin() + i);
                 spaceshipBulletsTexture.erase(spaceshipBulletsTexture.begin() + i);
                 int crystalX = crystalAst->rect.x;
@@ -810,6 +825,7 @@ void Game::initStars() {
 }
 
 void Game::initAsteroids() {
+    int index = 0;
 
   for(int i = 0; i < SMALL_ASTEROID_MAX_NUMBER; i++){
     std::shared_ptr<Asteroid> a = std::make_shared<Asteroid>(SMALL_ASTEROID_HEALTH,
@@ -820,9 +836,11 @@ void Game::initAsteroids() {
                                                              SMALL_ASTEROIDS_POINT,
                                                              ASTEROID_MIN_ROT,
                                                              ASTEROID_MAX_ROT,
-                                                             ASTEROID_Y_MULTIPLIER);
+                                                             ASTEROID_Y_MULTIPLIER,
+                                                             index);
     asteroids.push_back(a);
     fallingObjects.push_back(a);
+    index++;
   }
 
   for(int i = 0; i < MEDIUM_ASTEROID_MAX_NUMBER; i++){
@@ -834,9 +852,11 @@ void Game::initAsteroids() {
                                                              MEDIUM_ASTEROIDS_POINT,
                                                               ASTEROID_MIN_ROT,
                                                               ASTEROID_MAX_ROT,
-                                                              ASTEROID_Y_MULTIPLIER);
+                                                              ASTEROID_Y_MULTIPLIER,
+                                                              index);
     asteroids.push_back(a);
     fallingObjects.push_back(a);
+    index++;
   }
 
   for(int i = 0; i < LARGE_ASTEROID_MAX_NUMBER; i++){
@@ -848,9 +868,11 @@ void Game::initAsteroids() {
                                                              LARGE_ASTEROIDS_POINT,
                                                              ASTEROID_MIN_ROT,
                                                              ASTEROID_MAX_ROT,
-                                                             ASTEROID_Y_MULTIPLIER);
+                                                             ASTEROID_Y_MULTIPLIER,
+                                                             index);
     asteroids.push_back(a);
     fallingObjects.push_back(a);
+    index++;
   }
 
   for(int i = 0; i < CRYSTAL_ASTEROID_MAX_NUMBER; i++) {
@@ -862,9 +884,11 @@ void Game::initAsteroids() {
                                                                CRYSTAL_ASTEROID_POINT,
                                                                ASTEROID_MIN_ROT,
                                                                CRYSTAL_ASTEROID_MAX_ROT,
-                                                               CRYSTAL_ASTEROID_Y_MULTIPLIER);
+                                                               CRYSTAL_ASTEROID_Y_MULTIPLIER,
+                                                               index);
       crystalAsteroids.push_back(a);
       fallingObjects.push_back(a);
+      index++;
   }
 }
 
