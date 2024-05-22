@@ -545,6 +545,7 @@ void Game::handleCollisions() {
 
           if (SDL_HasIntersection(&bulletRect, &alienRect)) {
               alien->takeDamage();
+              alienTexture->swapTexture();
               objectHitByBullet->playSoundEffect();
               spaceship->bullets.erase(spaceship->bullets.begin() + i);
               spaceshipBulletsTexture.erase(spaceshipBulletsTexture.begin() + i);
