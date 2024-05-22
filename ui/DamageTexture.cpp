@@ -10,7 +10,7 @@ void DamageTexture::swapTexture() {
 }
 
 void DamageTexture::updateTexture(int ticks) {
-    if (isSwapped && (ticks - swapStartTime) >= 250) {
+    if (isSwapped && (ticks - swapStartTime) >= 150) {
         currentTexture = originalTexture;
         isSwapped = false;
     }
