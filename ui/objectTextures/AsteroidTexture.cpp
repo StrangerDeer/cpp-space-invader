@@ -2,7 +2,7 @@
 
 void AsteroidTexture::print(SDL_Renderer *renderer, Uint32 ticks) {
     if(!asteroid){
-        std::cerr << "Asteroid1's damageTexture doesn't exist!" << std::endl;
+        std::cerr << "Asteroid1's texture doesn't exist!" << std::endl;
         return;
     }
 
