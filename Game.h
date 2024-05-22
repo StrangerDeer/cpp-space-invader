@@ -150,6 +150,8 @@ private:
     void increaseGameDifficulty() const;
 
     void initUniqueObjects();
+
+    void spaceshipTakesDamage();
 };
 
 #endif //CPP_SPACE_INVADER_GAME_H

@@ -37,6 +37,7 @@ void Game::middleGameStage() {
 
     int ticks = SDL_GetTicks();
     alienTexture->updateTexture(ticks);
+    spaceshipTexture->updateTexture(ticks);
 }
 
 void Game::increaseGameDifficulty() const {
@@ -496,8 +497,7 @@ void Game::handleCollisions() {
 
     if (SDL_HasIntersection(&spaceshipRect, &asteroidRect)) {
       asteroid->reset();
-      asteroidExplodes->playSoundEffect();
-      spaceship->takeDamage();
+        spaceshipTakesDamage();
     }
   }
 
@@ -506,8 +506,7 @@ void Game::handleCollisions() {
 
       if (SDL_HasIntersection(&spaceshipRect, &crystalAstRect)) {
           crystalAst->reset();
-          asteroidExplodes->playSoundEffect();
-          spaceship->takeDamage();
+          spaceshipTakesDamage();
       }
   }
 
@@ -528,8 +527,7 @@ void Game::handleCollisions() {
           SDL_Rect bulletRect{bullet->bulletRect.x, bullet->bulletRect.y, bullet->width, bullet->height};
 
           if (SDL_HasIntersection(&bulletRect, &spaceshipRect)) {
-              spaceship->takeDamage();
-              asteroidExplodes->playSoundEffect();
+              spaceshipTakesDamage();
               alien->bullets.erase(alien->bullets.begin() + i);
               alienBulletsTexture.erase(alienBulletsTexture.begin() + i);
           }
@@ -631,6 +629,12 @@ void Game::handleCollisions() {
         }
     }
   }
+}
+
+void Game::spaceshipTakesDamage() {
+    asteroidExplodes->playSoundEffect();
+    spaceship->takeDamage();
+    spaceshipTexture->swapTexture();
 }
 
 void Game::printTexture() {
