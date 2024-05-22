@@ -6,7 +6,7 @@ void HealingItemTexture::print(SDL_Renderer *renderer, Uint32 ticks) {
         return;
     }
 
-    SDL_QueryTexture(texture, nullptr, nullptr, &healingItem->rect.w, &healingItem->rect.h);
+    SDL_QueryTexture(currentTexture, nullptr, nullptr, &healingItem->rect.w, &healingItem->rect.h);
     SDL_Rect dstrect = { healingItem->rect.x, healingItem->rect.y, healingItem->width, healingItem->height };
-    SDL_RenderCopy(renderer, texture, nullptr, &dstrect);
+    SDL_RenderCopy(renderer, currentTexture, nullptr, &dstrect);
 }

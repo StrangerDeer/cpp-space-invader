@@ -6,7 +6,7 @@ void BackgroundTexture::print(SDL_Renderer *renderer, Uint32 ticks) {
         return;
     }
 
-    SDL_QueryTexture(texture, nullptr, nullptr, &elem->rect.w, &elem->rect.h);
+    SDL_QueryTexture(currentTexture, nullptr, nullptr, &elem->rect.w, &elem->rect.h);
     SDL_Rect dstrect = { elem->rect.x, elem->rect.y, elem->width, elem->height};
-    SDL_RenderCopy(renderer, texture, nullptr, &dstrect);
+    SDL_RenderCopy(renderer, currentTexture, nullptr, &dstrect);
 }

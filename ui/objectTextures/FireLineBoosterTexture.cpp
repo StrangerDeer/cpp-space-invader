@@ -6,7 +6,7 @@ void FireLineBoosterTexture::print(SDL_Renderer *renderer, Uint32 ticks) {
         return;
     }
 
-    SDL_QueryTexture(texture, nullptr, nullptr, &fireLineBooster->rect.w, &fireLineBooster->rect.h);
+    SDL_QueryTexture(currentTexture, nullptr, nullptr, &fireLineBooster->rect.w, &fireLineBooster->rect.h);
     SDL_Rect dstrect = { fireLineBooster->rect.x, fireLineBooster->rect.y, fireLineBooster->width, fireLineBooster->height };
-    SDL_RenderCopy(renderer, texture, nullptr, &dstrect);
+    SDL_RenderCopy(renderer, currentTexture, nullptr, &dstrect);
 }
