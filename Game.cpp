@@ -613,9 +613,9 @@ void Game::handleCollisions() {
                     crystalAst->givePoints(spaceship);
 
                     crystalPickUps.clear();
-                    crystalPickUps.push_back(starItem); //star
-                    crystalPickUps.push_back(starItem); //star
-                    crystalPickUps.push_back(starItem); //star
+                    crystalPickUps.push_back(starItem);
+                    crystalPickUps.push_back(starItem);
+                    crystalPickUps.push_back(starItem);
                     crystalPickUps.push_back(healingItem); //shield
                     crystalPickUps.push_back(healingItem); //time slow
                     int randomIndex = Util::getRandomNumber(0, 4);
