@@ -83,6 +83,8 @@ add_executable(cpp_space_invader main.cpp
         objects/StarItem.h
         ui/objectTextures/StarItemTexture.h
         ui/objectTextures/StarItemTexture.cpp
+        ui/DamageTexture.cpp
+        ui/DamageTexture.h
 )
 
 target_link_libraries(cpp_space_invader
