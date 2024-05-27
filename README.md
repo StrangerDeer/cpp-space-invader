@@ -161,6 +161,10 @@ Once your spaceship's health reaches zero, you will get a game over scene with y
 - [X] Text for current game difficulty (speed)
 - [X] Gun pickup that adds more lines of fire
   - [X] Picking up increases alien and asteroids' HP
+- [X] Add WASD to controls
+- [X] Crystal asteroids that drop loot
+- [X] Extra points (star) pickup
+- [X] New sprites for asteroids, crystal asteroids, aliens and the spaceship taking damage
 
 ### Planned Features:
 - [ ] Looping background music
@@ -170,13 +174,9 @@ Once your spaceship's health reaches zero, you will get a game over scene with y
 - [ ] Fix music not playing when restarting after a game over
 - [ ] Menu
 - [ ] Shield pickup that protects the spaceship when taking damage
-  - [ ] New spritesheet for the spaceship with shield
-- [ ] Add WASD to controls
+  - [ ] Place shield sprite over spaceship's when active
 - [ ] Enable pausing the game
 - [ ] Time slowing pickup that slows objects down around the spaceship
-- [ ] Crystal asteroids that drop loot
-- [ ] Extra points (star) pickup
-- [ ] New sprites for asteroids, crystal asteroids, aliens and the spaceship taking damage
 - [ ] New sprites for asteroids, crystal asteroids, aliens and the spaceship getting destroyed
 - [ ] New spaceship sprites
   - [ ] Enable choosing between spaceships before beginning the game 
