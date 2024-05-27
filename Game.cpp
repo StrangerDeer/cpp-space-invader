@@ -12,6 +12,7 @@ void Game::run() {
 		case OPENING_STAGE_VALUE: openStage->run(renderer); break;
 		case MIDDLE_GAME_STAGE_VALUE: middleGameStage(); break;
 		case GAME_OVER_STAGE_VALUE: gameOverStage(); break;
+        case PAUSE_STAGE_VALUE: pauseStage(); break;
 		default:;
 	}
 
@@ -24,7 +25,7 @@ void Game::run() {
 }
 
 void Game::middleGameStage() {
-	handleEvent();
+    handleMiddleGameEvent();
 	handleCollisions();
 	makeObjectsMove();
 	printTexture();
@@ -231,55 +232,58 @@ void Game::clearObjects() {
 	}
 }
 
-void Game::handleEvent() {
+void Game::handleMiddleGameEvent() {
   while (SDL_PollEvent(&event)) {
-	if (event.type == QUIT || event.key.keysym.sym == QUIT_BUTTON) {
-	  *isRunning = 0;
-	}
+      if (event.type == QUIT || event.key.keysym.sym == QUIT_BUTTON) {
+          *isRunning = 0;
+      }
 
 	if(event.type == SDL_KEYDOWN){
 	  switch (event.key.keysym.sym) {
+          case PAUSE_BUTTON:
+                  *isRunning = PAUSE_STAGE_VALUE;
+                  break;
 		  case MOVE_DOWN_BUTTON2:
-		case MOVE_DOWN_BUTTON:
-		  if(spaceship->rect.y + 50 + spaceship->height < Config::windowHeight){
-			spaceship->moveDown();
-		  }
-		  break;
-		  case MOVE_UP_BUTTON2:
-		case MOVE_UP_BUTTON:
-		  if(spaceship->rect.y + 50 > 0 + spaceship->height) {
-			spaceship->moveUp();
-		  }
-		  break;
-		  case MOVE_RIGHT_BUTTON2:
-		case MOVE_RIGHT_BUTTON:
-		  if(spaceship->rect.x + 60 + spaceship->width < Config::windowWidth){
-			spaceship->moveRight();
-		  }
-		  break;
-		  case MOVE_LEFT_BUTTON2:
-		case MOVE_LEFT_BUTTON:
-		  if(spaceship->rect.x + 50 > 0 + spaceship->width) {
-			spaceship->moveLeft();
-		  }
-		  break;
+        case MOVE_DOWN_BUTTON:
+          if(spaceship->rect.y + 50 + spaceship->height < Config::windowHeight){
+            spaceship->moveDown();
+          }
+          break;
+          case MOVE_UP_BUTTON2:
+        case MOVE_UP_BUTTON:
+          if(spaceship->rect.y + 50 > 0 + spaceship->height) {
+            spaceship->moveUp();
+          }
+          break;
+          case MOVE_RIGHT_BUTTON2:
+        case MOVE_RIGHT_BUTTON:
+          if(spaceship->rect.x + 60 + spaceship->width < Config::windowWidth){
+            spaceship->moveRight();
+          }
+          break;
+          case MOVE_LEFT_BUTTON2:
+        case MOVE_LEFT_BUTTON:
+          if(spaceship->rect.x + 50 > 0 + spaceship->width) {
+            spaceship->moveLeft();
+          }
+          break;
 
-		case SPACESHIP_SHOOT_BUTTON:
-			auto now = std::chrono::steady_clock::now();
-			auto timeSinceLastShoot = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastShootTime).count();
+        case SPACESHIP_SHOOT_BUTTON:
+            auto now = std::chrono::steady_clock::now();
+            auto timeSinceLastShoot = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastShootTime).count();
 
-			if(timeSinceLastShoot >= (1.0 / spaceship->getFirerate()) * 1000){
-				std::vector<std::shared_ptr<SpaceshipBullet>> bullets = spaceship->shoot();
-				for (std::shared_ptr<SpaceshipBullet> bullet : bullets) {
-					std::shared_ptr<BulletTexture> spaceShipBulletTexture = std::make_shared<BulletTexture>(renderer, bullet, SDL_Color{0, 255, 175, 255});
-					spaceshipBulletsTexture.push_back(spaceShipBulletTexture);
-				}
-			  spaceshipShootSoundEffect->playSoundEffect();
-			  lastShootTime = now;
-			}
-		  break;
-	  }
-	}
+            if(timeSinceLastShoot >= (1.0 / spaceship->getFirerate()) * 1000){
+                std::vector<std::shared_ptr<SpaceshipBullet>> bullets = spaceship->shoot();
+                for (std::shared_ptr<SpaceshipBullet> bullet : bullets) {
+                    std::shared_ptr<BulletTexture> spaceShipBulletTexture = std::make_shared<BulletTexture>(renderer, bullet, SDL_Color{0, 255, 175, 255});
+                    spaceshipBulletsTexture.push_back(spaceShipBulletTexture);
+                }
+              spaceshipShootSoundEffect->playSoundEffect();
+              lastShootTime = now;
+            }
+          break;
+      }
+    }
   }
 }
 
@@ -925,4 +929,26 @@ std::shared_ptr<BackgroundElement> Game::generateBackgroundElement() {
 											 BACKGROUND_ELEMENT_SPEED,
 											 BACKGROUND_ELEMENT_SPEED,
 											 true);
+}
+
+void Game::pauseStage() {
+    handlePauseEvent();
+}
+
+void Game::handlePauseEvent() {
+    while (SDL_PollEvent(&event)) {
+        if (event.type == QUIT || event.key.keysym.sym == QUIT_BUTTON) {
+            *isRunning = 0;
+        }
+
+        if (event.type == SDL_KEYDOWN) {
+            switch (event.key.keysym.sym) {
+                case PAUSE_BUTTON:
+                    *isRunning = MIDDLE_GAME_STAGE_VALUE;
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 }
