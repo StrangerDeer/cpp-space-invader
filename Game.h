@@ -155,6 +155,8 @@ private:
     void checkGameOver() const;
     void makeAlienShoot();
     void moveBullets();
+
+    void printPauseTexts() const;
 };
 
 #endif //CPP_SPACE_INVADER_GAME_H

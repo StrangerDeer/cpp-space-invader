@@ -687,7 +687,6 @@ void Game::printTexture() {
 		asteroidTexture->print(renderer, ticks);
 	}
 
-	spaceshipTexture->print(renderer, ticks);
 	alienTexture->print(renderer, ticks);
 	healingItemTexture->print(renderer, ticks);
 	gunBoosterTexture->print(renderer, ticks);
@@ -707,13 +706,44 @@ void Game::printTexture() {
 		}
 	}
 
-  spaceshipTexture->print(renderer, ticks);
+    spaceshipTexture->print(renderer, ticks);
 
 	for(std::shared_ptr<GameText> text : texts){
 	  text->print(renderer);
 	}
 
-	SDL_RenderPresent(renderer);
+    printPauseTexts();
+
+    SDL_RenderPresent(renderer);
+}
+
+void Game::printPauseTexts() const {
+    if (*isRunning == PAUSE_STAGE_VALUE) {
+        GameTextChangeColorAnim pauseIcon(
+                "| |",
+                DEFAULT_GAME_TEXT_FONT_PATH,
+                DEFAULT_GAME_TEXT_FONT_SIZE_LARGE,
+                DEFAULT_GAME_TEXT_COLOR,
+                DEFAULT_GAME_TEXT_COLOR_2,
+                Config::windowWidth * 0.47,
+                Config::windowHeight * 0.25,
+                40,
+                renderer
+        );
+        GameTextChangeColorAnim pauseText(
+                "Press T to continue",
+                DEFAULT_GAME_TEXT_FONT_PATH,
+                DEFAULT_GAME_TEXT_FONT_SIZE,
+                DEFAULT_GAME_TEXT_COLOR_2,
+                DEFAULT_GAME_TEXT_COLOR,
+                Config::windowWidth * 0.38,
+                (Config::windowHeight * 0.5) + 50,
+                40,
+                renderer
+        );
+        pauseIcon.print(renderer);
+        pauseText.print(renderer);
+    }
 }
 
 void Game::gameOverStage() {
@@ -776,6 +806,7 @@ void Game::gameOverStage() {
 		}
 	  }
 	}
+
 	highScoreText.print(renderer);
 	timeText.print(renderer);
 	continueText.print(renderer);
@@ -932,6 +963,7 @@ std::shared_ptr<BackgroundElement> Game::generateBackgroundElement() {
 }
 
 void Game::pauseStage() {
+    printTexture();
     handlePauseEvent();
 }
 
