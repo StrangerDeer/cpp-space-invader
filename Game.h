@@ -152,6 +152,10 @@ private:
     void initUniqueObjects();
 
     void spaceshipTakesDamage();
+
+    void updateTextures();
+
+    void checkGameOver() const;
 };
 
 #endif //CPP_SPACE_INVADER_GAME_H

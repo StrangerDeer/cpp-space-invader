@@ -28,13 +28,19 @@ void Game::middleGameStage() {
     handleCollisions();
     makeObjectsMove();
     printTexture();
+    updateTextures();
 
     increaseGameDifficulty();
+    checkGameOver();
+}
 
+void Game::checkGameOver() const {
     if(spaceship->getHealth() <= 0){
-        *isRunning = 3;
+        *isRunning = GAME_OVER_STAGE_VALUE;
     }
+}
 
+void Game::updateTextures() {
     int ticks = SDL_GetTicks();
     alienTexture->updateTexture(ticks);
     spaceshipTexture->updateTexture(ticks);
