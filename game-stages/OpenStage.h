@@ -11,12 +11,13 @@
 
 class OpenStage {
 public:
-    OpenStage(SDL_Renderer* renderer, std::shared_ptr<int> isRunning, std::shared_ptr<SpaceshipTexture>& currSpaceshipTexture, std::shared_ptr<Spaceship> spaceshipObj) :
-      isRunning(std::move(isRunning)), currentSpaceshipTexture(currSpaceshipTexture), spaceship(std::move(spaceshipObj))
+    OpenStage(SDL_Renderer* renderer, std::shared_ptr<int> isRunning, std::shared_ptr<SpaceshipTexture>& currSpaceshipTexture, std::shared_ptr<Spaceship> spaceshipObj, std::shared_ptr<SDL_Color>& currBulletColor) :
+            isRunning(std::move(isRunning)), currentSpaceshipTexture(currSpaceshipTexture), spaceship(std::move(spaceshipObj)), currentSpaceshipBulletColor(currBulletColor)
     {
         initGameTexts(renderer);
         initSpaceshipTextures(renderer);
         currentSpaceshipTexture = spaceshipTexture1;
+        currentSpaceshipBulletColor = bulletColor1;
     }
 
     void run(SDL_Renderer* renderer);
@@ -37,12 +38,18 @@ private:
 
     std::shared_ptr<int> isRunning;
     std::shared_ptr<SpaceshipTexture>& currentSpaceshipTexture;
+    std::shared_ptr<SDL_Color>& currentSpaceshipBulletColor;
+
     std::vector<std::shared_ptr<GameText>> texts;
     std::vector<std::shared_ptr<PNGTexture>> itemTextures;
 
     std::shared_ptr<SpaceshipTexture> spaceshipTexture1{nullptr};
     std::shared_ptr<SpaceshipTexture> spaceshipTexture2{nullptr};
     std::shared_ptr<SpaceshipTexture> spaceshipTexture3{nullptr};
+
+    std::shared_ptr<SDL_Color> bulletColor1{nullptr};
+    std::shared_ptr<SDL_Color> bulletColor2{nullptr};
+    std::shared_ptr<SDL_Color> bulletColor3{nullptr};
 
     std::shared_ptr<Spaceship> spaceship;
 

@@ -100,6 +100,8 @@ private:
     //UI
     std::shared_ptr<SpaceshipTexture> currentSpaceshipTexture{nullptr};
 
+    std::shared_ptr<SDL_Color> currentSpaceshipBulletColor{nullptr};
+
     std::unique_ptr<AlienTexture> alienTexture{nullptr};
     std::unique_ptr<HealingItemTexture> healingItemTexture{nullptr};
     std::unique_ptr<GunBoosterTexture> gunBoosterTexture{nullptr};

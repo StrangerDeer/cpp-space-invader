@@ -269,7 +269,7 @@ void Game::handleMiddleGameEvent() {
             if(timeSinceLastShoot >= (1.0 / spaceship->getFirerate()) * 1000){
                 std::vector<std::shared_ptr<SpaceshipBullet>> bullets = spaceship->shoot();
                 for (std::shared_ptr<SpaceshipBullet> bullet : bullets) {
-                    std::shared_ptr<BulletTexture> spaceShipBulletTexture = std::make_shared<BulletTexture>(renderer, bullet, SDL_Color{0, 255, 175, 255});
+                    std::shared_ptr<BulletTexture> spaceShipBulletTexture = std::make_shared<BulletTexture>(renderer, bullet, *currentSpaceshipBulletColor);
                     spaceshipBulletsTexture.push_back(spaceShipBulletTexture);
                 }
               spaceshipShootSoundEffect->playSoundEffect();
@@ -984,7 +984,7 @@ void Game::handlePauseEvent() {
 }
 
 void Game::initOpenStage() {
-    openStage = std::make_unique<OpenStage>(renderer, isRunning, currentSpaceshipTexture, spaceship);
+    openStage = std::make_unique<OpenStage>(renderer, isRunning, currentSpaceshipTexture, spaceship, currentSpaceshipBulletColor);
 
     if(!openStage){
         std::cerr << "Error: Open Stage couldn't create!"  << std::endl;
