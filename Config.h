@@ -35,10 +35,19 @@ namespace fs = std::filesystem;
 using path = fs::path;
 
 #define TEXTURE_FILEPATH (path("..") / "ui" / "textures")
+
+#define SPACESHIP1_FILEPATH (TEXTURE_FILEPATH / "spaceship.png").string()
+#define SPACESHIP1_DAMAGE_FILEPATH (TEXTURE_FILEPATH / "spaceshipdamage1.png").string()
+#define SPACESHIP2_FILEPATH (TEXTURE_FILEPATH / "spaceship2.png").string()
+#define SPACESHIP2_DAMAGE_FILEPATH (TEXTURE_FILEPATH / "spaceshipdamage2.png").string()
+#define SPACESHIP3_FILEPATH (TEXTURE_FILEPATH / "spaceship3.png").string()
+#define SPACESHIP3_DAMAGE_FILEPATH (TEXTURE_FILEPATH / "spaceshipdamage3.png").string()
+
+
 #define ASTEROIDS_FILEPATH (TEXTURE_FILEPATH / "asteroid").string()
 #define CRYSTAL_ASTEROIDS_FILEPATH (TEXTURE_FILEPATH / "crystal-asteroid").string()
 #define BACKGROUND_ELEM_FILEPATH (TEXTURE_FILEPATH / "background").string()
-#define BLUE_STAR_FILEPATH ( TEXTURE_FILEPATH / "bluestar.png").string()
+#define BLUE_STAR_FILEPATH (TEXTURE_FILEPATH / "bluestar.png").string()
 #define GREEN_STAR_FILEPATH (TEXTURE_FILEPATH / "greenstar.png" ).string()
 #define PINK_STAR_FILEPATH (TEXTURE_FILEPATH / "pinkstar.png" ).string()
 #define GOLD_STAR_FILEPATH (TEXTURE_FILEPATH / "goldstar.png").string()
