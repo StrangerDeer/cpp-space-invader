@@ -125,11 +125,14 @@ private:
     void initTexture();
     void initSounds();
     void middleGameStage();
-    void handleEvent();
+    void handleMiddleGameEvent();
+    void pauseStage();
+    void handlePauseEvent();
     void printTexture();
 
     void initStars();
     void initAsteroids();
+    void initUniqueObjects();
 
     void initBackgroundElements();
     std::shared_ptr<BackgroundElement> generateBackgroundElement();
@@ -137,11 +140,10 @@ private:
     void initStarTextures();
     void initAsteroidTextures();
     void initBackgroundElemTextures();
+    void updateTextures();
 
     void handleCollisions();
-
     void makeObjectsMove();
-
     void gameOverStage();
 
     void clearObjects();
@@ -149,9 +151,12 @@ private:
 
     void increaseGameDifficulty() const;
 
-    void initUniqueObjects();
-
     void spaceshipTakesDamage();
+    void checkGameOver() const;
+    void makeAlienShoot();
+    void moveBullets();
+
+    void printPauseTexts() const;
 };
 
 #endif //CPP_SPACE_INVADER_GAME_H

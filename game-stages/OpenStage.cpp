@@ -5,7 +5,7 @@ void OpenStage::initGameTexts(SDL_Renderer* renderer) {
     texts.push_back(std::make_shared<GameText>(
         "STELLAR STORM",
         DEFAULT_GAME_TEXT_FONT_PATH,
-        200,
+        DEFAULT_GAME_TEXT_FONT_SIZE_LARGE,
         DEFAULT_GAME_TEXT_COLOR,
         Config::windowWidth * 0.125,
         Config::windowHeight * 0.25,
