@@ -748,59 +748,61 @@ void Game::gameOverStage() {
 	 Util::setTimeEnd((double)clock() / (double)CLOCKS_PER_SEC);
 	elapsedTime = Util::getTimeDuration();
 
-	GameText gameOverText{"GAME OVER",
-						DEFAULT_GAME_TEXT_FONT_PATH,
-						DEFAULT_GAME_TEXT_FONT_SIZE,
-						DEFAULT_GAME_TEXT_COLOR,
-						Config::windowWidth / 2 - 80,
-						Config::windowHeight / 2,
-						renderer};
-  GameText continueText{
-		  "Press space to restart!",
+    GameText gameOverText{"GAME OVER",
+                          DEFAULT_GAME_TEXT_FONT_PATH,
+                          DEFAULT_GAME_TEXT_FONT_SIZE_MEDIUM,
+                          DEFAULT_GAME_TEXT_COLOR,
+                          Config::windowWidth / 2 - 175,
+                          Config::windowHeight / 2 - DEFAULT_GAME_TEXT_FONT_SIZE * 5,
+                          renderer};
+    std::string hMessage = "Your score: " + std::to_string(spaceship->getPoints());
+    GameText highScoreText{
+            hMessage,
+            DEFAULT_GAME_TEXT_FONT_PATH,
+            DEFAULT_GAME_TEXT_FONT_SIZE,
+            DEFAULT_GAME_TEXT_COLOR,
+            (Config::windowWidth / 2) - 120,
+            (Config::windowHeight / 2) - DEFAULT_GAME_TEXT_FONT_SIZE,
+            renderer
+    };
+    std::string tMessage = "Time survived: " + std::to_string(elapsedTime);
+    GameText timeText{
+            tMessage,
+            DEFAULT_GAME_TEXT_FONT_PATH,
+            DEFAULT_GAME_TEXT_FONT_SIZE,
+            DEFAULT_GAME_TEXT_COLOR,
+            (Config::windowWidth / 2) - 120,
+            (Config::windowHeight / 2),
+            renderer
+    };
+    GameText continueText{
+		  "Press space to return to the menu!",
 	  DEFAULT_GAME_TEXT_FONT_PATH,
 	  DEFAULT_GAME_TEXT_FONT_SIZE,
 	  DEFAULT_GAME_TEXT_COLOR,
-	  Config::windowWidth / 2 - 80,
-	  (Config::windowHeight / 2) + DEFAULT_GAME_TEXT_FONT_SIZE,
+	  Config::windowWidth / 2 - 350,
+	  (Config::windowHeight / 2) + DEFAULT_GAME_TEXT_FONT_SIZE * 3,
 	  renderer
   };
-  std::string hMessage = "Your score: " + std::to_string(spaceship->getPoints());
-	GameText highScoreText{
-			hMessage,
-			DEFAULT_GAME_TEXT_FONT_PATH,
-			DEFAULT_GAME_TEXT_FONT_SIZE,
-			DEFAULT_GAME_TEXT_COLOR,
-			(Config::windowWidth / 2) - 80,
-			(Config::windowHeight / 2) - DEFAULT_GAME_TEXT_FONT_SIZE * 2,
-			renderer
-	};
-	std::string tMessage = "Time survived: " + std::to_string(elapsedTime);
-	GameText timeText{
-			tMessage,
-			DEFAULT_GAME_TEXT_FONT_PATH,
-			DEFAULT_GAME_TEXT_FONT_SIZE,
-			DEFAULT_GAME_TEXT_COLOR,
-			(Config::windowWidth / 2) - 80,
-			(Config::windowHeight / 2) - DEFAULT_GAME_TEXT_FONT_SIZE,
-			renderer
-	};
 
   GameMusic gameOverMusic{"../sound/game_over.wav"};
 
   gameOverMusic.playMusic();
 
-  while(*isRunning == 3){
+  while(*isRunning == GAME_OVER_STAGE_VALUE){
 	while (SDL_PollEvent(&event)) {
 	  if (event.type == QUIT || event.key.keysym.sym == QUIT_BUTTON) {
-		*isRunning = 0;
+		*isRunning = QUIT_VALUE;
 	  }
 
 	  if(event.type == SDL_KEYDOWN){
 		if(event.key.keysym.sym == SDLK_SPACE){
 			Util::setTimeBegin(((double)clock()) / (double)CLOCKS_PER_SEC);
-		  initLogic();
-		  initTexture();
-		  *isRunning = 2;
+            initLogic();
+            initTexture();
+            initOpenStage();
+            initSounds();
+		  *isRunning = OPENING_STAGE_VALUE;
 		}
 	  }
 	}
