@@ -44,7 +44,7 @@ void Game::checkGameOver() const {
 void Game::updateTextures() {
 	int ticks = SDL_GetTicks();
 	alienTexture->updateTexture(ticks);
-	spaceshipTexture->updateTexture(ticks);
+	currentSpaceshipTexture->updateTexture(ticks);
 	for (auto asteroid : asteroidTextures) {
 		asteroid->updateTexture(ticks);
 	}
@@ -153,12 +153,6 @@ void Game::initSDL() {
 	return;
   }
 
-  openStage = std::make_unique<OpenStage>(renderer, isRunning);
-
-  if(!openStage){
-	std::cerr << "Error: Open Stage couldn't create!"  << std::endl;
-	return;
-  }
 
 }
 
@@ -294,75 +288,79 @@ void Game::initTexture() {
 	initBackgroundElemTextures();
 	initStarTextures();
 	initAsteroidTextures();
+    initInfoTexts();
+    initUniqueTextures();
+}
 
-	std::shared_ptr<GameText> livesText = std::make_shared<GameText>("Health: ",
-																	 DEFAULT_GAME_TEXT_FONT_PATH,
-																	 DEFAULT_GAME_TEXT_FONT_SIZE,
-																	 DEFAULT_GAME_TEXT_COLOR, 20,Config::windowHeight * 0.87,
-																	 renderer);
-	std::shared_ptr<SpaceshipHealthGameText> spaceHealthText =
-		std::make_shared<SpaceshipHealthGameText>(renderer, spaceship,
-												  DEFAULT_GAME_TEXT_FONT_PATH,
-												  DEFAULT_GAME_TEXT_FONT_SIZE,
-												  DEFAULT_GAME_TEXT_COLOR, 175,Config::windowHeight * 0.87);
 
-	std::shared_ptr<GameText> lvlText = std::make_shared<GameText>("Gun Lvl: ",
-																   DEFAULT_GAME_TEXT_FONT_PATH,
-																   DEFAULT_GAME_TEXT_FONT_SIZE,
-																   DEFAULT_GAME_TEXT_COLOR, 20, Config::windowHeight * 0.93,
-																   renderer);
+void Game::initUniqueTextures() {
+    alienTexture = std::make_unique<AlienTexture>(renderer, alien);
+    healingItemTexture = std::make_unique<HealingItemTexture>(renderer, healingItem);
+    gunBoosterTexture = std::make_unique<GunBoosterTexture>(renderer, gunBooster);
+    fireLineBoosterTexture = std::make_unique<FireLineBoosterTexture>(renderer, fireLineBooster);
+    starItemTexture = std::make_unique<StarItemTexture>(renderer, starItem);
+}
 
-	std::shared_ptr<SpaceshipGunLvlGameText> spaceLvlText =
-			std::make_shared<SpaceshipGunLvlGameText>(renderer, spaceship,
-													  DEFAULT_GAME_TEXT_FONT_PATH,
-													  DEFAULT_GAME_TEXT_FONT_SIZE,
-													  DEFAULT_GAME_TEXT_COLOR, 195,Config::windowHeight * 0.93);
+void Game::initInfoTexts() {
+    std::shared_ptr<GameText> livesText = std::make_shared<GameText>("Health: ",
+DEFAULT_GAME_TEXT_FONT_PATH,
+DEFAULT_GAME_TEXT_FONT_SIZE,
+DEFAULT_GAME_TEXT_COLOR, 20,Config::windowHeight * 0.87,
+                                                                     renderer);
+    std::shared_ptr<SpaceshipHealthGameText> spaceHealthText =
+        std::make_shared<SpaceshipHealthGameText>(renderer, spaceship,
+                                                  DEFAULT_GAME_TEXT_FONT_PATH,
+                                                  DEFAULT_GAME_TEXT_FONT_SIZE,
+                                                  DEFAULT_GAME_TEXT_COLOR, 175,Config::windowHeight * 0.87);
 
-	std::shared_ptr<SpaceshipPointGameText> spacePointText = std::make_shared<SpaceshipPointGameText>(
-												renderer, spaceship,
-												DEFAULT_GAME_TEXT_FONT_PATH,
-												DEFAULT_GAME_TEXT_FONT_SIZE,
-												DEFAULT_GAME_TEXT_COLOR,
-												Config::windowWidth - 100,
-												Config::windowHeight * 0.02);
+    std::shared_ptr<GameText> lvlText = std::make_shared<GameText>("Gun Lvl: ",
+                                                                   DEFAULT_GAME_TEXT_FONT_PATH,
+                                                                   DEFAULT_GAME_TEXT_FONT_SIZE,
+                                                                   DEFAULT_GAME_TEXT_COLOR, 20, Config::windowHeight * 0.93,
+                                                                   renderer);
 
-	std::shared_ptr<GameText> travelSpeedText = std::make_shared<GameText>("Travelling at ",
-																   DEFAULT_GAME_TEXT_FONT_PATH,
-																   DEFAULT_GAME_TEXT_FONT_SIZE,
-																   DEFAULT_GAME_TEXT_COLOR,
-																   Config::windowWidth - 280,
-																   Config::windowHeight * 0.87,
-																   renderer);
+    std::shared_ptr<SpaceshipGunLvlGameText> spaceLvlText =
+            std::make_shared<SpaceshipGunLvlGameText>(renderer, spaceship,
+                                                      DEFAULT_GAME_TEXT_FONT_PATH,
+                                                      DEFAULT_GAME_TEXT_FONT_SIZE,
+                                                      DEFAULT_GAME_TEXT_COLOR, 195,Config::windowHeight * 0.93);
 
-	std::shared_ptr<SpaceshipTravelSpeedGameText> spaceTravelSpeed =
-			std::make_shared<SpaceshipTravelSpeedGameText>(renderer, spaceship,
-													  DEFAULT_GAME_TEXT_FONT_PATH,
-													  DEFAULT_GAME_TEXT_FONT_SIZE,
-													  DEFAULT_GAME_TEXT_COLOR,
-													  Config::windowWidth - 280,
-													  Config::windowHeight * 0.93);
+    std::shared_ptr<SpaceshipPointGameText> spacePointText = std::make_shared<SpaceshipPointGameText>(
+            renderer, spaceship,
+            DEFAULT_GAME_TEXT_FONT_PATH,
+            DEFAULT_GAME_TEXT_FONT_SIZE,
+            DEFAULT_GAME_TEXT_COLOR,
+                                                Config::windowWidth - 100,
+                                                Config::windowHeight * 0.02);
 
-	texts.push_back(livesText);
-	texts.push_back(spaceHealthText);
-	texts.push_back(lvlText);
-	texts.push_back(spaceLvlText);
-	texts.push_back(spacePointText);
-	texts.push_back(travelSpeedText);
-	texts.push_back(spaceTravelSpeed);
+    std::shared_ptr<GameText> travelSpeedText = std::make_shared<GameText>("Travelling at ",
+                                                                   DEFAULT_GAME_TEXT_FONT_PATH,
+                                                                   DEFAULT_GAME_TEXT_FONT_SIZE,
+                                                                   DEFAULT_GAME_TEXT_COLOR,
+                                                                   Config::windowWidth - 280,
+                                                                   Config::windowHeight * 0.87,
+                                                                           renderer);
 
-	spaceshipTexture = std::make_shared<SpaceshipTexture>(renderer, spaceship);
-	alienTexture = std::make_unique<AlienTexture>(renderer, alien);
-	healingItemTexture = std::make_unique<HealingItemTexture>(renderer, healingItem);
-	gunBoosterTexture = std::make_unique<GunBoosterTexture>(renderer, gunBooster);
-	fireLineBoosterTexture = std::make_unique<FireLineBoosterTexture>(renderer, fireLineBooster);
-	starItemTexture = std::make_unique<StarItemTexture>(renderer, starItem);
+    std::shared_ptr<SpaceshipTravelSpeedGameText> spaceTravelSpeed =
+            std::make_shared<SpaceshipTravelSpeedGameText>(renderer, spaceship,
+                                                           DEFAULT_GAME_TEXT_FONT_PATH,
+                                                           DEFAULT_GAME_TEXT_FONT_SIZE,
+                                                           DEFAULT_GAME_TEXT_COLOR,
+                                                      Config::windowWidth - 280,
+                                                      Config::windowHeight * 0.93);
 
-	openStage->addTexture(spaceshipTexture);
+    texts.push_back(livesText);
+    texts.push_back(spaceHealthText);
+    texts.push_back(lvlText);
+    texts.push_back(spaceLvlText);
+    texts.push_back(spacePointText);
+    texts.push_back(travelSpeedText);
+    texts.push_back(spaceTravelSpeed);
 }
 
 void Game::clearTextures() {
-	if(spaceshipTexture){
-		spaceshipTexture = nullptr;
+	if(currentSpaceshipTexture){
+        currentSpaceshipTexture = nullptr;
 	}
 
 	if (alienTexture) {
@@ -667,7 +665,7 @@ void Game::handleCollisions() {
 void Game::spaceshipTakesDamage() {
 	asteroidExplodes->playSoundEffect();
 	spaceship->takeDamage();
-	spaceshipTexture->swapTexture();
+	currentSpaceshipTexture->swapTexture();
 }
 
 void Game::printTexture() {
@@ -706,7 +704,7 @@ void Game::printTexture() {
 		}
 	}
 
-    spaceshipTexture->print(renderer, ticks);
+    currentSpaceshipTexture->print(renderer, ticks);
 
 	for(std::shared_ptr<GameText> text : texts){
 	  text->print(renderer);
@@ -982,5 +980,14 @@ void Game::handlePauseEvent() {
                     break;
             }
         }
+    }
+}
+
+void Game::initOpenStage() {
+    openStage = std::make_unique<OpenStage>(renderer, isRunning, currentSpaceshipTexture, spaceship);
+
+    if(!openStage){
+        std::cerr << "Error: Open Stage couldn't create!"  << std::endl;
+        return;
     }
 }

@@ -53,6 +53,7 @@ public:
     initSDL();
     initLogic();
     initTexture();
+    initOpenStage();
     initSounds();
   }
 
@@ -97,7 +98,8 @@ private:
     shared_vector<PickUpItem> crystalPickUps{};
 
     //UI
-    std::shared_ptr<SpaceshipTexture> spaceshipTexture{nullptr};
+    std::shared_ptr<SpaceshipTexture> currentSpaceshipTexture{nullptr};
+
     std::unique_ptr<AlienTexture> alienTexture{nullptr};
     std::unique_ptr<HealingItemTexture> healingItemTexture{nullptr};
     std::unique_ptr<GunBoosterTexture> gunBoosterTexture{nullptr};
@@ -124,6 +126,9 @@ private:
     void initLogic();
     void initTexture();
     void initSounds();
+
+    void initOpenStage();
+
     void middleGameStage();
     void handleMiddleGameEvent();
     void pauseStage();
@@ -157,6 +162,10 @@ private:
     void moveBullets();
 
     void printPauseTexts() const;
+
+    void initInfoTexts();
+
+    void initUniqueTextures();
 };
 
 #endif //CPP_SPACE_INVADER_GAME_H
