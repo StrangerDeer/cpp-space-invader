@@ -165,17 +165,17 @@ Once your spaceship's health reaches zero, you will get a game over scene with y
 - [X] Crystal asteroids that drop loot
 - [X] Extra points (star) pickup
 - [X] New sprites for asteroids, crystal asteroids, aliens and the spaceship taking damage
+- [X] Fixed: music now restarts when you begin a new game after game over
+- [X] Fixed: Background music now loops
+- [X] The game can be paused by pressing 'T'
 
 ### Planned Features:
-- [ ] Looping background music
 - [ ] Installer
 - [ ] Restrict spaceship movement so collision with an alien is no longer possible
 - [ ] Fix background images not appearing when restarting after a game over
-- [ ] Fix music not playing when restarting after a game over
 - [ ] Menu
 - [ ] Shield pickup that protects the spaceship when taking damage
   - [ ] Place shield sprite over spaceship's when active
-- [ ] Enable pausing the game
 - [ ] Time slowing pickup that slows objects down around the spaceship
 - [ ] New sprites for asteroids, crystal asteroids, aliens and the spaceship getting destroyed
 - [ ] New spaceship sprites
