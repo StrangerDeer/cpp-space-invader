@@ -71,12 +71,18 @@ void Game::increaseGameDifficulty() const {
 }
 
 void Game::makeObjectsMove() {
+    static int counter = 0;
+    counter++;
+
   for(const std::shared_ptr<FallingObject> object : fallingObjects){
 	object->fall();
   }
 
-  for(const std::shared_ptr<FallingObject> bgElem : backgroundElems) {
-	  bgElem->fall();
+  if (counter == 3) {
+      for (const std::shared_ptr<FallingObject> bgElem: backgroundElems) {
+          bgElem->fall();
+      }
+      counter = 0;
   }
 
   alien->fall();
@@ -953,7 +959,7 @@ void Game::initBackgroundElements() {
 
 std::shared_ptr<BackgroundElement> Game::generateBackgroundElement(int &yPos) {
   int x = Util::getRandomNumber(0, Config::windowWidth - BACKGROUND_ELEMENT_SIZE);
-  int y = yPos - BACKGROUND_ELEMENT_SIZE * 1.5;
+  int y = yPos - BACKGROUND_ELEMENT_SIZE * 1;
   yPos = y;
   return std::make_shared<BackgroundElement>(x,
 											 y,
