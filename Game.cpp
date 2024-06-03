@@ -944,14 +944,14 @@ void Game::initAsteroids() {
 }
 
 void Game::initBackgroundElements() {
+    int yPos = -(Config::windowHeight) * 0.5;
   for (int i = 0; i < NUMBER_OF_BACKGROUND_ELEMENTS; ++i) {
-	std::shared_ptr<BackgroundElement> elem = generateBackgroundElement();
+	std::shared_ptr<BackgroundElement> elem = generateBackgroundElement(yPos);
 	backgroundElems.push_back(elem);
   }
 }
 
-std::shared_ptr<BackgroundElement> Game::generateBackgroundElement() {
-  static int yPos = -(Config::windowHeight) * 0.5;
+std::shared_ptr<BackgroundElement> Game::generateBackgroundElement(int &yPos) {
   int x = Util::getRandomNumber(0, Config::windowWidth - BACKGROUND_ELEMENT_SIZE);
   int y = yPos - BACKGROUND_ELEMENT_SIZE * 1.5;
   yPos = y;

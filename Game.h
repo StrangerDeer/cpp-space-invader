@@ -142,7 +142,7 @@ private:
     void initUniqueObjects();
 
     void initBackgroundElements();
-    std::shared_ptr<BackgroundElement> generateBackgroundElement();
+    std::shared_ptr<BackgroundElement> generateBackgroundElement(int &yPos);
 
     void initStarTextures();
     void initAsteroidTextures();
