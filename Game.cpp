@@ -3,7 +3,7 @@
 
 void Game::run() {
 
-  backgroundMusic->playMusic();
+  //backgroundMusic->playMusic();
 
   while(*isRunning != QUIT_VALUE){
 	frameStart = SDL_GetTicks();
@@ -785,9 +785,11 @@ void Game::gameOverStage() {
 	  renderer
   };
 
-  GameMusic gameOverMusic{"../sound/game_over.wav"};
+    backgroundMusic->stopMusic();
 
-  gameOverMusic.playMusic();
+  GameSoundEffect gameOverMusic{"../sound/game_over.wav"};
+
+  gameOverMusic.playSoundEffect();
 
   while(*isRunning == GAME_OVER_STAGE_VALUE){
 	while (SDL_PollEvent(&event)) {
@@ -801,7 +803,7 @@ void Game::gameOverStage() {
             initLogic();
             initTexture();
             initOpenStage();
-            initSounds();
+            backgroundMusic->rewindMusic();
 		  *isRunning = OPENING_STAGE_VALUE;
 		}
 	  }
@@ -992,4 +994,6 @@ void Game::initOpenStage() {
         std::cerr << "Error: Open Stage couldn't create!"  << std::endl;
         return;
     }
+
+    backgroundMusic->playMusic();
 }

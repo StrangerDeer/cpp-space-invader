@@ -53,8 +53,8 @@ public:
     initSDL();
     initLogic();
     initTexture();
-    initOpenStage();
     initSounds();
+    initOpenStage();
   }
 
   ~Game() {
