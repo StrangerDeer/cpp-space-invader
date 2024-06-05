@@ -8,7 +8,7 @@
 class HealingItem : public PickUpItem {
 public:
     HealingItem(int x, int y, int alienWidth, int alienHeight) :
-    PickUpItem(x, y, 70, 130), healAmount(2) {
+    PickUpItem(x, y, 70, 130), healAmount(3) {
         removeFromScreen();
     };
 
