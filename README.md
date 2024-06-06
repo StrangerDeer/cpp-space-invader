@@ -59,6 +59,10 @@ For future features, see the <a href="#roadmap">roadmap</a>!
 ## Getting Started
 The project is still under development - once the first release is ready, an installer will be made available.
 
+You will need:
+* Install CMake, Ninja and vcpkg
+* env variable set for VCPKG_ROOT (path\to\.vcpkg-clion\vcpkg)
+
 ### Running The Game:
 The project uses SDL2, SDL2 image, SDL2 ttf and SDL2 mixer.<br>
 We use Visual Studio toolchain in CLion, and compiler is cl.
@@ -169,6 +173,8 @@ Once your spaceship's health reaches zero, you will get a game over scene with y
 - [X] Fixed: Background music now loops
 - [X] The game can be paused by pressing 'T'
 - [X] Fixed: Background images now appear when restarting after game over
+- [X] New spaceship sprites
+  - [X] Enable choosing between spaceships before beginning the game
 
 ### Planned Features:
 - [ ] Installer
@@ -178,8 +184,6 @@ Once your spaceship's health reaches zero, you will get a game over scene with y
   - [ ] Place shield sprite over spaceship's when active
 - [ ] Time slowing pickup that slows objects down around the spaceship
 - [ ] New sprites for asteroids, crystal asteroids, aliens and the spaceship getting destroyed
-- [ ] New spaceship sprites
-  - [ ] Enable choosing between spaceships before beginning the game 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
