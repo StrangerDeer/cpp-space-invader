@@ -2,7 +2,6 @@
 
 
 #include "../HiddenTexture.h"
-#include "../../objects/ShieldItem.h"
 #include "../../objects/PickUpItem.h"
 
 class ShieldItemTexture : public PNGTexture { ;
