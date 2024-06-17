@@ -30,11 +30,12 @@ class FallingObject : public DimensionalObject {
   }
 
   void reduceSpeed() {
-    if (minSpeed > 1) {
-      minSpeed = minSpeed - 2;
-    }
-    if (maxSpeed > 5) {
-      maxSpeed = maxSpeed - 2;
+    if (currentSpeed > 3) {
+      currentSpeed = currentSpeed - 3;
+    } else if (currentSpeed > 2) {
+      currentSpeed = currentSpeed - 2;
+    } else if (currentSpeed > 1) {
+      currentSpeed = currentSpeed - 1;
     }
   }
 
