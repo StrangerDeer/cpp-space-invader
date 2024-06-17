@@ -273,7 +273,7 @@ void Game::handleMiddleGameEvent() {
           break;
         case MOVE_UP_BUTTON2:
         case MOVE_UP_BUTTON:
-          if (spaceship->rect.y + 50 > 0 + spaceship->height) {
+          if (spaceship->rect.y + 50 > 0 + spaceship->height * 2) {
             spaceship->moveUp();
           }
           break;
