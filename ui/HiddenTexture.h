@@ -9,7 +9,7 @@ public:
     PNGTexture(renderer, originalFilePath)
     {
       loadTexture(renderer,  originalFilePath, currentTexture);
-      loadTexture(renderer, "", hiddenTexture);
+      loadTexture(renderer, "../ui/textures/hidden.png", hiddenTexture);
       originalTexture = currentTexture;
     }
 
