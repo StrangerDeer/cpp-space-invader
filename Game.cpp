@@ -1069,3 +1069,9 @@ void Game::initOpenStage() {
 
   backgroundMusic->playMusic();
 }
+
+void Game::reduceObjectSpeed() {
+    for (const std::shared_ptr<FallingObject> object : fallingObjects) {
+      object->reduceSpeed();
+    }
+}
