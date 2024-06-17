@@ -629,14 +629,14 @@ void Game::handleCollisions() {
             alienPickUps.clear();
             alienPickUps.push_back(shieldItem);
             int maxRandomIndex = 0;
-            /*if (spaceship->getGunLvl() < 5) {
+            if (spaceship->getGunLvl() < 5) {
               alienPickUps.push_back(gunBooster);
               maxRandomIndex++;
             }
             if (spaceship->getLinesOfFire() < 5) {
               alienPickUps.push_back(fireLineBooster);
               maxRandomIndex++;
-            }*/
+            }
             int randomIndex = Util::getRandomNumber(0, maxRandomIndex);
             alienPickUps[randomIndex]->placeAtSpawnPos(alienX, alienY);
           }
