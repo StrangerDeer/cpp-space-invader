@@ -4,8 +4,8 @@
 #include "../HiddenTexture.h"
 #include "../../objects/ShieldItem.h"
 
-class ShieldItemTexture : public PNGTexture {
-
+class ShieldItemTexture : public PNGTexture { ;
+public:
     ShieldItemTexture(SDL_Renderer* renderer, const std::shared_ptr<ShieldItem>& shieldItem) :
             PNGTexture(renderer, "../ui/textures/shielditem.png") {
       if(!shieldItem){
@@ -13,7 +13,7 @@ class ShieldItemTexture : public PNGTexture {
       } else {
         this->shieldItem = shieldItem;
       }
-    };
+    }
 
     void print(SDL_Renderer*  renderer, Uint32 ticks) override;
 

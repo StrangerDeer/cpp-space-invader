@@ -5,6 +5,7 @@
 #include "Spaceship.h"
 
 class Shield : public HealthObject, public DimensionalObject {
+public:
     Shield(std::shared_ptr<Spaceship>& ship) : spaceship(ship), maxHealth(3), HealthObject(maxHealth), DimensionalObject(0, 0, 100, 100), isEnabled(false) {
     }
 
@@ -17,7 +18,7 @@ class Shield : public HealthObject, public DimensionalObject {
 
     void updateLocation() {
       rect.x = spaceship->rect.x;
-      rect.y = spaceship->rect.y;
+      rect.y = spaceship->rect.y - 10;
     }
 
     void addShield() {
