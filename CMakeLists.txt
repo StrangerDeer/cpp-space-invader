@@ -88,7 +88,6 @@ add_executable(cpp_space_invader main.cpp
         ui/objectTextures/StarItemTexture.cpp
         ui/DamageTexture.cpp
         ui/DamageTexture.h
-        objects/ShieldItem.h
         ui/HiddenTexture.h
         ui/HiddenTexture.cpp
         ui/objectTextures/ShieldItemTexture.h
@@ -96,6 +95,12 @@ add_executable(cpp_space_invader main.cpp
         objects/Shield.h
         ui/objectTextures/ShieldTexture.h
         ui/objectTextures/ShieldTexture.cpp
+        ui/objectTextures/TimeSlowingItemTexture.h
+        ui/objectTextures/TimeSlowingItemTexture.cpp
+        ui/objectTextures/TimeSlowingItemTexture.h
+        ui/objectTextures/TimeSlowingItemTexture.h
+        ui/objectTextures/TimeSlowingItemTexture.cpp
+        ui/objectTextures/TimeSlowingItemTexture.h
 )
 
 target_link_libraries(cpp_space_invader

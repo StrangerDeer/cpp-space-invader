@@ -42,10 +42,10 @@
 #include "ui/objectTextures/FireLineBoosterTexture.h"
 #include "objects/StarItem.h"
 #include "ui/objectTextures/StarItemTexture.h"
-#include "objects/ShieldItem.h"
 #include "ui/objectTextures/ShieldItemTexture.h"
 #include "objects/Shield.h"
 #include "ui/objectTextures/ShieldTexture.h"
+#include "ui/objectTextures/TimeSlowingItemTexture.h"
 
 template<typename T>
 using shared_vector = std::vector<std::shared_ptr<T>>;
@@ -99,11 +99,12 @@ private:
 
     std::shared_ptr<GunBoosterItem> gunBooster{nullptr};
     std::shared_ptr<FireLineItem> fireLineBooster{nullptr};
-    std::shared_ptr<ShieldItem> shieldItem{nullptr};
+    std::shared_ptr<PickUpItem> shieldItem{nullptr};
     shared_vector<PickUpItem> alienPickUps{};
 
     std::shared_ptr<HealingItem> healingItem{nullptr};
     std::shared_ptr<StarItem> starItem{nullptr};
+    std::shared_ptr<PickUpItem> timeSlowingItem{nullptr};
     shared_vector<PickUpItem> crystalPickUps{};
 
     //UI
@@ -119,6 +120,7 @@ private:
     std::unique_ptr<FireLineBoosterTexture> fireLineBoosterTexture{nullptr};
     std::unique_ptr<StarItemTexture> starItemTexture{nullptr};
     std::unique_ptr<ShieldItemTexture> shieldItemTexture{nullptr};
+    std::unique_ptr<TimeSlowingItemTexture> timeSlowingItemTexture{nullptr};
 
     shared_vector<StarTexture> starTextures{};
     shared_vector<AsteroidTexture> asteroidTextures{};
@@ -176,10 +178,10 @@ private:
     void moveBullets();
 
     void printPauseTexts() const;
-
     void initInfoTexts();
 
     void initUniqueTextures();
+    void reduceObjectSpeed();
 };
 
 #endif //CPP_SPACE_INVADER_GAME_H
