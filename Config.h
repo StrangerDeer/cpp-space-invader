@@ -23,10 +23,14 @@
 #define MOVE_RIGHT_BUTTON2 SDLK_d
 #define MOVE_LEFT_BUTTON2 SDLK_a
 #define SPACESHIP_SHOOT_BUTTON SDLK_SPACE
+#define NUMBER_1 SDLK_1
+#define NUMBER_2 SDLK_2
+#define NUMBER_3 SDLK_3
 
 #define TEXTURE_FILE_EXTENSION ".png"
 
 #define DEFAULT_GAME_TEXT_FONT_SIZE 50
+#define DEFAULT_GAME_TEXT_FONT_SIZE_MEDIUM 100
 #define DEFAULT_GAME_TEXT_FONT_SIZE_LARGE 200
 #define DEFAULT_GAME_TEXT_COLOR SDL_Color{0,255,0,255}
 #define DEFAULT_GAME_TEXT_COLOR_2 SDL_Color{175,255,0,255}
@@ -35,10 +39,19 @@ namespace fs = std::filesystem;
 using path = fs::path;
 
 #define TEXTURE_FILEPATH (path("..") / "ui" / "textures")
+
+#define SPACESHIP1_FILEPATH (TEXTURE_FILEPATH / "spaceship.png").string()
+#define SPACESHIP1_DAMAGE_FILEPATH (TEXTURE_FILEPATH / "spaceshipdamage1.png").string()
+#define SPACESHIP2_FILEPATH (TEXTURE_FILEPATH / "spaceship2.png").string()
+#define SPACESHIP2_DAMAGE_FILEPATH (TEXTURE_FILEPATH / "spaceshipdamage2.png").string()
+#define SPACESHIP3_FILEPATH (TEXTURE_FILEPATH / "spaceship3.png").string()
+#define SPACESHIP3_DAMAGE_FILEPATH (TEXTURE_FILEPATH / "spaceshipdamage3.png").string()
+
+
 #define ASTEROIDS_FILEPATH (TEXTURE_FILEPATH / "asteroid").string()
 #define CRYSTAL_ASTEROIDS_FILEPATH (TEXTURE_FILEPATH / "crystal-asteroid").string()
 #define BACKGROUND_ELEM_FILEPATH (TEXTURE_FILEPATH / "background").string()
-#define BLUE_STAR_FILEPATH ( TEXTURE_FILEPATH / "bluestar.png").string()
+#define BLUE_STAR_FILEPATH (TEXTURE_FILEPATH / "bluestar.png").string()
 #define GREEN_STAR_FILEPATH (TEXTURE_FILEPATH / "greenstar.png" ).string()
 #define PINK_STAR_FILEPATH (TEXTURE_FILEPATH / "pinkstar.png" ).string()
 #define GOLD_STAR_FILEPATH (TEXTURE_FILEPATH / "goldstar.png").string()

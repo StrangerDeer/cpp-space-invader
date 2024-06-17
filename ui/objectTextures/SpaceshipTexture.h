@@ -10,8 +10,8 @@
 class SpaceshipTexture : public DamageTexture {
 
 public:
-    SpaceshipTexture(SDL_Renderer* renderer, const std::shared_ptr<Spaceship>& spaceship) :
-        DamageTexture(renderer, "../ui/textures/spaceship.png", "../ui/textures/spaceshipdamage.png")
+    SpaceshipTexture(SDL_Renderer* renderer, const std::shared_ptr<Spaceship>& spaceship, std::string filePath, std::string damageFilePath) :
+        DamageTexture(renderer, filePath, damageFilePath)
     {
         if(!spaceship){
             std::cerr << "Spaceship doesn't exist!" << std::endl;

@@ -5,6 +5,7 @@
 #include <SDL_mixer.h>
 
 #include "httplib.h"
+#define CPPHTTPLIB_OPENSSL_SUPPORT
 
 #include <iostream>
 #include <vector>
@@ -41,6 +42,10 @@
 #include "ui/objectTextures/FireLineBoosterTexture.h"
 #include "objects/StarItem.h"
 #include "ui/objectTextures/StarItemTexture.h"
+#include "objects/ShieldItem.h"
+#include "ui/objectTextures/ShieldItemTexture.h"
+#include "objects/Shield.h"
+#include "ui/objectTextures/ShieldTexture.h"
 
 template<typename T>
 using shared_vector = std::vector<std::shared_ptr<T>>;
@@ -54,6 +59,7 @@ public:
     initLogic();
     initTexture();
     initSounds();
+    initOpenStage();
   }
 
   ~Game() {
@@ -89,20 +95,30 @@ private:
 
     std::shared_ptr<Spaceship> spaceship{nullptr};
     std::shared_ptr<Alien> alien{nullptr};
-    std::shared_ptr<HealingItem> healingItem{nullptr};
+    std::shared_ptr<Shield> shield{nullptr};
+
     std::shared_ptr<GunBoosterItem> gunBooster{nullptr};
     std::shared_ptr<FireLineItem> fireLineBooster{nullptr};
+    std::shared_ptr<ShieldItem> shieldItem{nullptr};
+    shared_vector<PickUpItem> alienPickUps{};
+
+    std::shared_ptr<HealingItem> healingItem{nullptr};
     std::shared_ptr<StarItem> starItem{nullptr};
-    shared_vector<PickUpItem> pickUps{};
     shared_vector<PickUpItem> crystalPickUps{};
 
     //UI
-    std::shared_ptr<SpaceshipTexture> spaceshipTexture{nullptr};
+    std::shared_ptr<SpaceshipTexture> currentSpaceshipTexture{nullptr};
+    std::shared_ptr<SDL_Color> currentSpaceshipBulletColor{nullptr};
+
     std::unique_ptr<AlienTexture> alienTexture{nullptr};
+
+    std::unique_ptr<ShieldTexture> shieldTexture{nullptr};
+
     std::unique_ptr<HealingItemTexture> healingItemTexture{nullptr};
     std::unique_ptr<GunBoosterTexture> gunBoosterTexture{nullptr};
     std::unique_ptr<FireLineBoosterTexture> fireLineBoosterTexture{nullptr};
     std::unique_ptr<StarItemTexture> starItemTexture{nullptr};
+    std::unique_ptr<ShieldItemTexture> shieldItemTexture{nullptr};
 
     shared_vector<StarTexture> starTextures{};
     shared_vector<AsteroidTexture> asteroidTextures{};
@@ -124,6 +140,9 @@ private:
     void initLogic();
     void initTexture();
     void initSounds();
+
+    void initOpenStage();
+
     void middleGameStage();
     void handleMiddleGameEvent();
     void pauseStage();
@@ -135,7 +154,7 @@ private:
     void initUniqueObjects();
 
     void initBackgroundElements();
-    std::shared_ptr<BackgroundElement> generateBackgroundElement();
+    std::shared_ptr<BackgroundElement> generateBackgroundElement(int &yPos);
 
     void initStarTextures();
     void initAsteroidTextures();
@@ -157,6 +176,10 @@ private:
     void moveBullets();
 
     void printPauseTexts() const;
+
+    void initInfoTexts();
+
+    void initUniqueTextures();
 };
 
 #endif //CPP_SPACE_INVADER_GAME_H

@@ -6,7 +6,9 @@ find_package(SDL2_image CONFIG REQUIRED)
 find_package(SDL2_ttf CONFIG REQUIRED)
 find_package(SDL2_mixer CONFIG REQUIRED)
 find_package(SDL2_mixer_ext CONFIG REQUIRED)
-#[[find_package(OpenSSL REQUIRED)]]
+
+find_package(OpenSSL REQUIRED)
+find_package(httplib CONFIG REQUIRED)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -86,6 +88,14 @@ add_executable(cpp_space_invader main.cpp
         ui/objectTextures/StarItemTexture.cpp
         ui/DamageTexture.cpp
         ui/DamageTexture.h
+        objects/ShieldItem.h
+        ui/HiddenTexture.h
+        ui/HiddenTexture.cpp
+        ui/objectTextures/ShieldItemTexture.h
+        ui/objectTextures/ShieldItemTexture.cpp
+        objects/Shield.h
+        ui/objectTextures/ShieldTexture.h
+        ui/objectTextures/ShieldTexture.cpp
 )
 
 target_link_libraries(cpp_space_invader
@@ -96,6 +106,11 @@ target_link_libraries(cpp_space_invader
         $<IF:$<TARGET_EXISTS:SDL2_ttf::SDL2_ttf>,SDL2_ttf::SDL2_ttf,SDL2_ttf::SDL2_ttf-static>
         $<IF:$<TARGET_EXISTS:SDL2_mixer::SDL2_mixer>,SDL2_mixer::SDL2_mixer,SDL2_mixer::SDL2_mixer-static>
         $<IF:$<TARGET_EXISTS:SDL2_mixer_ext::SDL2_mixer_ext>,SDL2_mixer_ext::SDL2_mixer_ext,SDL2_mixer_ext::SDL2_mixer_ext_Static>
-        #[[OpenSSL::Crypto
-        OpenSSL::SSL]]
+        OpenSSL::Crypto
+        OpenSSL::SSL
+        httplib::httplib
 )
+
+if(WIN32)
+    target_link_libraries(cpp_space_invader PRIVATE ws2_32)
+endif ()

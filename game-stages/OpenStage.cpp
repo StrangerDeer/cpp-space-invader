@@ -37,10 +37,26 @@ void OpenStage::handleEvent() {
     }
 
     if (event.type == SDL_KEYDOWN) {
-      if (event.key.keysym.sym == SDLK_SPACE) {
-          Util::setTimeBegin(((double)clock()) / (double)CLOCKS_PER_SEC);
-        *isRunning = MIDDLE_GAME_STAGE_VALUE;
-      }
+        switch (event.key.keysym.sym) {
+            case SDLK_SPACE:
+                Util::setTimeBegin(((double)clock()) / (double)CLOCKS_PER_SEC);
+                *isRunning = MIDDLE_GAME_STAGE_VALUE;
+                break;
+            case NUMBER_1:
+                currentSpaceshipTexture = spaceshipTexture1;
+                currentSpaceshipBulletColor = bulletColor1;
+                break;
+            case NUMBER_2:
+                currentSpaceshipTexture = spaceshipTexture2;
+                currentSpaceshipBulletColor = bulletColor2;
+                break;
+            case NUMBER_3:
+                currentSpaceshipTexture = spaceshipTexture3;
+                currentSpaceshipBulletColor = bulletColor3;
+                break;
+            default:
+                break;
+        }
     }
   }
 }
@@ -57,5 +73,17 @@ void OpenStage::printer(SDL_Renderer* renderer) {
     }
   }
 
+  currentSpaceshipTexture->print(renderer, SDL_GetTicks());
+
   SDL_RenderPresent(renderer);
+}
+
+void OpenStage::initSpaceshipTextures(SDL_Renderer *renderer) {
+    spaceshipTexture1 = std::make_shared<SpaceshipTexture>(renderer, spaceship, SPACESHIP1_FILEPATH, SPACESHIP1_DAMAGE_FILEPATH);
+    spaceshipTexture2 = std::make_shared<SpaceshipTexture>(renderer, spaceship, SPACESHIP2_FILEPATH, SPACESHIP2_DAMAGE_FILEPATH);
+    spaceshipTexture3 = std::make_shared<SpaceshipTexture>(renderer, spaceship, SPACESHIP3_FILEPATH, SPACESHIP3_DAMAGE_FILEPATH);
+
+    bulletColor1 = std::make_shared<SDL_Color>(SDL_Color{0, 255, 175, 255});
+    bulletColor2 = std::make_shared<SDL_Color>(SDL_Color{255, 210, 130, 255});
+    bulletColor3 = std::make_shared<SDL_Color>(SDL_Color{120, 225, 255, 255});
 }

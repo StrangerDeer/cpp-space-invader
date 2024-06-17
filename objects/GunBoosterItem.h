@@ -5,7 +5,7 @@
 
 class GunBoosterItem : public PickUpItem {
 public:
-    GunBoosterItem(int x, int y, int alienWidth, int alienHeight) :
+    GunBoosterItem(int x, int y, int spawnObjectWidth, int spawnObjectHeight) :
     PickUpItem(x, y, 70, 130) {
         removeFromScreen();
     };

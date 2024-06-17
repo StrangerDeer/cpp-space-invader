@@ -11,7 +11,7 @@ class Spaceship : public DimensionalObject, public FlyingObject, public HealthOb
 public:
     Spaceship(int health, int speed, int x, int y, int width, int height, int fireRate) :
             HealthObject(health), FlyingObject(speed), DimensionalObject(x, y, width, height), fireRate(fireRate),
-            linesOfFire(1), bulletSpeed(10), gunLvl(1), travelSpeed(23500) {
+            linesOfFire(1), bulletSpeed(10), gunLvl(1), travelSpeed(23500), isShieldEnabled(false) {
         points = 0;
     };
 
@@ -83,6 +83,18 @@ public:
         return travelSpeed;
     }
 
+    bool isShieldActive() const {
+      return isShieldEnabled;
+    }
+
+    void enableShield() {
+      isShieldEnabled = true;
+    }
+
+    void disableShield() {
+      isShieldEnabled = false;
+    }
+
 private:
     int travelSpeed;
     int points;
@@ -90,5 +102,7 @@ private:
     int bulletSpeed;
     int gunLvl;
     int linesOfFire;
+
+    bool isShieldEnabled;
 };
 

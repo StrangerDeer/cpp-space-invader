@@ -59,6 +59,10 @@ For future features, see the <a href="#roadmap">roadmap</a>!
 ## Getting Started
 The project is still under development - once the first release is ready, an installer will be made available.
 
+You will need:
+* Install CMake, Ninja and vcpkg
+* env variable set for VCPKG_ROOT (path\to\.vcpkg-clion\vcpkg)
+
 ### Running The Game:
 The project uses SDL2, SDL2 image, SDL2 ttf and SDL2 mixer.<br>
 We use Visual Studio toolchain in CLion, and compiler is cl.
@@ -165,21 +169,22 @@ Once your spaceship's health reaches zero, you will get a game over scene with y
 - [X] Crystal asteroids that drop loot
 - [X] Extra points (star) pickup
 - [X] New sprites for asteroids, crystal asteroids, aliens and the spaceship taking damage
+- [X] Fixed: music now restarts when restarting after game over
+- [X] Fixed: Background music now loops
+- [X] The game can be paused by pressing 'T'
+- [X] Fixed: Background images now appear when restarting after game over
+- [X] New spaceship sprites
+  - [X] Enable choosing between spaceships before beginning the game
+- [X] Shield pickup that protects the spaceship when taking damage
+  - [X] Place shield sprite over spaceship's when active
+- [X] Restrict spaceship movement so collision with an alien is no longer possible
 
 ### Planned Features:
-- [ ] Looping background music
 - [ ] Installer
-- [ ] Restrict spaceship movement so collision with an alien is no longer possible
-- [ ] Fix background images not appearing when restarting after a game over
-- [ ] Fix music not playing when restarting after a game over
+- [ ] Make the game platform independent
 - [ ] Menu
-- [ ] Shield pickup that protects the spaceship when taking damage
-  - [ ] Place shield sprite over spaceship's when active
-- [ ] Enable pausing the game
 - [ ] Time slowing pickup that slows objects down around the spaceship
 - [ ] New sprites for asteroids, crystal asteroids, aliens and the spaceship getting destroyed
-- [ ] New spaceship sprites
-  - [ ] Enable choosing between spaceships before beginning the game 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

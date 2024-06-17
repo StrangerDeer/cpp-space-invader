@@ -15,8 +15,29 @@ public:
         Mix_HaltMusic();
     }
 
+    void stopMusic() {
+        if(!music){
+            std::cerr << "Music does not exist!" << std::endl;
+            return;
+        }
+        Mix_PauseMusic();
+    }
+
+    void rewindMusic() {
+        if(!music){
+            std::cerr << "Music does not exist!" << std::endl;
+            return;
+        }
+        Mix_RewindMusic();
+    }
+
     void playMusic(){
-        Mix_PlayMusic(music, 1);
+        if(!music){
+            std::cerr << "Music does not exist!" << std::endl;
+            return;
+        }
+
+        Mix_PlayMusic(music, 999);
     }
 
 private:
