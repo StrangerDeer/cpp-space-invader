@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "ui/text/SpaceshipTravelSpeedGameText.h"
+#include "httplib.h"
 
 void Game::run() {
 
@@ -51,10 +52,17 @@ void Game::checkGameOver() const {
 
 void Game::updateTextures() {
   int ticks = SDL_GetTicks();
+
   alienTexture->updateTexture(ticks);
   currentSpaceshipTexture->updateTexture(ticks);
   for (auto asteroid: asteroidTextures) {
     asteroid->updateTexture(ticks);
+  }
+
+  if (shield->isActive()) {
+    shieldTexture->enableTexture();
+  } else {
+    shieldTexture->hideTexture();
   }
 }
 
@@ -98,11 +106,12 @@ void Game::makeObjectsMove() {
   gunBooster->fall();
   fireLineBooster->fall();
   starItem->fall();
+  shieldItem->fall();
+
+  shield->updateLocation();
 
   makeAlienShoot();
   moveBullets();
-
-
 }
 
 void Game::moveBullets() {
@@ -198,6 +207,9 @@ void Game::initUniqueObjects() {
   gunBooster = std::make_shared<GunBoosterItem>(0, 0, alien->rect.w, alien->rect.h);
   fireLineBooster = std::make_shared<FireLineItem>(0, 0, alien->rect.w, alien->rect.h);
   starItem = std::make_shared<StarItem>(0, 0, alien->rect.w, alien->rect.h);
+  shieldItem = std::make_shared<ShieldItem>(0, 0, alien->rect.w, alien->rect.h);
+
+  shield = std::make_shared<Shield>(spaceship);
 }
 
 void Game::clearObjects() {
@@ -317,6 +329,8 @@ void Game::initUniqueTextures() {
   gunBoosterTexture = std::make_unique<GunBoosterTexture>(renderer, gunBooster);
   fireLineBoosterTexture = std::make_unique<FireLineBoosterTexture>(renderer, fireLineBooster);
   starItemTexture = std::make_unique<StarItemTexture>(renderer, starItem);
+  shieldItemTexture = std::make_unique<ShieldItemTexture>(renderer, shieldItem);
+  shieldTexture = std::make_unique<ShieldTexture>(renderer, shield);
 }
 
 void Game::initInfoTexts() {
@@ -506,8 +520,15 @@ void Game::handleCollisions() {
   SDL_Rect fireLineBoosterRect{fireLineBooster->rect.x, fireLineBooster->rect.y, fireLineBooster->width,
                                fireLineBooster->height};
   SDL_Rect starItemRect{starItem->rect.x, starItem->rect.y, starItem->width, starItem->height};
+  SDL_Rect shieldItemRect{shieldItem->rect.x, shieldItem->rect.y, shieldItem->width, shieldItem->height};
 
   //switch-case
+
+  if (SDL_HasIntersection(&spaceshipRect, &shieldItemRect)) {
+    shieldItem->removeFromScreen();
+    shield->addShield();
+    healingPickUp->playSoundEffect();
+  }
 
   if (SDL_HasIntersection(&spaceshipRect, &starItemRect)) {
     starItem->removeFromScreen();
@@ -605,19 +626,19 @@ void Game::handleCollisions() {
 
           if (alien->isDead()) {
             alien->givePoints(spaceship);
-            pickUps.clear();
-            pickUps.push_back(healingItem);
+            alienPickUps.clear();
+            alienPickUps.push_back(shieldItem);
             int maxRandomIndex = 0;
-            if (spaceship->getGunLvl() < 5) {
-              pickUps.push_back(gunBooster);
+            /*if (spaceship->getGunLvl() < 5) {
+              alienPickUps.push_back(gunBooster);
               maxRandomIndex++;
             }
             if (spaceship->getLinesOfFire() < 5) {
-              pickUps.push_back(fireLineBooster);
+              alienPickUps.push_back(fireLineBooster);
               maxRandomIndex++;
-            }
+            }*/
             int randomIndex = Util::getRandomNumber(0, maxRandomIndex);
-            pickUps[randomIndex]->placeAtSpawnPos(alienX, alienY);
+            alienPickUps[randomIndex]->placeAtSpawnPos(alienX, alienY);
           }
 
           break;
@@ -678,7 +699,7 @@ void Game::handleCollisions() {
             crystalPickUps.push_back(starItem);
             crystalPickUps.push_back(starItem);
             crystalPickUps.push_back(starItem);
-            crystalPickUps.push_back(healingItem); //shield
+            crystalPickUps.push_back(shieldItem);
             crystalPickUps.push_back(healingItem); //time slow
             int randomIndex = Util::getRandomNumber(0, 4);
             crystalPickUps[randomIndex]->placeAtSpawnPos(
@@ -695,8 +716,12 @@ void Game::handleCollisions() {
 
 void Game::spaceshipTakesDamage() {
   asteroidExplodes->playSoundEffect();
-  spaceship->takeDamage();
-  currentSpaceshipTexture->swapTexture();
+  if (spaceship->isShieldActive()) {
+    shield->takeDamage();
+  } else {
+    spaceship->takeDamage();
+    currentSpaceshipTexture->swapTexture();
+  }
 }
 
 void Game::printTexture() {
@@ -721,7 +746,7 @@ void Game::printTexture() {
   gunBoosterTexture->print(renderer, ticks);
   fireLineBoosterTexture->print(renderer, ticks);
   starItemTexture->print(renderer, ticks);
-
+  shieldItemTexture->print(renderer, ticks);
 
   if (!spaceshipBulletsTexture.empty()) {
     for (std::shared_ptr<BulletTexture> bullet: spaceshipBulletsTexture) {
@@ -736,12 +761,11 @@ void Game::printTexture() {
   }
 
   currentSpaceshipTexture->print(renderer, ticks);
+  shieldTexture->print(renderer, ticks);
 
   for (std::shared_ptr<GameText> text: texts) {
     text->print(renderer);
   }
-
-  //printPauseTexts();
 
   SDL_RenderPresent(renderer);
 }
@@ -780,6 +804,19 @@ void Game::printPauseTexts() const {
 void Game::gameOverStage() {
   Util::setTimeEnd((double) clock() / (double) CLOCKS_PER_SEC);
   elapsedTime = Util::getTimeDuration();
+
+
+
+  /*httplib::SSLClient cli("localhost", 7059);
+
+  std::string data = "{\n"
+                     "    \"Name\": \"from cpp\",\n"
+                     "    \"Score\": " + std::to_string(spaceship->getPoints()) + ",\n"
+                     "    \"TimeSurvived\": " + std::to_string(elapsedTime) + "\n"
+                     "}";
+  auto res = cli.Post(std::string("/api/highscores/add-new"), data, std::string("application/json"));*/
+
+
 
   GameText gameOverText{"GAME OVER",
                         DEFAULT_GAME_TEXT_FONT_PATH,
