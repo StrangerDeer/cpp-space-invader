@@ -107,6 +107,7 @@ void Game::makeObjectsMove() {
   fireLineBooster->fall();
   starItem->fall();
   shieldItem->fall();
+  timeSlowingItem->fall();
 
   shield->updateLocation();
 
@@ -207,7 +208,8 @@ void Game::initUniqueObjects() {
   gunBooster = std::make_shared<GunBoosterItem>(0, 0, alien->rect.w, alien->rect.h);
   fireLineBooster = std::make_shared<FireLineItem>(0, 0, alien->rect.w, alien->rect.h);
   starItem = std::make_shared<StarItem>(0, 0, alien->rect.w, alien->rect.h);
-  shieldItem = std::make_shared<ShieldItem>(0, 0, alien->rect.w, alien->rect.h);
+  shieldItem = std::make_shared<PickUpItem>(0, 0, alien->rect.w, alien->rect.h);
+  timeSlowingItem = std::make_shared<PickUpItem>(0, 0, alien->rect.w, alien->rect.h);
 
   shield = std::make_shared<Shield>(spaceship);
 }
@@ -331,6 +333,7 @@ void Game::initUniqueTextures() {
   starItemTexture = std::make_unique<StarItemTexture>(renderer, starItem);
   shieldItemTexture = std::make_unique<ShieldItemTexture>(renderer, shieldItem);
   shieldTexture = std::make_unique<ShieldTexture>(renderer, shield);
+  timeSlowingItemTexture = std::make_unique<TimeSlowingItemTexture>(renderer, timeSlowingItem);
 }
 
 void Game::initInfoTexts() {
@@ -521,8 +524,15 @@ void Game::handleCollisions() {
                                fireLineBooster->height};
   SDL_Rect starItemRect{starItem->rect.x, starItem->rect.y, starItem->width, starItem->height};
   SDL_Rect shieldItemRect{shieldItem->rect.x, shieldItem->rect.y, shieldItem->width, shieldItem->height};
+  SDL_Rect timeSlowItemRect{timeSlowingItem->rect.x, timeSlowingItem->rect.y, timeSlowingItem->width, timeSlowingItem->height};
 
   //switch-case
+
+  if (SDL_HasIntersection(&spaceshipRect, &timeSlowItemRect)) {
+    timeSlowingItem->removeFromScreen();
+    reduceObjectSpeed();
+    healingPickUp->playSoundEffect();
+  }
 
   if (SDL_HasIntersection(&spaceshipRect, &shieldItemRect)) {
     shieldItem->removeFromScreen();
@@ -697,11 +707,9 @@ void Game::handleCollisions() {
 
             crystalPickUps.clear();
             crystalPickUps.push_back(starItem);
-            crystalPickUps.push_back(starItem);
-            crystalPickUps.push_back(starItem);
-            crystalPickUps.push_back(shieldItem);
-            crystalPickUps.push_back(healingItem); //time slow
-            int randomIndex = Util::getRandomNumber(0, 4);
+            crystalPickUps.push_back(healingItem);
+            crystalPickUps.push_back(timeSlowingItem);
+            int randomIndex = Util::getRandomNumber(0, 2);
             crystalPickUps[randomIndex]->placeAtSpawnPos(
                     crystalX + crystalAst->width / 2 - starItem->width / 2,
                     crystalY + crystalAst->height / 2 - starItem->height / 2);
@@ -747,6 +755,7 @@ void Game::printTexture() {
   fireLineBoosterTexture->print(renderer, ticks);
   starItemTexture->print(renderer, ticks);
   shieldItemTexture->print(renderer, ticks);
+  timeSlowingItemTexture->print(renderer, ticks);
 
   if (!spaceshipBulletsTexture.empty()) {
     for (std::shared_ptr<BulletTexture> bullet: spaceshipBulletsTexture) {
