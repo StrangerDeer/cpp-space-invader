@@ -29,6 +29,15 @@ class FallingObject : public DimensionalObject {
       maxSpeed = maxSpeed + 1;
   }
 
+  void reduceSpeed() {
+    if (minSpeed > 1) {
+      minSpeed = minSpeed - 2;
+    }
+    if (maxSpeed > 5) {
+      maxSpeed = maxSpeed - 2;
+    }
+  }
+
  protected:
   int minSpeed;
   int maxSpeed;
