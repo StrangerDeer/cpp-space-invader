@@ -99,7 +99,7 @@ private:
 
     std::shared_ptr<GunBoosterItem> gunBooster{nullptr};
     std::shared_ptr<FireLineItem> fireLineBooster{nullptr};
-    std::shared_ptr<ShieldItem> shieldItem{nullptr};
+    std::shared_ptr<PickUpItem> shieldItem{nullptr};
     shared_vector<PickUpItem> alienPickUps{};
 
     std::shared_ptr<HealingItem> healingItem{nullptr};
@@ -176,10 +176,10 @@ private:
     void moveBullets();
 
     void printPauseTexts() const;
-
     void initInfoTexts();
 
     void initUniqueTextures();
+    void reduceObjectSpeed();
 };
 
 #endif //CPP_SPACE_INVADER_GAME_H
