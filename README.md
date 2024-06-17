@@ -40,7 +40,7 @@
 
 ## About The Project
 
-Inspired by the classic Space Invaders, Stellar Storm is an arcade-style game in which the player navigates their spaceship through a dangerous asteroid belt. The player has to catch falling stars to score points while avoiding the oncoming asteroids. To help in their journey, the player's spaceship is equipped with a gun with which they can shoot the asteroids they can't avoid. As they progress through the asteroid belt, the player will soon encounter hostile aliens with unpredictable movement and fire. Upon defeating an alien, it drops a health restoration bubble, which can aid greatly in the player's adventure through the belt.
+Inspired by the classic Space Invaders, Stellar Storm is an arcade-style game in which the player navigates their spaceship through a dangerous asteroid belt. The player has to catch falling stars to score points while avoiding the oncoming asteroids. To help in their journey, the player's spaceship is equipped with a gun with which they can shoot the asteroids they can't avoid. As they progress through the asteroid belt, the player will soon encounter hostile aliens with unpredictable movement and fire. Defeating these aliens and catching their loot is essential to upgrade the ship and survive. Extra loot can be found in special asteroids containing rare crystals.
 <br>
 
 For future features, see the <a href="#roadmap">roadmap</a>!
@@ -61,7 +61,7 @@ The project is still under development - once the first release is ready, an ins
 
 You will need:
 * Install CMake, Ninja and vcpkg
-* env variable set for VCPKG_ROOT (path\to\.vcpkg-clion\vcpkg)
+* env variable set for VCPKG_ROOT (`path\to\.vcpkg-clion\vcpkg`)
 
 ### Running The Game:
 The project uses SDL2, SDL2 image, SDL2 ttf and SDL2 mixer.<br>
@@ -95,15 +95,20 @@ Controls:
 
 ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/56e15a26-0663-428f-9301-9a9cdeeaf0f1)
 
-When starting the game, you will be met with the title screen. After pressing space, the game will begin, and you can control your spaceship ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/b1f7fc10-cc44-432b-ac6c-b581e3293d38).
+When starting the game, you will be met with the title screen. You can press the buttons 1, 2 and 3 to toggle between spaceship sprites ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/b1f7fc10-cc44-432b-ac6c-b581e3293d38), ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/4662e807-044d-4d22-b014-e139f8ec2ee8), ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/c7ba3af9-1efb-4ade-8560-707f07586feb).
+After pressing space, the game will begin, and you can control your spaceship.
 <br>
 
 Throughout the game, you have to catch falling stars ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/101d6603-5af6-4966-afa9-ed064d48026b) to score points (top right of the screen) and avoid asteroids ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/94c297bf-4ec2-4ffa-96a1-9d528a85d719) which deplete the spaceship's health upon impact (bottom left of the screen).
 
 After a while, you will be meeting hostile aliens ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/b3eff62b-e956-4f28-a8d8-8cf0f13ce163) who will not hesitate to open fire at your spaceship. Their movement is pretty unpredictable, but they can be defeated. Once defeated, it will drop one of the following items:
-- a healing bubble ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/e7175e9a-6d23-4390-92d8-d8f587710131) which restores some of your spaceship's health
+- a shield bubble ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/ed1371fc-64eb-4c0d-8db4-373dded48a7b) which negates your ship from taking any damage, but it doesn't last forever
 - a gun booster bubble ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/6c61fdc9-fa82-430b-9d6f-ee71ad5d402a) which will level up your spaceship's gun, increasing its fire rate
 - a gun expansion bubble ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/1c2fafdb-5e72-4dc0-8fcd-0662702b0f0f) which adds more lines of fire to the spaceship's gun
+
+Throughout your journey across the asteroid belt, you will find special asteroids containing crystals. These precious crystals can give you the following:
+- a healing bubble ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/e7175e9a-6d23-4390-92d8-d8f587710131) which restores some of your spaceship's health
+- a star bubble ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/9e295f15-d96d-42d9-9b1d-ef7935be6e6e) which gives your ship extra points
 
 The more stars you catch, the spaceship's travelling speed increases, and aliens will become harder to defeat.
 
