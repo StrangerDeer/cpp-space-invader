@@ -101,12 +101,12 @@ After pressing space, the game will begin, and you can control your spaceship.
 
 Throughout the game, you have to catch falling stars ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/101d6603-5af6-4966-afa9-ed064d48026b) to score points (top right of the screen) and avoid asteroids ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/94c297bf-4ec2-4ffa-96a1-9d528a85d719) which deplete the spaceship's health upon impact (bottom left of the screen).
 
-After a while, you will be meeting hostile aliens ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/b3eff62b-e956-4f28-a8d8-8cf0f13ce163) who will not hesitate to open fire at your spaceship. Their movement is pretty unpredictable, but they can be defeated. Once defeated, it will drop one of the following items:
+After a while, you will be meeting hostile aliens ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/b3eff62b-e956-4f28-a8d8-8cf0f13ce163) who will not hesitate to open fire at your spaceship. Their movement is pretty unpredictable, but they can be defeated. Once defeated, the alien will drop one of the following items:
 - a shield bubble ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/ed1371fc-64eb-4c0d-8db4-373dded48a7b) which negates your ship from taking any damage, but it doesn't last forever
 - a gun booster bubble ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/6c61fdc9-fa82-430b-9d6f-ee71ad5d402a) which will level up your spaceship's gun, increasing its fire rate
 - a gun expansion bubble ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/1c2fafdb-5e72-4dc0-8fcd-0662702b0f0f) which adds more lines of fire to the spaceship's gun
 
-Throughout your journey across the asteroid belt, you will find special asteroids containing crystals. These precious crystals can give you the following:
+Throughout your journey across the asteroid belt, you will find special asteroids containing rare crystals ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/a3e88eb3-8d2b-4619-bd03-209b69c24c5e). These precious crystals can give you the following:
 - a healing bubble ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/e7175e9a-6d23-4390-92d8-d8f587710131) which restores some of your spaceship's health
 - a star bubble ![image](https://github.com/StrangerDeer/cpp-space-invader/assets/113454591/9e295f15-d96d-42d9-9b1d-ef7935be6e6e) which gives your ship extra points
 
