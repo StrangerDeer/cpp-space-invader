@@ -6,7 +6,7 @@
 
 class FireLineItem : public PickUpItem {
 public:
-    FireLineItem(int x, int y, int alienWidth, int alienHeight) :
+    FireLineItem(int x, int y, int spawnObjectWidth, int spawnObjectHeight) :
             PickUpItem(x, y, 70, 130) {
         removeFromScreen();
     };

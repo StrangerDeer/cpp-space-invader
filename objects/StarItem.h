@@ -5,7 +5,7 @@
 
 class StarItem : public PickUpItem, public ScoreObject {
 public:
-    StarItem(int x, int y, int alienWidth, int alienHeight) :
+    StarItem(int x, int y, int spawnObjectWidth, int spawnObjectHeight) :
             PickUpItem(x, y, 70, 130), ScoreObject(100) {
         removeFromScreen();
     };
