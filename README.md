@@ -175,13 +175,13 @@ Once your spaceship's health reaches zero, you will get a game over scene with y
 - [X] Fixed: Background images now appear when restarting after game over
 - [X] New spaceship sprites
   - [X] Enable choosing between spaceships before beginning the game
+- [X] Shield pickup that protects the spaceship when taking damage
+  - [X] Place shield sprite over spaceship's when active
 
 ### Planned Features:
 - [ ] Installer
 - [ ] Restrict spaceship movement so collision with an alien is no longer possible
 - [ ] Menu
-- [ ] Shield pickup that protects the spaceship when taking damage
-  - [ ] Place shield sprite over spaceship's when active
 - [ ] Time slowing pickup that slows objects down around the spaceship
 - [ ] New sprites for asteroids, crystal asteroids, aliens and the spaceship getting destroyed
 
