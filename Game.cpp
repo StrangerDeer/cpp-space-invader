@@ -64,6 +64,18 @@ void Game::updateTextures() {
   } else {
     shieldTexture->hideTexture();
   }
+
+  eraseExplosions();
+}
+
+void Game::eraseExplosions() {
+  for (int i = 0; i < explosions.size(); i++) {
+    std::shared_ptr<Explosion> exp = explosions.at(i);
+    if (exp->checkIfShouldBeDestroyed(ticks)) {
+      explosions.erase(explosions.begin() + i);
+      explosionTextures.erase(explosionTextures.begin() + i);
+    }
+  }
 }
 
 void Game::increaseGameDifficulty() const {
@@ -167,7 +179,7 @@ void Game::initSDL() {
   Config::windowHeight = windowHeight;
 
   if (Config::windowWidth == 0 || Config::windowHeight == 0) {
-    std::cerr << "Window size could not  initialised!" << std::endl;
+    std::cerr << "Window size could not be initialised!" << std::endl;
     return;
   }
 
@@ -245,6 +257,10 @@ void Game::clearObjects() {
 
   if (!asteroids.empty()) {
     asteroids.clear();
+  }
+
+  if (!explosions.empty()) {
+    explosions.clear();
   }
 
   if (!crystalAsteroids.empty()) {
@@ -436,6 +452,10 @@ void Game::clearTextures() {
     alienBulletsTexture.clear();
   }
 
+  if (!explosionTextures.empty()) {
+    explosionTextures.clear();
+  }
+
   if (!backgroundTextures.empty()) {
     backgroundTextures.clear();
   }
@@ -518,66 +538,17 @@ void Game::initStarTextures() {
 void Game::handleCollisions() {
 
   SDL_Rect spaceshipRect{spaceship->rect.x, spaceship->rect.y, spaceship->width, spaceship->height};
-  SDL_Rect healingItemRect{healingItem->rect.x, healingItem->rect.y, healingItem->width, healingItem->height};
-  SDL_Rect gunBoosterRect{gunBooster->rect.x, gunBooster->rect.y, gunBooster->width, gunBooster->height};
-  SDL_Rect fireLineBoosterRect{fireLineBooster->rect.x, fireLineBooster->rect.y, fireLineBooster->width,
-                               fireLineBooster->height};
-  SDL_Rect starItemRect{starItem->rect.x, starItem->rect.y, starItem->width, starItem->height};
-  SDL_Rect shieldItemRect{shieldItem->rect.x, shieldItem->rect.y, shieldItem->width, shieldItem->height};
-  SDL_Rect timeSlowItemRect{timeSlowingItem->rect.x, timeSlowingItem->rect.y, timeSlowingItem->width, timeSlowingItem->height};
 
-  //switch-case
-
-  if (SDL_HasIntersection(&spaceshipRect, &timeSlowItemRect)) {
-    timeSlowingItem->removeFromScreen();
-    reduceObjectSpeed();
-    healingPickUp->playSoundEffect();
-  }
-
-  if (SDL_HasIntersection(&spaceshipRect, &shieldItemRect)) {
-    shieldItem->removeFromScreen();
-    shield->addShield();
-    healingPickUp->playSoundEffect();
-  }
-
-  if (SDL_HasIntersection(&spaceshipRect, &starItemRect)) {
-    starItem->removeFromScreen();
-    starItem->givePoints(spaceship);
-    healingPickUp->playSoundEffect();
-  }
-
-  if (SDL_HasIntersection(&spaceshipRect, &fireLineBoosterRect)) {
-    fireLineBooster->removeFromScreen();
-    fireLineBooster->increaseSpaceshipFireLine(spaceship);
-    healingPickUp->playSoundEffect();
-    alien->increaseDifficulty();
-    for (const std::shared_ptr<Asteroid> asteroid: asteroids) {
-      asteroid->increaseHealth();
-    }
-  }
-
-  if (SDL_HasIntersection(&spaceshipRect, &gunBoosterRect)) {
-    gunBooster->removeFromScreen();
-    gunBooster->increaseSpaceshipFireRate(spaceship);
-    alien->increaseDifficulty();
-    for (const std::shared_ptr<Asteroid> asteroid: asteroids) {
-      asteroid->increaseHealth();
-    }
-    healingPickUp->playSoundEffect();
-  }
-
-  if (SDL_HasIntersection(&spaceshipRect, &healingItemRect)) {
-    healingItem->removeFromScreen();
-    healingItem->healSpaceship(spaceship);
-    healingPickUp->playSoundEffect();
-  }
+  handlePickUpCollisions(spaceshipRect);
 
   for (auto &asteroid: asteroids) {
 
     SDL_Rect asteroidRect{asteroid->rect.x, asteroid->rect.y, asteroid->width, asteroid->height};
 
     if (SDL_HasIntersection(&spaceshipRect, &asteroidRect)) {
+
       asteroid->reset();
+      createExplosion(asteroidRect.x, asteroidRect.y, asteroidRect.w, asteroidRect.h);
       spaceshipTakesDamage();
     }
   }
@@ -587,6 +558,7 @@ void Game::handleCollisions() {
 
     if (SDL_HasIntersection(&spaceshipRect, &crystalAstRect)) {
       crystalAst->reset();
+      createExplosion(crystalAstRect.x, crystalAstRect.y, crystalAstRect.w, crystalAstRect.h);
       spaceshipTakesDamage();
     }
   }
@@ -635,6 +607,7 @@ void Game::handleCollisions() {
           int alienY = alien->rect.y;
 
           if (alien->isDead()) {
+            createExplosion(alienRect.x, alienRect.y, alienRect.w, alienRect.w);
             alien->givePoints(spaceship);
             alienPickUps.clear();
             alienPickUps.push_back(shieldItem);
@@ -673,6 +646,7 @@ void Game::handleCollisions() {
           spaceshipBulletsTexture.erase(spaceshipBulletsTexture.begin() + i);
 
           if (asteroid->isDead()) {
+            createExplosion(asteroidRect.x, asteroidRect.y, asteroidRect.w, asteroidRect.h);
             asteroidExplodes->playSoundEffect();
             asteroid->givePoints(spaceship);
           }
@@ -702,6 +676,7 @@ void Game::handleCollisions() {
 
 
           if (crystalAst->isDead()) {
+            createExplosion(crystalAstRect.x, crystalAstRect.y, crystalAstRect.w, crystalAstRect.h);
             asteroidExplodes->playSoundEffect();
             crystalAst->givePoints(spaceship);
 
@@ -722,6 +697,67 @@ void Game::handleCollisions() {
   }
 }
 
+void Game::createExplosion(int x, int y, int w, int h) {
+  std::shared_ptr<Explosion> explosion = std::make_shared<Explosion>(x-10, y-10, w+20, h+20, ticks);
+  std::shared_ptr<ExplosionTexture> expTexture = std::make_shared<ExplosionTexture>(renderer, explosion);
+  explosions.push_back(explosion);
+  explosionTextures.push_back(expTexture);
+}
+
+void Game::handlePickUpCollisions(SDL_Rect &spaceshipRect) {
+  SDL_Rect healingItemRect{healingItem->rect.x, healingItem->rect.y, healingItem->width, healingItem->height};
+  SDL_Rect gunBoosterRect{gunBooster->rect.x, gunBooster->rect.y, gunBooster->width, gunBooster->height};
+  SDL_Rect fireLineBoosterRect{fireLineBooster->rect.x, fireLineBooster->rect.y, fireLineBooster->width,
+                               fireLineBooster->height};
+  SDL_Rect starItemRect{starItem->rect.x, starItem->rect.y, starItem->width, starItem->height};
+  SDL_Rect shieldItemRect{shieldItem->rect.x, shieldItem->rect.y, shieldItem->width, shieldItem->height};
+  SDL_Rect timeSlowItemRect{timeSlowingItem->rect.x, timeSlowingItem->rect.y, timeSlowingItem->width, timeSlowingItem->height};
+
+  if (SDL_HasIntersection(&spaceshipRect, &timeSlowItemRect)) {
+    timeSlowingItem->removeFromScreen();
+    reduceObjectSpeed();
+    healingPickUp->playSoundEffect();
+  }
+
+  if (SDL_HasIntersection(&spaceshipRect, &shieldItemRect)) {
+    shieldItem->removeFromScreen();
+    shield->addShield();
+    healingPickUp->playSoundEffect();
+  }
+
+  if (SDL_HasIntersection(&spaceshipRect, &starItemRect)) {
+    starItem->removeFromScreen();
+    starItem->givePoints(spaceship);
+    healingPickUp->playSoundEffect();
+  }
+
+  if (SDL_HasIntersection(&spaceshipRect, &fireLineBoosterRect)) {
+    fireLineBooster->removeFromScreen();
+    fireLineBooster->increaseSpaceshipFireLine(spaceship);
+    healingPickUp->playSoundEffect();
+    alien->increaseDifficulty();
+    for (const std::shared_ptr<Asteroid> asteroid: asteroids) {
+      asteroid->increaseHealth();
+    }
+  }
+
+  if (SDL_HasIntersection(&spaceshipRect, &gunBoosterRect)) {
+    gunBooster->removeFromScreen();
+    gunBooster->increaseSpaceshipFireRate(spaceship);
+    alien->increaseDifficulty();
+    for (const std::shared_ptr<Asteroid> asteroid: asteroids) {
+      asteroid->increaseHealth();
+    }
+    healingPickUp->playSoundEffect();
+  }
+
+  if (SDL_HasIntersection(&spaceshipRect, &healingItemRect)) {
+    healingItem->removeFromScreen();
+    healingItem->healSpaceship(spaceship);
+    healingPickUp->playSoundEffect();
+  }
+}
+
 void Game::spaceshipTakesDamage() {
   asteroidExplodes->playSoundEffect();
   if (spaceship->isShieldActive()) {
@@ -736,18 +772,24 @@ void Game::printTexture() {
   SDL_RenderClear(renderer);
   ticks = SDL_GetTicks();
 
-
-  for (const std::shared_ptr<BackgroundTexture> &backgroundTexture: backgroundTextures) {
+  for (const auto& backgroundTexture: backgroundTextures) {
     backgroundTexture->print(renderer, ticks);
   }
 
-  for (const std::shared_ptr<StarTexture> &starTexture: starTextures) {
+  if (!explosionTextures.empty()) {
+    for (const auto& explosionTexture : explosionTextures) {
+      explosionTexture->print(renderer, ticks);
+    }
+  }
+
+  for (const auto& starTexture: starTextures) {
     starTexture->print(renderer, ticks);
   }
 
-  for (std::shared_ptr<AsteroidTexture> &asteroidTexture: asteroidTextures) {
+  for (const auto& asteroidTexture: asteroidTextures) {
     asteroidTexture->print(renderer, ticks);
   }
+
 
   alienTexture->print(renderer, ticks);
   healingItemTexture->print(renderer, ticks);
@@ -758,13 +800,13 @@ void Game::printTexture() {
   timeSlowingItemTexture->print(renderer, ticks);
 
   if (!spaceshipBulletsTexture.empty()) {
-    for (std::shared_ptr<BulletTexture> bullet: spaceshipBulletsTexture) {
+    for (const auto& bullet: spaceshipBulletsTexture) {
       bullet->print(renderer);
     }
   }
 
   if (!alienBulletsTexture.empty()) {
-    for (std::shared_ptr<BulletTexture> bullet: alienBulletsTexture) {
+    for (const auto& bullet: alienBulletsTexture) {
       bullet->print(renderer);
     }
   }
@@ -772,9 +814,11 @@ void Game::printTexture() {
   currentSpaceshipTexture->print(renderer, ticks);
   shieldTexture->print(renderer, ticks);
 
-  for (std::shared_ptr<GameText> text: texts) {
+  for (const auto& text: texts) {
     text->print(renderer);
   }
+
+  //TestTexture(renderer);
 
   SDL_RenderPresent(renderer);
 }
@@ -1083,4 +1127,24 @@ void Game::reduceObjectSpeed() {
     for (const std::shared_ptr<FallingObject> object : fallingObjects) {
       object->reduceSpeed();
     }
+}
+
+void Game::TestTexture(SDL_Renderer *renderer) {
+  SDL_Surface* surface = IMG_Load("../ui/textures/explosion.png");
+  if (!surface) {
+    std::cerr << "Error: Unable to load test image - " << IMG_GetError() << std::endl;
+    return;
+  }
+
+  SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+  SDL_FreeSurface(surface);
+
+  if (!texture) {
+    std::cerr << "Error: Unable to create test texture - " << SDL_GetError() << std::endl;
+    return;
+  }
+
+  SDL_Rect dstrect = { 100, 100, 64, 64 };
+  SDL_RenderCopy(renderer, texture, nullptr, &dstrect);
+  SDL_DestroyTexture(texture);
 }
