@@ -12,6 +12,9 @@ void PNGTexture::loadTexture(SDL_Renderer *renderer, const std::string& filePath
 
     if(!texture){
         std::cerr << "Error: Image currentTexture: " << SDL_GetError() << std::endl;
+        SDL_FreeSurface(surface);
         return;
     }
+
+  SDL_FreeSurface(surface);
 }
