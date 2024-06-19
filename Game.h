@@ -46,6 +46,8 @@
 #include "objects/Shield.h"
 #include "ui/objectTextures/ShieldTexture.h"
 #include "ui/objectTextures/TimeSlowingItemTexture.h"
+#include "objects/Explosion.h"
+#include "ui/objectTextures/ExplosionTexture.h"
 
 template<typename T>
 using shared_vector = std::vector<std::shared_ptr<T>>;
@@ -92,6 +94,7 @@ private:
     //shared_vector<DimensionalObject> dimensionalObjects;
     shared_vector<BackgroundElement> backgroundElems;
     shared_vector<Asteroid> crystalAsteroids;
+    shared_vector<Explosion> explosions;
 
     std::shared_ptr<Spaceship> spaceship{nullptr};
     std::shared_ptr<Alien> alien{nullptr};
@@ -127,6 +130,7 @@ private:
     shared_vector<BulletTexture> spaceshipBulletsTexture{};
     shared_vector<BulletTexture> alienBulletsTexture{};
     shared_vector<BackgroundTexture> backgroundTextures{};
+    shared_vector<ExplosionTexture> explosionTextures{};
 
     shared_vector<GameText> texts;
 
@@ -182,6 +186,13 @@ private:
 
     void initUniqueTextures();
     void reduceObjectSpeed();
+
+    void handlePickUpCollisions(SDL_Rect &spaceshipRect);
+
+    void createExplosion(int x, int y, int w, int h);
+    void eraseExplosions();
+
+    void TestTexture(SDL_Renderer* renderer);
 };
 
 #endif //CPP_SPACE_INVADER_GAME_H

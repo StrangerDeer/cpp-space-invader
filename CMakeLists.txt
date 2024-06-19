@@ -101,6 +101,9 @@ add_executable(cpp_space_invader main.cpp
         ui/objectTextures/TimeSlowingItemTexture.h
         ui/objectTextures/TimeSlowingItemTexture.cpp
         ui/objectTextures/TimeSlowingItemTexture.h
+        objects/Explosion.h
+        ui/objectTextures/ExplosionTexture.h
+        ui/objectTextures/ExplosionTexture.cpp
 )
 
 target_link_libraries(cpp_space_invader
