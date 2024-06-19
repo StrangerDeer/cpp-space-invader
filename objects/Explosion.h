@@ -9,7 +9,7 @@ public:
     }
 
     bool checkIfShouldBeDestroyed(Uint32 ticks) const {
-      if (ticks - beginTicks >= 1500) {
+      if (ticks - beginTicks >= 500) {
         return true;
       } else {
         return false;

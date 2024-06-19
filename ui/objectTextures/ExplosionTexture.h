@@ -2,6 +2,7 @@
 
 #include "../PNGTexture.h"
 #include "../../objects/Explosion.h"
+#include <iostream>
 
 class ExplosionTexture : public PNGTexture {
 public:

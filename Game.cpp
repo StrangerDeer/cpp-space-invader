@@ -34,7 +34,6 @@ void Game::run() {
 }
 
 void Game::middleGameStage() {
-  createExplosion(300, 300, 60, 60);
   handleMiddleGameEvent();
   handleCollisions();
   makeObjectsMove();
@@ -70,7 +69,6 @@ void Game::updateTextures() {
 }
 
 void Game::eraseExplosions() {
-  return;
   for (int i = 0; i < explosions.size(); i++) {
     std::shared_ptr<Explosion> exp = explosions.at(i);
     if (exp->checkIfShouldBeDestroyed(ticks)) {
@@ -700,10 +698,10 @@ void Game::handleCollisions() {
 }
 
 void Game::createExplosion(int x, int y, int w, int h) {
-  Explosion explosion{x, y, w, h, ticks};
-  ExplosionTexture expTexture{renderer, std::make_shared<Explosion>(explosion)};
-  explosions.push_back(std::make_shared<Explosion>(explosion));
-  explosionTextures.push_back(std::make_shared<ExplosionTexture>(expTexture));
+  std::shared_ptr<Explosion> explosion = std::make_shared<Explosion>(x-10, y-10, w+20, h+20, ticks);
+  std::shared_ptr<ExplosionTexture> expTexture = std::make_shared<ExplosionTexture>(renderer, explosion);
+  explosions.push_back(explosion);
+  explosionTextures.push_back(expTexture);
 }
 
 void Game::handlePickUpCollisions(SDL_Rect &spaceshipRect) {
@@ -820,7 +818,7 @@ void Game::printTexture() {
     text->print(renderer);
   }
 
-  TestTexture(renderer);
+  //TestTexture(renderer);
 
   SDL_RenderPresent(renderer);
 }
