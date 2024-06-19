@@ -184,12 +184,12 @@ Once your spaceship's health reaches zero, you will get a game over scene with y
   - [X] Place shield sprite over spaceship's when active
 - [X] Restrict spaceship movement so collision with an alien is no longer possible
 - [X] Time slowing pickup that slows objects down around the spaceship
+- [X] New sprites for asteroids, crystal asteroids and aliens getting destroyed
 
 ### Planned Features:
 - [ ] Installer
 - [ ] Make the game platform independent
 - [ ] Menu
-- [ ] New sprites for asteroids, crystal asteroids, aliens and the spaceship getting destroyed
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
