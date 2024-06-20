@@ -2,6 +2,7 @@
 #include <cstdlib> // For rand()
 #include <ctime>   // For time()
 #include <time.h>
+#include <vector>
 
 class Util {
 public:
@@ -11,15 +12,12 @@ public:
         return rand() % (max - min + 1) + min;
     }
 
-    static void setTimeBegin(double begin);
-    static void setTimeEnd(double end);
+    static void addTimeStamp(int ticks);
     static int getTimeDuration();
+    static void clearTimeStamps();
 
-    static double timeBegin;
-    static double timeEnd;
 
 private:
-
 
     // Helper function to initialize the random number generator
     static void initialize() {
@@ -29,4 +27,6 @@ private:
             initialized = true;
         }
     }
+
+    static void calculateDuration();
 };
