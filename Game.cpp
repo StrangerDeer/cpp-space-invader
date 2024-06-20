@@ -282,6 +282,7 @@ void Game::handleMiddleGameEvent() {
       switch (event.key.keysym.sym) {
         case PAUSE_BUTTON:
           *isRunning = PAUSE_STAGE_VALUE;
+          Util::addTimeStamp(SDL_GetTicks());
           break;
         case MOVE_DOWN_BUTTON2:
         case MOVE_DOWN_BUTTON:
@@ -855,7 +856,7 @@ void Game::printPauseTexts() const {
 }
 
 void Game::gameOverStage() {
-  Util::setTimeEnd((double) clock() / (double) CLOCKS_PER_SEC);
+  Util::addTimeStamp(SDL_GetTicks());
   elapsedTime = Util::getTimeDuration();
 
 
@@ -922,7 +923,7 @@ void Game::gameOverStage() {
 
       if (event.type == SDL_KEYDOWN) {
         if (event.key.keysym.sym == SDLK_SPACE) {
-          Util::setTimeBegin(((double) clock()) / (double) CLOCKS_PER_SEC);
+          Util::clearTimeStamps();
           initLogic();
           initTexture();
           initOpenStage();
@@ -1102,6 +1103,7 @@ void Game::handlePauseEvent() {
     if (event.type == SDL_KEYDOWN) {
       switch (event.key.keysym.sym) {
         case PAUSE_BUTTON:
+          Util::addTimeStamp(SDL_GetTicks());
           *isRunning = MIDDLE_GAME_STAGE_VALUE;
           break;
         default:
