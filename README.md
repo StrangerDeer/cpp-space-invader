@@ -185,11 +185,13 @@ Once your spaceship's health reaches zero, you will get a game over scene with y
 - [X] Restrict spaceship movement so collision with an alien is no longer possible
 - [X] Time slowing pickup that slows objects down around the spaceship
 - [X] New sprites for asteroids, crystal asteroids and aliens getting destroyed
+- [X] Time counter stops when game is paused
 
 ### Planned Features:
 - [ ] Installer
 - [ ] Make the game platform independent
-- [ ] Menu
+- [ ] Difficulties: Easy, Medium, Hard
+- [ ] Option to add name with a button to send the player's high score to the webpage
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
