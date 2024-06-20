@@ -88,7 +88,7 @@ After this, you will be ready to run the application!
 ## Usage
 
 Controls:
-* Arrow keys for the movement
+* Arrow keys or WASD for the movement
 * Space to shoot
 <br>
 <br>
