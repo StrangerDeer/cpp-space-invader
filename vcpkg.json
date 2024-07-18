@@ -1,0 +1,66 @@
+{
+  "name" : "cpp-space-invader",
+  "version-string" : "1.0.0",
+  "builtin-baseline" : "5fa0f075ea51f305b627ecd5e050a363707353ff",
+  "dependencies" : [ {
+    "name" : "brotli",
+    "version>=" : "1.1.0#1"
+  }, {
+    "name" : "bzip2",
+    "version>=" : "1.0.8#5"
+  }, {
+    "name" : "cpp-httplib",
+    "version>=" : "0.15.3"
+  }, {
+    "name" : "flatbuffers",
+    "version>=" : "23.5.26#1"
+  }, {
+    "name" : "freetype",
+    "version>=" : "2.13.2#1"
+  }, {
+    "name" : "libjpeg-turbo",
+    "version>=" : "3.0.2"
+  }, {
+    "name" : "libogg",
+    "version>=" : "1.3.5#1"
+  }, {
+    "name" : "libpng",
+    "version>=" : "1.6.43"
+  }, {
+    "name" : "libvorbis",
+    "version>=" : "1.3.7#2"
+  }, {
+    "name" : "openssl",
+    "version>=" : "3.2.1#2"
+  }, {
+    "name" : "sdl2-image",
+    "version>=" : "2.8.2#1"
+  }, {
+    "name" : "sdl2-mixer-ext",
+    "version>=" : "2.6.0#1"
+  }, {
+    "name" : "sdl2-mixer",
+    "version>=" : "2.8.0#3"
+  }, {
+    "name" : "sdl2-ttf",
+    "version>=" : "2.22.0#1"
+  }, {
+    "name" : "sdl2",
+    "version>=" : "2.30.1"
+  }, {
+    "name" : "vcpkg-cmake-config",
+    "version>=" : "2022-02-06#1"
+  }, {
+    "name" : "vcpkg-cmake-get-vars",
+    "version>=" : "2023-12-31"
+  }, {
+    "name" : "vcpkg-cmake",
+    "version>=" : "2023-05-04"
+  }, {
+    "name" : "wavpack",
+    "version>=" : "5.6.0#1"
+  }, {
+    "name" : "zlib",
+    "version>=" : "1.3.1"
+  } ]
+}

@@ -61,26 +61,17 @@ The project is still under development - once the first release is ready, an ins
 
 You will need:
 * Install CMake, Ninja and vcpkg
-* env variable set for VCPKG_ROOT (`path\to\.vcpkg-clion\vcpkg`)
+* env variable set for VCPKG_ROOT (`C:\Program Files\Microsoft Visual Studio\2022\Community\VC\vcpkg`)
+* add ninja to Path env variable
+
+For Windows:
+* build with build.ps1
+
+For Linux:
+* build with build.sh
 
 ### Running The Game:
-The project uses SDL2, SDL2 image, SDL2 ttf and SDL2 mixer.<br>
-We use Visual Studio toolchain in CLion, and compiler is cl.
-
-In Clion:
-
-* Download vcpkg in Clion
-* Download in vcpkg:
-    * sdl2
-    * sdl2 image
-    * sdl2 ttf
-    * sdl2 mixer and sdl2 mixer ext
-* Settings -> CMake -> Cache variables
-* You must add all variable's paths. You can find all paths .vcpkg-clion\vcpkg\installed\x64-windows\share. The base location, in windows, C:\Users\user.
-* Build the project
-* Copy every dll from the vcpkg directory to build directory. ( .vcpkg-clion\vcpkg\installed\x64-windows\bin , .vcpkg-clion\vcpkg\installed\x64-windows\debug )
-
-After this, you will be ready to run the application!
+Run cpp_space_invader.exe in build-cmake folder
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -187,10 +178,10 @@ Once your spaceship's health reaches zero, you will get a game over scene with y
 - [X] Time slowing pickup that slows objects down around the spaceship
 - [X] New sprites for asteroids, crystal asteroids and aliens getting destroyed
 - [X] Time counter stops when game is paused
+- [X] Make the game platform and OS independent
 
 ### Planned Features:
 - [ ] Installer
-- [ ] Make the game platform independent
 - [ ] Difficulties: Easy, Medium, Hard
 - [ ] Option to add name with a button to send the player's high score to the webpage
 

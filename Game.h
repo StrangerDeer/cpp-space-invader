@@ -4,8 +4,8 @@
 #include <SDL.h>
 #include <SDL_mixer.h>
 
-#include "httplib.h"
 #define CPPHTTPLIB_OPENSSL_SUPPORT
+#include "httplib.h"
 
 #include <iostream>
 #include <vector>
@@ -193,6 +193,12 @@ private:
     void eraseExplosions();
 
     void TestTexture(SDL_Renderer* renderer);
+
+    void postResultToWebPage();
+
+    void handleGameOverEvent();
+
+    void printGameOverTexts() const;
 };
 
 #endif //CPP_SPACE_INVADER_GAME_H

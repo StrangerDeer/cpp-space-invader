@@ -1,6 +1,5 @@
 #include "Game.h"
 #include "ui/text/SpaceshipTravelSpeedGameText.h"
-#include "httplib.h"
 
 void Game::run() {
 
@@ -21,6 +20,9 @@ void Game::run() {
         break;
       case PAUSE_STAGE_VALUE:
         pauseStage();
+        break;
+      case GAME_END_SCREEN:
+        handleGameOverEvent();
         break;
       default:;
     }
@@ -856,22 +858,18 @@ void Game::printPauseTexts() const {
 }
 
 void Game::gameOverStage() {
-  Util::addTimeStamp(SDL_GetTicks());
-  elapsedTime = Util::getTimeDuration();
+  backgroundMusic->stopMusic();
+  GameSoundEffect gameOverMusic{"../sound/game_over.wav"};
+  gameOverMusic.playSoundEffect();
 
+  postResultToWebPage();
 
+  printGameOverTexts();
 
-  /*httplib::SSLClient cli("localhost", 7059);
+  *isRunning = GAME_END_SCREEN;
+}
 
-  std::string data = "{\n"
-                     "    \"Name\": \"from cpp\",\n"
-                     "    \"Score\": " + std::to_string(spaceship->getPoints()) + ",\n"
-                     "    \"TimeSurvived\": " + std::to_string(elapsedTime) + "\n"
-                     "}";
-  auto res = cli.Post(std::string("/api/highscores/add-new"), data, std::string("application/json"));*/
-
-
-
+void Game::printGameOverTexts() const {
   GameText gameOverText{"GAME OVER",
                         DEFAULT_GAME_TEXT_FONT_PATH,
                         DEFAULT_GAME_TEXT_FONT_SIZE_MEDIUM,
@@ -909,13 +907,15 @@ void Game::gameOverStage() {
           renderer
   };
 
-  backgroundMusic->stopMusic();
+  highScoreText.print(renderer);
+  timeText.print(renderer);
+  continueText.print(renderer);
+  gameOverText.print(renderer);
+  SDL_RenderPresent(renderer);
+}
 
-  GameSoundEffect gameOverMusic{"../sound/game_over.wav"};
-
-  gameOverMusic.playSoundEffect();
-
-  while (*isRunning == GAME_OVER_STAGE_VALUE) {
+void Game::handleGameOverEvent() {
+  while (*isRunning == GAME_END_SCREEN) {
     while (SDL_PollEvent(&event)) {
       if (event.type == QUIT || event.key.keysym.sym == QUIT_BUTTON) {
         *isRunning = QUIT_VALUE;
@@ -932,13 +932,21 @@ void Game::gameOverStage() {
         }
       }
     }
-
-    highScoreText.print(renderer);
-    timeText.print(renderer);
-    continueText.print(renderer);
-    gameOverText.print(renderer);
-    SDL_RenderPresent(renderer);
   }
+}
+
+void Game::postResultToWebPage() {
+  Util::addTimeStamp(SDL_GetTicks());
+  elapsedTime = Util::getTimeDuration();
+
+  httplib::SSLClient cli("localhost", 7059);
+
+  std::string data = "{\n"
+                     "    \"Name\": \"from cpp 2\",\n"
+                     "    \"Score\": " + std::to_string(spaceship->getPoints()) + ",\n"
+                     "    \"TimeSurvived\": " + std::to_string(elapsedTime) + "\n"
+                     "}";
+  auto res = cli.Post(std::string("/api/highscores/add-new"), data, std::string("application/json"));
 }
 
 void Game::initStars() {
